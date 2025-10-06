@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Cykl extends StatelessWidget {
-  const Cykl({ super.key });
+class Aktywnosc extends StatelessWidget {
+  const Aktywnosc({ super.key });
 
   @override
   Widget build(BuildContext context) {

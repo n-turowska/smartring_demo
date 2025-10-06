@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartring_demo/ekrany/aktywnosc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,7 +48,12 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (context) => const Aktywnosc(),
+                  ),
+                );
               }, 
               child: Text('Aktywność'),),
             ElevatedButton(
