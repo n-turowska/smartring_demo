@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartring_demo/ekrany/aktywnosc.dart';
+import 'package:smartring_demo/ekrany/zdrowie.dart';
+import 'package:smartring_demo/ekrany/cykl.dart';
 
 void main() {
   runApp(const MyApp());
