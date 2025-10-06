@@ -18,7 +18,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: '/glowny',
+      routes: {
+        '/aktywnosc': (context) => const Aktywnosc(),
+        '/zdrowie': (context) => const Zdrowie(),
+        '/cykl': (context) => const Cykl(),
+        '/glowny': (context) => const MyHomePage(title: 'Mira Ring Demo Home Page'),
+      }
     );
   }
 }
@@ -50,22 +56,17 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (context) => const Aktywnosc(),
-                  ),
-                );
+                Navigator.popAndPushNamed(context, '/aktywnosc');
               }, 
               child: Text('Aktywność'),),
             ElevatedButton(
               onPressed: () {
-
+                Navigator.popAndPushNamed(context, '/zdrowie');
               }, 
               child: Text('Zdrowie'),),
             ElevatedButton(
               onPressed: () {
-
+                Navigator.popAndPushNamed(context, '/cykl');
               }, 
               child: Text('Cykl'),),
             MainShape(kolor: Colors.amber),
