@@ -23,8 +23,9 @@ class MyApp extends StatelessWidget {
         '/aktywnosc': (context) => const Aktywnosc(),
         '/zdrowie': (context) => const Zdrowie(),
         '/cykl': (context) => const Cykl(),
-        '/glowny': (context) => const MyHomePage(title: 'Mira Ring Demo Home Page'),
-      }
+        '/glowny': (context) =>
+            const MyHomePage(title: 'Mira Ring Demo Home Page'),
+      },
     );
   }
 }
@@ -39,16 +40,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.pink,
-        title: Center(
-          child: Text('Witaj w Mira Ring'),
-        ),
+        title: Center(child: Text('Witaj w Mira Ring')),
       ),
       body: Center(
         child: Column(
@@ -57,18 +54,21 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 Navigator.popAndPushNamed(context, '/aktywnosc');
-              }, 
-              child: Text('Aktywność'),),
+              },
+              child: Text('Aktywność'),
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.popAndPushNamed(context, '/zdrowie');
-              }, 
-              child: Text('Zdrowie'),),
+              },
+              child: Text('Zdrowie'),
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.popAndPushNamed(context, '/cykl');
-              }, 
-              child: Text('Cykl'),),
+              },
+              child: Text('Cykl'),
+            ),
             MainShape(kolor: Colors.grey, nazwa: 'segment testowy'),
           ],
         ),
@@ -81,7 +81,11 @@ class MainShape extends StatelessWidget {
   final Color kolor;
   final String nazwa;
 
-  const MainShape({ super.key, this.kolor = Colors.lightBlueAccent, required this.nazwa});
+  const MainShape({
+    super.key,
+    this.kolor = Colors.lightBlueAccent,
+    required this.nazwa,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -104,14 +108,15 @@ class MainShape extends StatelessWidget {
             blurRadius: 15.0,
             spreadRadius: 1.0,
           ),
-        ]
+        ],
       ),
       alignment: Alignment.center,
-      child: Text(nazwa,
-        style: Theme.of(context)
-            .textTheme
-            .headlineMedium!
-            .copyWith(color: Colors.white)),
+      child: Text(
+        nazwa,
+        style: Theme.of(
+          context,
+        ).textTheme.headlineMedium!.copyWith(color: Colors.white),
+      ),
     );
   }
 }
