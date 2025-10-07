@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.popAndPushNamed(context, '/cykl');
               }, 
               child: Text('Cykl'),),
-            MainShape(kolor: Colors.amber),
+            MainShape(kolor: Colors.grey, nazwa: 'segment testowy'),
           ],
         ),
       ),
@@ -79,19 +79,35 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class MainShape extends StatelessWidget {
   final Color kolor;
+  final String nazwa;
 
-  const MainShape({ super.key, this.kolor = Colors.lightBlueAccent });
-
-  
+  const MainShape({ super.key, this.kolor = Colors.lightBlueAccent, required this.nazwa});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      height: 100,
-      color: kolor,
+      height: 50,
+      width: 400,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: kolor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade500,
+            offset: Offset(4.0, 4.0),
+            blurRadius: 15.0,
+            spreadRadius: 1.0,
+          ),
+          BoxShadow(
+            color: Colors.white,
+            offset: Offset(-4.0, -4.0),
+            blurRadius: 15.0,
+            spreadRadius: 1.0,
+          ),
+        ]
+      ),
       alignment: Alignment.center,
-      child: Text('Hello World',
+      child: Text(nazwa,
         style: Theme.of(context)
             .textTheme
             .headlineMedium!

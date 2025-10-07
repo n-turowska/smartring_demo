@@ -16,8 +16,11 @@ class Aktywnosc extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 10.0,
           children: <Widget>[
-            MainShape(kolor: Colors.blueGrey),
+            MainShape(kolor: Colors.blueGrey, nazwa: 'kroki => 5607'),
+            MainShape(kolor: Colors.blueGrey, nazwa: 'spaone kalorie => 590'),
+            MainShape(kolor: Colors.blueGrey, nazwa: 'przebyty dystans => 5 km'),
           ],
         ),
       ),
