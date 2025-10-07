@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.popAndPushNamed(context, '/cykl');
               }, 
               child: Text('Cykl'),),
-            MainShape(kolor: Colors.amber),
+            MainShape(kolor: Colors.amber, nazwa: 'segment testowy'),
           ],
         ),
       ),
@@ -79,8 +79,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class MainShape extends StatelessWidget {
   final Color kolor;
+  final String nazwa;
 
-  const MainShape({ super.key, this.kolor = Colors.lightBlueAccent });
+  const MainShape({ super.key, this.kolor = Colors.lightBlueAccent, required this.nazwa});
 
   
 
@@ -91,7 +92,7 @@ class MainShape extends StatelessWidget {
       height: 100,
       color: kolor,
       alignment: Alignment.center,
-      child: Text('Hello World',
+      child: Text(nazwa,
         style: Theme.of(context)
             .textTheme
             .headlineMedium!

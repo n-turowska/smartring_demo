@@ -17,7 +17,7 @@ class Aktywnosc extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            MainShape(kolor: Colors.blueGrey),
+            MainShape(kolor: Colors.blueGrey, nazwa: 'kroki => 5607'),
           ],
         ),
       ),
