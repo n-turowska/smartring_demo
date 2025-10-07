@@ -24,7 +24,7 @@ class Cykl extends StatelessWidget {
             CrossAxisAlignment.stretch, //zeby bylo rozciagniete na cala dlugosc
         mainAxisAlignment: MainAxisAlignment.center, //zeby bylo na srodku
         children: [
-          Image.asset('asset/polneKwiatki', width: 25), //dodanie obrazka
+          Image.asset('assets/polneKwiatki', width: 25), //dodanie obrazka
           Container(
             color: Colors.blueAccent,
             padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
@@ -38,8 +38,9 @@ class Cykl extends StatelessWidget {
           Container(
             color: Colors.blueAccent,
             padding: EdgeInsets.all(20),
-            child: const Text('prawdopodobieństwo zajścia w ciążę: '),
+            child: const Text('dni z bolącym brzuchem: '),
           ),
+          FilledButton(onPressed: () {}, child: const Text('+')),
         ],
       ),
     );
