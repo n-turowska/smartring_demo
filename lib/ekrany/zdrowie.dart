@@ -19,7 +19,7 @@ class Zdrowie extends StatelessWidget {
           children: <Widget>[
             MainShape(kolor: Colors.blueGrey ,nazwa: "Ilość snu: 8h"),
             MainShape(kolor:Colors.blueGrey ,nazwa: "Dobowy HRV: 40ms"),
-            Stres(kolor: Colors.blueGrey ,nazwa: "Jak bardzo się dziś stresujesz: ",),
+            Stres(kolor: Colors.blueGrey ,nazwa: "Poziom stresu: ",),
             ],
       ),
       ),
@@ -41,14 +41,14 @@ class Zdrowie extends StatelessWidget {
     required this.nazwa});
 
     @override
-    State<Stres> createState() => _poziom_stresu();
+    State<Stres> createState() => _PoziomStresuState();
   }
 
-  class _poziom_stresu extends State<Stres>{
+  class _PoziomStresuState extends State<Stres>{
     int _counter = 0;
     
-     late final dynamic kolor;
-      late final dynamic nazwa;
+     //late final dynamic kolor;
+      //late final dynamic nazwa;
 
     void _incrementCounter(){
       setState((){
@@ -64,7 +64,7 @@ class Zdrowie extends StatelessWidget {
       width: 400,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: kolor,
+        color: widget.kolor,
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade500,
@@ -81,10 +81,22 @@ class Zdrowie extends StatelessWidget {
         ],
       ),
       alignment: Alignment.center,
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-        Text(nazwa, style: Theme.of(context,).textTheme.headlineMedium!.copyWith(color: Colors.white),),
-        ElevatedButton(onPressed:_incrementCounter, child:Text('$_counter'),) ])
+        Text(widget.nazwa, style: Theme.of(context,).textTheme.headlineMedium!.copyWith(color: Colors.white),),
+        SizedBox(width: 50,
+            height: 50,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: _incrementCounter,
+              child: Text('$_counter'),),),],),
+        //ElevatedButton(onPressed:_incrementCounter, child:Text('$_counter'),), ],),
     );
     
   }
