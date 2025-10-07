@@ -15,7 +15,12 @@ class Zdrowie extends StatelessWidget {
       body: Center(
         child:Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[MyWidget(),],
+          spacing: 10.0,
+          children: <Widget>[
+            MainShape(kolor: Colors.blueGrey ,nazwa: "Ilość snu: 8h"),
+            MainShape(kolor: Colors.blueGrey ,nazwa: "Jak bardzo się dziś stresujesz (1-10): 8"),
+            MainShape(kolor:Colors.blueGrey ,nazwa: "Dobowy HRV: 40ms"),
+            ],
       ),
       ),
       floatingActionButton: FloatingActionButton(onPressed: (){
@@ -36,10 +41,7 @@ class Zdrowie extends StatelessWidget {
       height: 100,
       color: Colors.lightBlueAccent,
       alignment: Alignment.center,
-      child: const Text(
-        'HELLO WORLD',
-        style: TextStyle(color: Colors.black, fontSize: 32),
-      ),
+      child: const Text('Wykres',),
     );
   }
 
