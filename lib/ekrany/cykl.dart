@@ -10,7 +10,7 @@ class Cykl extends StatefulWidget {
 
 class _CyklState extends State<Cykl> {
   int ilosc_dni_boli_brzuch = 0;
-  int ilosc_dni_do_miesiaczki = 0;
+  int ilosc_dni_do_miesiaczki = 3;
 
   void zwiekszenie_dni() {
     setState(() {
@@ -53,12 +53,13 @@ class _CyklState extends State<Cykl> {
             child: Stack(
               children: [
                 Text('dni do miesiączki: $ilosc_dni_do_miesiaczki'),
-                Image.asset(
-                  'assets/kropelka.jpg',
-                  width: 25,
-                  color: Colors.blueAccent,
-                  colorBlendMode: BlendMode.multiply,
-                ),
+                for (int i = 0; i < 4 - ilosc_dni_do_miesiaczki; i++)
+                  Image.asset(
+                    'assets/kropelka.jpg',
+                    width: 25,
+                    color: Colors.blueAccent,
+                    colorBlendMode: BlendMode.multiply,
+                  ),
               ],
             ),
           ),
