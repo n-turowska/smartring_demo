@@ -12,7 +12,16 @@ class Zdrowie extends StatelessWidget {
         title: Center(child: Text('Zdrowie'),
         ),
       ),
-      body: Center(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/canva_material.jpg', 
+              //fit: BoxFit.cover, 
+            ),
+          ),
+      
+      Center(
         child:Column(
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 10.0,
@@ -23,6 +32,7 @@ class Zdrowie extends StatelessWidget {
             ],
       ),
       ),
+        ],),
       floatingActionButton: FloatingActionButton(onPressed: (){
          Navigator.popAndPushNamed(context, '/glowny');
         },
