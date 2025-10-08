@@ -16,8 +16,8 @@ class Zdrowie extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/canva_material.jpg', 
-              //fit: BoxFit.cover, 
+              'assets/tlo_pastel.jpg', 
+              fit: BoxFit.cover, 
             ),
           ),
       
