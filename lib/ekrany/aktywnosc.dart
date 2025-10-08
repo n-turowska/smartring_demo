@@ -8,7 +8,7 @@ class Aktywnosc extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.redAccent[400],
         title: Center(
           child: Text('Aktywność'),
         ),
@@ -16,11 +16,11 @@ class Aktywnosc extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 10.0,
+          spacing: 30.0,
           children: <Widget>[
-            MainShape(kolor: Colors.blueGrey, nazwa: 'kroki => 5607'),
-            MainShape(kolor: Colors.blueGrey, nazwa: 'spaone kalorie => 590'),
-            MainShape(kolor: Colors.blueGrey, nazwa: 'przebyty dystans => 5 km'),
+            MainShape(kolor: Colors.redAccent, nazwa: 'kroki => 5607'),
+            MainShape(kolor: Colors.redAccent, nazwa: 'spaone kalorie => 590'),
+            MainShape(kolor: Colors.redAccent, nazwa: 'przebyty dystans => 5 km'),
           ],
         ),
       ),
