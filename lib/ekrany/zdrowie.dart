@@ -8,7 +8,7 @@ class Zdrowie extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink,
+        backgroundColor: const Color.fromARGB(255, 233, 174, 210),
         title: Center(child: Text('Zdrowie'),
         ),
       ),
@@ -26,9 +26,9 @@ class Zdrowie extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 10.0,
           children: <Widget>[
-            MainShape(kolor: Color.fromARGB(255, 158, 154, 244),nazwa: "Ilość snu: 8h"),
-            MainShape(kolor:Color.fromARGB(255, 158, 154, 244) ,nazwa: "Dobowy HRV: 40ms"),
-            Stres(kolor: Color.fromARGB(255, 158, 154, 244) ,nazwa: "                Poziom stresu: ",), //tak na daną chwilę, potem użyje Stack zamiac Row
+            MainShape(kolor: Color.fromARGB(255, 229, 138, 144),nazwa: "Ilość snu: 8h"),
+            MainShape(kolor:Color.fromARGB(255, 229, 138, 144) ,nazwa: "Dobowy HRV: 40ms"),
+            Stres(kolor: Color.fromARGB(255, 229, 138, 144) ,nazwa: "                Poziom stresu: ",), //tak na daną chwilę, potem użyje Stack zamiac Row
             ],
       ),
       ),
@@ -36,7 +36,8 @@ class Zdrowie extends StatelessWidget {
       floatingActionButton: FloatingActionButton(onPressed: (){
          Navigator.popAndPushNamed(context, '/glowny');
         },
-        child: const Icon(Icons.home),),
+        backgroundColor: const Color.fromARGB(255, 210, 176, 230),
+         child: const Icon(Icons.home)),
       );
       }
       }
