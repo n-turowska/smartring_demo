@@ -27,7 +27,7 @@ class _CyklState extends State<Cykl> {
       appBar: AppBar(
         //gora ekranu
         title: const Text(
-          'Cykl',
+          'Mój Cykl',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold, //grubosc czcionki
@@ -41,40 +41,57 @@ class _CyklState extends State<Cykl> {
             CrossAxisAlignment.stretch, //zeby bylo rozciagniete na cala dlugosc
         mainAxisAlignment: MainAxisAlignment.center, //zeby bylo na srodku
         children: [
-          Image.asset('assets/polneKwiatki', width: 25), //dodanie obrazka
+          //Image.asset('assets/polneKwiatki', width: 25), //dodanie obrazka
           Container(
-            color: Colors.blueAccent,
+            color: const Color.fromARGB(255, 201, 84, 212),
             padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
-            child: const Text('dzień cyklu: '),
+            child: const Text(
+              'dzień cyklu: ',
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            ),
           ),
           Container(
-            color: Colors.blueAccent,
+            color: const Color.fromARGB(255, 201, 84, 212),
             padding: EdgeInsets.all(20),
-            child: Stack(
+            child: Row(
               children: [
-                Text('dni do miesiączki: $ilosc_dni_do_miesiaczki'),
-                for (int i = 0; i < 4 - ilosc_dni_do_miesiaczki; i++)
+                Text(
+                  'do miesiączki: $ilosc_dni_do_miesiaczki dni',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+                const SizedBox(
+                  width: 10,
+                ), //zeby byla przerwa miedzy tekstem a obrazkiem
+                for (
+                  int i = 0;
+                  i < 4 - ilosc_dni_do_miesiaczki;
+                  i++
+                ) //wyswietlenie kropelek obok napisu
                   Image.asset(
                     'assets/kropelka.jpg',
                     width: 25,
-                    color: Colors.blueAccent,
+                    color: const Color.fromARGB(255, 164, 30, 79),
                     colorBlendMode: BlendMode.multiply,
                   ),
               ],
             ),
           ),
           Container(
-            color: Colors.blueAccent,
+            color: const Color.fromARGB(255, 201, 84, 212),
             padding: EdgeInsets.all(20),
-            child: Text('dni z bolącym brzuchem: $ilosc_dni_boli_brzuch '),
-          ),
-          FilledButton(
-            style: FilledButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.black,
+            child: Row(
+              children: [
+                Text('dni z bolącym brzuchem: $ilosc_dni_boli_brzuch '),
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                  ),
+                  onPressed: zwiekszenie_dni,
+                  child: const Text('+'),
+                ),
+              ],
             ),
-            onPressed: zwiekszenie_dni,
-            child: const Text('+'),
           ),
         ],
       ),
