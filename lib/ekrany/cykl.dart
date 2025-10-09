@@ -40,7 +40,7 @@ class _CyklState extends State<Cykl> {
         //zeby tlo nie przykrylo pozniejszych elementow dajemy stack-stos
         fit: StackFit.expand,
         children: [
-          Image.asset('assets/tlo.jpg', fit: BoxFit.cover),
+          Image.asset('assets/tlo_pastel.jpg', fit: BoxFit.cover),
           Column(
             //scaffold ma jeden widget wiec column musi byc w stack
             crossAxisAlignment: CrossAxisAlignment

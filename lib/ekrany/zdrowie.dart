@@ -36,7 +36,7 @@ class Zdrowie extends StatelessWidget {
       floatingActionButton: FloatingActionButton(onPressed: (){
          Navigator.popAndPushNamed(context, '/glowny');
         },
-        backgroundColor: const Color.fromARGB(255, 210, 176, 230),
+        backgroundColor: const Color.fromARGB(255, 233, 174, 210),
          child: const Icon(Icons.home)),
       );
       }
@@ -105,7 +105,7 @@ class Zdrowie extends StatelessWidget {
             height: 50,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 210, 176, 230),
+                backgroundColor: const Color.fromARGB(255, 233, 174, 210),
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),

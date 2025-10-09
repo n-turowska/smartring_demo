@@ -67,6 +67,7 @@ flutter:
     - assets/tlo_perly.jpg
     - assets/tlo_pastel.jpg
     - assets/niebieskie_kwiatki.jpg
+    - assets/woda.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
