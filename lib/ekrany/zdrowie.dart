@@ -28,7 +28,7 @@ class Zdrowie extends StatelessWidget {
           children: <Widget>[
             MainShape(kolor: Color.fromARGB(255, 229, 138, 144),nazwa: "Ilość snu: 8h"),
             MainShape(kolor:Color.fromARGB(255, 229, 138, 144) ,nazwa: "Dobowy HRV: 40ms"),
-            Stres(kolor: Color.fromARGB(255, 229, 138, 144) ,nazwa: "                Poziom stresu: ",), //tak na daną chwilę, potem użyje Stack zamiac Row
+            Stres(kolor: Color.fromARGB(255, 229, 138, 144) ,max_liczba: 5 ,nazwa: "                Poziom stresu: ",), //tak na daną chwilę, potem użyje Stack zamiac Row
             ],
       ),
       ),
@@ -46,10 +46,12 @@ class Zdrowie extends StatelessWidget {
   final dynamic kolor;
   
   final dynamic nazwa;
+  final dynamic max_liczba;
   
     const Stres({super.key,
     this.kolor = Colors.lightBlueAccent,
-    required this.nazwa});
+    required this.nazwa,
+    required this.max_liczba});
 
     @override
     State<Stres> createState() => _PoziomStresuState();
@@ -63,7 +65,7 @@ class Zdrowie extends StatelessWidget {
 
     void _incrementCounter(){
       setState((){
-        if (_counter<5){
+        if (_counter<widget.max_liczba){
           _counter++;
           }
         else {_counter=0;}
