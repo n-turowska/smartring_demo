@@ -61,6 +61,11 @@ flutter:
   assets:
     #- assets/polneKwiatki.jpg
     - assets/kropelka.jpg
+    - assets/canva_material.jpg
+    - assets/canva_swiatlo.jpg
+    - assets/marmur.jpg
+    - assets/tlo_perly.jpg
+    - assets/tlo_pastel.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

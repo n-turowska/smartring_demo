@@ -44,30 +44,38 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink,
+        backgroundColor: Colors.redAccent[400],
         title: Center(child: Text('Witaj w Mira Ring')),
       ),
       body: Center(
         child: Column(
+          spacing: 20.0,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
                 Navigator.popAndPushNamed(context, '/aktywnosc');
               },
-              child: Text('Aktywność'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent[400],),
+              child: Text('Aktywność',
+              style: TextStyle(height: 2, fontSize: 25, color: Colors.black),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.popAndPushNamed(context, '/zdrowie');
               },
-              child: Text('Zdrowie'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent[400],),
+              child: Text('Zdrowie',
+              style: TextStyle(height: 2, fontSize: 25, color: Colors.black),),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.popAndPushNamed(context, '/cykl');
               },
-              child: Text('Cykl'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent[400],),
+              child: Text('Cykl',
+                style: TextStyle(height: 2, fontSize: 25, color: Colors.black),),
             ),
             MainShape(kolor: Colors.grey, nazwa: 'segment testowy'),
           ],
