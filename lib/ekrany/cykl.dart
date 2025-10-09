@@ -95,6 +95,13 @@ class _CyklState extends State<Cykl> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.popAndPushNamed(context, '/glowny');
+        },
+        backgroundColor: const Color.fromARGB(255, 210, 176, 230),
+        child: const Icon(Icons.home),
+      ),
     );
   }
 }
