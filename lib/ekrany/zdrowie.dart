@@ -8,15 +8,15 @@ class Zdrowie extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 233, 174, 210),
-        title: Center(child: Text('Zdrowie'),
+        backgroundColor: const Color.fromARGB(255, 141, 227, 138),
+        title: Center(child: Text('Zdrowie',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30)),
         ),
       ),
       body: Stack(
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/tlo_pastel.jpg', 
+              'assets/zielone_kształty.jpg', 
               fit: BoxFit.cover, 
             ),
           ),
@@ -26,9 +26,9 @@ class Zdrowie extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 10.0,
           children: <Widget>[
-            MainShape(kolor: Color.fromARGB(255, 229, 138, 144),nazwa: "Ilość snu: 8h"),
-            MainShape(kolor:Color.fromARGB(255, 229, 138, 144) ,nazwa: "Dobowy HRV: 40ms"),
-            Stres(kolor: Color.fromARGB(255, 229, 138, 144) ,max_liczba: 5 ,nazwa: "                Poziom stresu: ",), //tak na daną chwilę, potem użyje Stack zamiac Row
+            MainShape(kolor: Color.fromARGB(255, 34, 169, 88),nazwa: "Ilość snu: 8h"),
+            MainShape(kolor:Color.fromARGB(255, 34, 169, 88) ,nazwa: "Dobowy HRV: 40ms"),
+            Stres(kolor: Color.fromARGB(255, 34, 169, 88) ,max_liczba: 5 ,nazwa: "                Poziom stresu: ",), //tak na daną chwilę, potem użyje Stack zamiac Row
             ],
       ),
       ),
@@ -36,7 +36,7 @@ class Zdrowie extends StatelessWidget {
       floatingActionButton: FloatingActionButton(onPressed: (){
          Navigator.popAndPushNamed(context, '/glowny');
         },
-        backgroundColor: const Color.fromARGB(255, 233, 174, 210),
+        backgroundColor: const Color.fromARGB(255, 141, 227, 138),
          child: const Icon(Icons.home)),
       );
       }
@@ -107,12 +107,12 @@ class Zdrowie extends StatelessWidget {
             height: 50,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 233, 174, 210),
+                backgroundColor: const Color.fromARGB(255, 141, 227, 138),
                 padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
               onPressed: _incrementCounter,
-              child: Text('$_counter',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),),),],),
+              child: Text('$_counter',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black),),),),],),
     );
     
   }
