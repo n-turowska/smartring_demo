@@ -13,10 +13,16 @@ class Aktywnosc extends StatelessWidget {
           child: Text('Aktywność'),
         ),
       ),
-      body: Center(
-        child: Stack(
-          children: [ Image.asset('assets/niebieskie_kwiatki.jpg', fit: BoxFit.cover,),
-            Column(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/tlo_niebieskie.jpg', 
+              fit: BoxFit.cover, 
+            ),
+          ),
+          Center(
+          child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 30.0,
                 children: <Widget>[
@@ -24,13 +30,14 @@ class Aktywnosc extends StatelessWidget {
                   MainShape(kolor: const Color.fromARGB(255, 130, 167, 197), nazwa: 'spaone kalorie => 590'),
                   MainShape(kolor: const Color.fromARGB(255, 130, 167, 197), nazwa: 'przebyty dystans => 5 km'),
                 ],
-              ),],
-      ),
+              ),
+      ),],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.popAndPushNamed(context, '/glowny');
         },
+        backgroundColor: const Color.fromARGB(255, 64, 155, 197),
         child: const Icon(Icons.home),
       ),
     );

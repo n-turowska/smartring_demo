@@ -44,10 +44,17 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent[400],
-        title: Center(child: Text('Witaj w Mira Ring')),
+        backgroundColor: const Color.fromARGB(255, 232, 226, 218),
+        title: Center(child: Text('Witaj w Mira Ring',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25))),
       ),
-      body: Center(
+      body: Stack(children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/tlo_główna.jpg', 
+              fit: BoxFit.cover, 
+            ),
+          ),
+          Center(
         child: Column(
           spacing: 20.0,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.popAndPushNamed(context, '/aktywnosc');
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent[400],),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 236, 199, 231),),
               child: Text('Aktywność',
               style: TextStyle(height: 2, fontSize: 25, color: Colors.black),
               ),
@@ -65,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.popAndPushNamed(context, '/zdrowie');
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent[400],),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 236, 199, 231),),
               child: Text('Zdrowie',
               style: TextStyle(height: 2, fontSize: 25, color: Colors.black),),
             ),
@@ -73,14 +80,14 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.popAndPushNamed(context, '/cykl');
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent[400],),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 236, 199, 231),),
               child: Text('Cykl',
                 style: TextStyle(height: 2, fontSize: 25, color: Colors.black),),
             ),
-            MainShape(kolor: Colors.grey, nazwa: 'segment testowy'),
+            //MainShape(kolor: Colors.grey, nazwa: 'segment testowy'),
           ],
         ),
-      ),
+      ),],)
     );
   }
 }

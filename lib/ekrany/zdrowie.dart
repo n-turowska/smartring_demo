@@ -9,7 +9,7 @@ class Zdrowie extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 141, 227, 138),
-        title: Center(child: Text('Zdrowie',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30)),
+        title: Center(child: Text('Zdrowie',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25)),
         ),
       ),
       body: Stack(
