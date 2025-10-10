@@ -42,28 +42,70 @@ class _CyklState extends State<Cykl> {
         children: [
           Image.asset('assets/tlo_pastel.jpg', fit: BoxFit.cover),
           Column(
+            spacing: 20.0,
             //scaffold ma jeden widget wiec column musi byc w stack
-            crossAxisAlignment: CrossAxisAlignment
-                .stretch, //zeby bylo rozciagniete na cala dlugosc
             mainAxisAlignment: MainAxisAlignment.center, //zeby bylo na srodku
             children: [
               //Image.asset('assets/polneKwiatki', width: 25), //dodanie obrazka
               Container(
-                color: const Color.fromARGB(255, 201, 84, 212),
-                padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
-                child: const Text(
+                height: 50,
+                width: 400,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: const Color.fromARGB(255, 197, 52, 156),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade500,
+                      offset: Offset(4.0, 4.0),
+                      blurRadius: 15.0,
+                      spreadRadius: 1.0,
+                    ),
+                    BoxShadow(
+                      color: Colors.white,
+                      offset: Offset(-4.0, -4.0),
+                      blurRadius: 15.0,
+                      spreadRadius: 1.0,
+                    ),
+                  ],
+                ),
+                //padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
+                alignment: Alignment.center,
+                child: Text(
                   'dzień cyklu: ',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineMedium!.copyWith(color: Colors.white),
                 ),
               ),
               Container(
-                color: const Color.fromARGB(255, 201, 84, 212),
-                padding: EdgeInsets.all(20),
+                height: 50,
+                width: 400,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: const Color.fromARGB(255, 197, 52, 156),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade500,
+                      offset: Offset(4.0, 4.0),
+                      blurRadius: 15.0,
+                      spreadRadius: 1.0,
+                    ),
+                    BoxShadow(
+                      color: Colors.white,
+                      offset: Offset(-4.0, -4.0),
+                      blurRadius: 15.0,
+                      spreadRadius: 1.0,
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
                 child: Row(
                   children: [
                     Text(
                       'do miesiączki: $ilosc_dni_do_miesiaczki dni',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineMedium!.copyWith(color: Colors.white),
                     ),
                     const SizedBox(
                       width: 10,
@@ -83,11 +125,35 @@ class _CyklState extends State<Cykl> {
                 ),
               ),
               Container(
-                color: const Color.fromARGB(255, 201, 84, 212),
-                padding: EdgeInsets.all(20),
+                height: 50,
+                width: 400,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: const Color.fromARGB(255, 197, 52, 156),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade500,
+                      offset: Offset(4.0, 4.0),
+                      blurRadius: 15.0,
+                      spreadRadius: 1.0,
+                    ),
+                    BoxShadow(
+                      color: Colors.white,
+                      offset: Offset(-4.0, -4.0),
+                      blurRadius: 15.0,
+                      spreadRadius: 1.0,
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
                 child: Row(
                   children: [
-                    Text('dni z bolącym brzuchem: $ilosc_dni_boli_brzuch '),
+                    Text(
+                      'dni z bolącym brzuchem: $ilosc_dni_boli_brzuch ',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineMedium!.copyWith(color: Colors.white),
+                    ),
                     FilledButton(
                       style: FilledButton.styleFrom(
                         backgroundColor: Colors.white,
