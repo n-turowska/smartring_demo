@@ -49,7 +49,7 @@ class _CyklState extends State<Cykl> {
               //Image.asset('assets/polneKwiatki', width: 25), //dodanie obrazka
               Container(
                 height: 50,
-                width: 400,
+                width: 450,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: const Color.fromARGB(255, 197, 52, 156),
@@ -79,7 +79,7 @@ class _CyklState extends State<Cykl> {
               ),
               Container(
                 height: 50,
-                width: 400,
+                width: 450,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: const Color.fromARGB(255, 197, 52, 156),
@@ -99,7 +99,9 @@ class _CyklState extends State<Cykl> {
                   ],
                 ),
                 alignment: Alignment.center,
+
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'do miesiączki: $ilosc_dni_do_miesiaczki dni',
@@ -126,7 +128,7 @@ class _CyklState extends State<Cykl> {
               ),
               Container(
                 height: 50,
-                width: 400,
+                width: 450,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: const Color.fromARGB(255, 197, 52, 156),
@@ -147,6 +149,7 @@ class _CyklState extends State<Cykl> {
                 ),
                 alignment: Alignment.center,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'dni z bolącym brzuchem: $ilosc_dni_boli_brzuch ',
