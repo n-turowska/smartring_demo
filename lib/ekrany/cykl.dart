@@ -33,7 +33,7 @@ class _CyklState extends State<Cykl> {
             fontWeight: FontWeight.bold, //grubosc czcionki
           ),
         ),
-        backgroundColor: Colors.pink,
+        backgroundColor: const Color.fromARGB(255, 118, 8, 45),
         centerTitle: true,
       ),
       body: Stack(
@@ -52,7 +52,7 @@ class _CyklState extends State<Cykl> {
                 width: 450,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: const Color.fromARGB(255, 197, 52, 156),
+                  color: const Color.fromARGB(255, 224, 114, 171),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.shade500,
@@ -82,7 +82,7 @@ class _CyklState extends State<Cykl> {
                 width: 450,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: const Color.fromARGB(255, 197, 52, 156),
+                  color: const Color.fromARGB(255, 224, 114, 171),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.shade500,
@@ -120,7 +120,7 @@ class _CyklState extends State<Cykl> {
                       Image.asset(
                         'assets/kropelka.jpg',
                         width: 25,
-                        color: const Color.fromARGB(255, 164, 30, 79),
+                        color: const Color.fromARGB(255, 224, 114, 171),
                         colorBlendMode: BlendMode.multiply,
                       ),
                   ],
@@ -131,7 +131,7 @@ class _CyklState extends State<Cykl> {
                 width: 450,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: const Color.fromARGB(255, 197, 52, 156),
+                  color: const Color.fromARGB(255, 224, 114, 171),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.shade500,
