@@ -27,12 +27,23 @@ class MyHistogram extends StatelessWidget {
       BarChartData(
         maxY: 15000,
         minY: 0,
+        gridData: FlGridData(show: false),
         barGroups: mojeDane.histogramDane
             .map(
               (data) => BarChartGroupData(
                 x: data.x,
                 barRods: [
-                  BarChartRodData(toY: data.y),
+                  BarChartRodData(
+                    toY: data.y,
+                    width: 20,
+                    color: Colors.blueGrey[400],
+                    borderRadius: BorderRadius.circular(3),
+                    backDrawRodData: BackgroundBarChartRodData(
+                      show: true,
+                      toY: 15000,
+                      color: Colors.grey[300],
+                    ),
+                  ),
                 ],
               ),
             )
