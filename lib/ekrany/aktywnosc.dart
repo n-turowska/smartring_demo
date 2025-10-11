@@ -17,7 +17,7 @@ class Aktywnosc extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/tlo_niebieskie.jpg', 
+              'assets/tlo_aktywnosc.jpg', 
               fit: BoxFit.cover, 
             ),
           ),
