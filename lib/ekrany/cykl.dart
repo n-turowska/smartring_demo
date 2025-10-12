@@ -46,7 +46,13 @@ class _CyklState extends State<Cykl> {
             //scaffold ma jeden widget wiec column musi byc w stack
             mainAxisAlignment: MainAxisAlignment.center, //zeby bylo na srodku
             children: [
-              //Image.asset('assets/polneKwiatki', width: 25), //dodanie obrazka
+              Image.asset(
+                'assets/kalendarz1.png',
+                width: 250,
+                height: 250,
+                //color: const Color.fromARGB(255, 236, 175, 207),
+                //colorBlendMode: BlendMode.multiply,
+              ), //dodanie obrazka
               Container(
                 height: 50,
                 width: 450,
