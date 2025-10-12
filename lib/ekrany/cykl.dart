@@ -10,7 +10,7 @@ class Cykl extends StatefulWidget {
 
 class _CyklState extends State<Cykl> {
   int ilosc_dni_boli_brzuch = 0;
-  int ilosc_dni_do_miesiaczki = 3;
+  int ilosc_dni_do_miesiaczki = 1;
 
   void zwiekszenie_dni() {
     setState(() {
@@ -33,14 +33,14 @@ class _CyklState extends State<Cykl> {
             fontWeight: FontWeight.bold, //grubosc czcionki
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 118, 8, 45),
+        backgroundColor: const Color.fromARGB(255, 227, 76, 126),
         centerTitle: true,
       ),
       body: Stack(
         //zeby tlo nie przykrylo pozniejszych elementow dajemy stack-stos
         fit: StackFit.expand,
         children: [
-          Image.asset('assets/tlo_pastel.jpg', fit: BoxFit.cover),
+          Image.asset('assets/tlo.png', fit: BoxFit.cover),
           Column(
             spacing: 20.0,
             //scaffold ma jeden widget wiec column musi byc w stack
@@ -71,7 +71,7 @@ class _CyklState extends State<Cykl> {
                 //padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
                 alignment: Alignment.center,
                 child: Text(
-                  'dzień cyklu: ',
+                  'dzień cyklu: 28',
                   style: Theme.of(
                     context,
                   ).textTheme.headlineMedium!.copyWith(color: Colors.white),
@@ -177,7 +177,7 @@ class _CyklState extends State<Cykl> {
         onPressed: () {
           Navigator.popAndPushNamed(context, '/glowny');
         },
-        backgroundColor: const Color.fromARGB(255, 210, 176, 230),
+        backgroundColor: const Color.fromARGB(255, 236, 161, 202),
         child: const Icon(Icons.home),
       ),
     );
