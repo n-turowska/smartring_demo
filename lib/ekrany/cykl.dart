@@ -50,7 +50,7 @@ class _CyklState extends State<Cykl> {
                 'assets/kalendarz1.png',
                 width: 250,
                 height: 250,
-                //color: const Color.fromARGB(255, 236, 175, 207),
+                //color: const Color.fromARGB(255, 193, 187, 190),
                 //colorBlendMode: BlendMode.multiply,
               ), //dodanie obrazka
               Container(
