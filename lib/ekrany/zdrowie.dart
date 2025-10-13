@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartring_demo/main.dart';
+import 'package:smartring_demo/wykres_zdrowie/wykres1.dart';
+
 
 class Zdrowie extends StatelessWidget {
   const Zdrowie({ super.key });
@@ -29,7 +31,8 @@ class Zdrowie extends StatelessWidget {
             MainShape(kolor: Color.fromARGB(255, 34, 169, 88),nazwa: "Ilość snu: 8h"),
             MainShape(kolor:Color.fromARGB(255, 34, 169, 88) ,nazwa: "Dobowy HRV: 40ms"),
             Stres(kolor: Color.fromARGB(255, 34, 169, 88) ,max_liczba: 5 ,nazwa: "                Poziom stresu: ",), //tak na daną chwilę, potem użyje Stack zamiac Row
-            Image.asset('assets/wykres.png', width: 400, height: 300, fit: BoxFit.contain),
+            SizedBox(height:200, width: 500, child: StressChart()),
+            //Image.asset('assets/wykres.png', width: 400, height: 300, fit: BoxFit.contain),
             ],
       ),
       ),
