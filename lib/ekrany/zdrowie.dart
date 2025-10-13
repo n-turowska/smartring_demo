@@ -31,7 +31,7 @@ class Zdrowie extends StatelessWidget {
             MainShape(kolor: Color.fromARGB(255, 34, 169, 88),nazwa: "Ilość snu: 8h"),
             MainShape(kolor:Color.fromARGB(255, 34, 169, 88) ,nazwa: "Dobowy HRV: 40ms"),
             Stres(kolor: Color.fromARGB(255, 34, 169, 88) ,max_liczba: 5 ,nazwa: "                Poziom stresu: ",), //tak na daną chwilę, potem użyje Stack zamiac Row
-            SizedBox(height:200, width: 500, child: StressChart()),
+            SizedBox(height:200, width: 400, child: StressChart()),
             //Image.asset('assets/wykres.png', width: 400, height: 300, fit: BoxFit.contain),
             ],
       ),
