@@ -11,7 +11,8 @@ class Cykl extends StatefulWidget {
 class _CyklState extends State<Cykl> {
   int ilosc_dni_boli_brzuch = 0;
   int ilosc_dni_do_miesiaczki = 1;
-
+  final Kolor = const Color.fromARGB(255, 252, 212, 232);
+  final Kolor_tekstu = Colors.black;
   void zwiekszenie_dni() {
     setState(() {
       //sprawia ze klikniecie przycisku zwieksza ilosc dni na ekranie
@@ -29,18 +30,22 @@ class _CyklState extends State<Cykl> {
         title: const Text(
           'Mój Cykl',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontWeight: FontWeight.bold, //grubosc czcionki
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 227, 76, 126),
+        backgroundColor: const Color.fromARGB(255, 236, 161, 202),
         centerTitle: true,
       ),
       body: Stack(
         //zeby tlo nie przykrylo pozniejszych elementow dajemy stack-stos
         fit: StackFit.expand,
         children: [
-          Image.asset('assets/tlo.png', fit: BoxFit.cover),
+          Image.asset(
+            //'assets/tlo.png',
+            'assets/tlo_tel_cykl.png',
+            fit: BoxFit.cover,
+          ),
           Column(
             spacing: 20.0,
             //scaffold ma jeden widget wiec column musi byc w stack
@@ -55,10 +60,10 @@ class _CyklState extends State<Cykl> {
               ), //dodanie obrazka
               Container(
                 height: 50,
-                width: 450,
+                width: 400,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: const Color.fromARGB(255, 224, 114, 171),
+                  color: Kolor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.shade500,
@@ -80,15 +85,15 @@ class _CyklState extends State<Cykl> {
                   'dzień cyklu: 28',
                   style: Theme.of(
                     context,
-                  ).textTheme.headlineMedium!.copyWith(color: Colors.white),
+                  ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
                 ),
               ),
               Container(
                 height: 50,
-                width: 450,
+                width: 400,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: const Color.fromARGB(255, 224, 114, 171),
+                  color: Kolor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.shade500,
@@ -113,7 +118,7 @@ class _CyklState extends State<Cykl> {
                       'do miesiączki: $ilosc_dni_do_miesiaczki dni',
                       style: Theme.of(
                         context,
-                      ).textTheme.headlineMedium!.copyWith(color: Colors.white),
+                      ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
                     ),
                     const SizedBox(
                       width: 10,
@@ -126,7 +131,7 @@ class _CyklState extends State<Cykl> {
                       Image.asset(
                         'assets/kropelka.jpg',
                         width: 25,
-                        color: const Color.fromARGB(255, 224, 114, 171),
+                        color: Kolor,
                         colorBlendMode: BlendMode.multiply,
                       ),
                   ],
@@ -134,10 +139,10 @@ class _CyklState extends State<Cykl> {
               ),
               Container(
                 height: 50,
-                width: 450,
+                width: 400,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: const Color.fromARGB(255, 224, 114, 171),
+                  color: Kolor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.shade500,
@@ -158,10 +163,10 @@ class _CyklState extends State<Cykl> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'dni z bolącym brzuchem: $ilosc_dni_boli_brzuch ',
+                      'bolący brzuch: $ilosc_dni_boli_brzuch ',
                       style: Theme.of(
                         context,
-                      ).textTheme.headlineMedium!.copyWith(color: Colors.white),
+                      ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
                     ),
                     FilledButton(
                       style: FilledButton.styleFrom(
