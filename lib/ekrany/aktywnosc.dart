@@ -11,7 +11,7 @@ class Aktywnosc extends StatefulWidget {
 
 class _AktywnoscState extends State<Aktywnosc> {
   // Lista liczby kroków w tygodniu
-  List<double> tygodniowePodsumowanie = [
+  List<int> tygodniowePodsumowanie = [
     5040,
     6490,
     2904,
