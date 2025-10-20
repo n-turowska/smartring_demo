@@ -20,7 +20,8 @@ class _CyklState extends State<Cykl> {
 
   //do kalendarza
   DateTime dzisiaj = DateTime.now();
-  DateTime? _kliknietyDzien;
+  DateTime?
+  _kliknietyDzien; // _ jest po to zeby nie dalo sie modiikowac tych zmiennych spoza klasy
   DateTime? _terazniejszyDzien;
 
   void zwiekszenie_dni() {
@@ -70,6 +71,7 @@ class _CyklState extends State<Cykl> {
               ), //dodanie obrazka
               */
               Container(
+                width: 350,
                 child: TableCalendar(
                   locale: Localizations.localeOf(
                     context,
@@ -81,18 +83,25 @@ class _CyklState extends State<Cykl> {
                   ),
                   availableGestures: AvailableGestures
                       .all, //zeby mozna bylo przewijac, przeciagac-co sie chce
-                  selectedDayPredicate: (dzien) {
-                    return isSameDay(_kliknietyDzien, dzien);
-                  },
                   firstDay: DateTime.utc(2010, 10, 16),
                   lastDay: DateTime.utc(2035, 10, 16),
                   focusedDay: dzisiaj,
+                  selectedDayPredicate: (dzien) {
+                    return isSameDay(
+                      _kliknietyDzien,
+                      dzien,
+                    ); //dzien jest aktualnie rysowany w siatce, jesli true znaczy ze dzien jest rzeczywiscie tym co kliknal uzytkownik i jest wtedy podkreslany
+                  },
                   onDaySelected: (kliknietyDzien, terazniejszyDzien) {
+                    //
                     setState(() {
+                      //zeby powiadomic ze zmienily sie wartosci trzeba przypisac
                       _kliknietyDzien = kliknietyDzien;
                       _terazniejszyDzien = terazniejszyDzien;
                     });
                   },
+                  startingDayOfWeek: StartingDayOfWeek
+                      .monday, //zeby byl od pn-ndz a nie ndz-sb
                 ),
               ),
               Container(
