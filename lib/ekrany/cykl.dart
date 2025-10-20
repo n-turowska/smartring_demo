@@ -22,7 +22,6 @@ class _CyklState extends State<Cykl> {
   DateTime dzisiaj = DateTime.now();
   DateTime?
   _kliknietyDzien; // _ jest po to zeby nie dalo sie modiikowac tych zmiennych spoza klasy
-  DateTime? _terazniejszyDzien;
 
   void zwiekszenie_dni() {
     setState(() {
@@ -71,7 +70,7 @@ class _CyklState extends State<Cykl> {
               ), //dodanie obrazka
               */
               Container(
-                width: 350,
+                width: 400,
                 child: TableCalendar(
                   locale: Localizations.localeOf(
                     context,
@@ -97,25 +96,33 @@ class _CyklState extends State<Cykl> {
                     setState(() {
                       //zeby powiadomic ze zmienily sie wartosci trzeba przypisac
                       _kliknietyDzien = kliknietyDzien;
-                      _terazniejszyDzien = terazniejszyDzien;
+                      dzisiaj = terazniejszyDzien;
                     });
                   },
                   startingDayOfWeek: StartingDayOfWeek
                       .monday, //zeby byl od pn-ndz a nie ndz-sb
+                  onPageChanged: (terazniejszyDzien) {
+                    setState(() {
+                      dzisiaj = terazniejszyDzien;
+                    });
+                  },
                 ),
               ),
               Container(
                 height: 50,
                 width: 400,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Kolor,
+                  borderRadius: BorderRadius.circular(
+                    15,
+                  ), //do zaokraglenia rogow
+                  color: Kolor, //kolor tla
                   boxShadow: [
+                    //cienie
                     BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
+                      color: Colors.grey.shade500, //kolor cienia
+                      offset: Offset(4.0, 4.0), //przesunicie wzgledem kontenera
+                      blurRadius: 15.0, //rozmycie cienia
+                      spreadRadius: 1.0, //rozszerzenie cienia
                     ),
                     BoxShadow(
                       color: Colors.white,
