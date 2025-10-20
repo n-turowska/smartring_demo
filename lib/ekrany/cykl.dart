@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartring_demo/main.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class Cykl extends StatefulWidget {
   const Cykl({super.key});
@@ -13,6 +14,7 @@ class _CyklState extends State<Cykl> {
   int ilosc_dni_do_miesiaczki = 1;
   final Kolor = const Color.fromARGB(255, 252, 212, 232);
   final Kolor_tekstu = Colors.black;
+  final dzisiaj = DateTime.now();
   void zwiekszenie_dni() {
     setState(() {
       //sprawia ze klikniecie przycisku zwieksza ilosc dni na ekranie
@@ -51,13 +53,29 @@ class _CyklState extends State<Cykl> {
             //scaffold ma jeden widget wiec column musi byc w stack
             mainAxisAlignment: MainAxisAlignment.center, //zeby bylo na srodku
             children: [
-              Image.asset(
+              /*Image.asset(
                 'assets/kalendarz1.png',
                 width: 250,
                 height: 250,
                 //color: const Color.fromARGB(255, 193, 187, 190),
                 //colorBlendMode: BlendMode.multiply,
               ), //dodanie obrazka
+              */
+              Container(
+                child: TableCalendar(
+                  locale: Localizations.localeOf(context).toString(), //jezyk
+                  rowHeight: 40, //odleglosc miedzy wierszami
+                  headerStyle: HeaderStyle(
+                    titleCentered: true,
+                    formatButtonVisible: false, //zeby zniknal napis '2weeks'
+                  ),
+                  availableGestures: AvailableGestures
+                      .all, //zeby mozna bylo przewijac, przeciagac-co sie chce
+                  firstDay: DateTime.utc(2010, 10, 16),
+                  lastDay: DateTime.utc(2035, 10, 16),
+                  focusedDay: dzisiaj,
+                ),
+              ),
               Container(
                 height: 50,
                 width: 400,

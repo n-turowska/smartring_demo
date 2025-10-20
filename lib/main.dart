@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartring_demo/ekrany/aktywnosc.dart';
 import 'package:smartring_demo/ekrany/zdrowie.dart';
 import 'package:smartring_demo/ekrany/cykl.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         '/glowny': (context) =>
             const MyHomePage(title: 'Mira Ring Demo Home Page'),
       },
+      localizationsDelegates: GlobalMaterialLocalizations
+          .delegates, //zeby tlumaczylo na jezyk systemowy uzytkownika
+      supportedLocales: const [Locale('pl'), Locale('en')], //dostepne jezyki
     );
   }
 }
@@ -45,49 +49,77 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 232, 226, 218),
-        title: Center(child: Text('Witaj w Mira Ring',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25))),
+        title: Center(
+          child: Text(
+            'Witaj w Mira Ring',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+          ),
+        ),
       ),
-      body: Stack(children: [
+      body: Stack(
+        children: [
           Positioned.fill(
-            child: Image.asset(
-              'assets/tlo_główna.jpg', 
-              fit: BoxFit.cover, 
-            ),
+            child: Image.asset('assets/tlo_główna.jpg', fit: BoxFit.cover),
           ),
           Center(
-        child: Column(
-          spacing: 20.0,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                Navigator.popAndPushNamed(context, '/aktywnosc');
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 236, 199, 231),),
-              child: Text('Aktywność',
-              style: TextStyle(height: 2, fontSize: 25, color: Colors.black),
-              ),
+            child: Column(
+              spacing: 20.0,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/aktywnosc');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 236, 199, 231),
+                  ),
+                  child: Text(
+                    'Aktywność',
+                    style: TextStyle(
+                      height: 2,
+                      fontSize: 25,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/zdrowie');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 236, 199, 231),
+                  ),
+                  child: Text(
+                    'Zdrowie',
+                    style: TextStyle(
+                      height: 2,
+                      fontSize: 25,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/cykl');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 236, 199, 231),
+                  ),
+                  child: Text(
+                    'Cykl',
+                    style: TextStyle(
+                      height: 2,
+                      fontSize: 25,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                //MainShape(kolor: Colors.grey, nazwa: 'segment testowy'),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.popAndPushNamed(context, '/zdrowie');
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 236, 199, 231),),
-              child: Text('Zdrowie',
-              style: TextStyle(height: 2, fontSize: 25, color: Colors.black),),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.popAndPushNamed(context, '/cykl');
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 236, 199, 231),),
-              child: Text('Cykl',
-                style: TextStyle(height: 2, fontSize: 25, color: Colors.black),),
-            ),
-            //MainShape(kolor: Colors.grey, nazwa: 'segment testowy'),
-          ],
-        ),
-      ),],)
+          ),
+        ],
+      ),
     );
   }
 }
