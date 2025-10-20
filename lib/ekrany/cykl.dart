@@ -10,11 +10,19 @@ class Cykl extends StatefulWidget {
 }
 
 class _CyklState extends State<Cykl> {
+  //do przycisków
   int ilosc_dni_boli_brzuch = 0;
   int ilosc_dni_do_miesiaczki = 1;
+
+  //kolory
   final Kolor = const Color.fromARGB(255, 252, 212, 232);
   final Kolor_tekstu = Colors.black;
-  final dzisiaj = DateTime.now();
+
+  //do kalendarza
+  DateTime dzisiaj = DateTime.now();
+  DateTime? _kliknietyDzien;
+  DateTime? _terazniejszyDzien;
+
   void zwiekszenie_dni() {
     setState(() {
       //sprawia ze klikniecie przycisku zwieksza ilosc dni na ekranie
@@ -63,7 +71,9 @@ class _CyklState extends State<Cykl> {
               */
               Container(
                 child: TableCalendar(
-                  locale: Localizations.localeOf(context).toString(), //jezyk
+                  locale: Localizations.localeOf(
+                    context,
+                  ).toString(), //toString zamienia na tekst "pl_PL", a to wczesniej pobiera atualny jezyk aplikacji
                   rowHeight: 40, //odleglosc miedzy wierszami
                   headerStyle: HeaderStyle(
                     titleCentered: true,
@@ -71,9 +81,18 @@ class _CyklState extends State<Cykl> {
                   ),
                   availableGestures: AvailableGestures
                       .all, //zeby mozna bylo przewijac, przeciagac-co sie chce
+                  selectedDayPredicate: (dzien) {
+                    return isSameDay(_kliknietyDzien, dzien);
+                  },
                   firstDay: DateTime.utc(2010, 10, 16),
                   lastDay: DateTime.utc(2035, 10, 16),
                   focusedDay: dzisiaj,
+                  onDaySelected: (kliknietyDzien, terazniejszyDzien) {
+                    setState(() {
+                      _kliknietyDzien = kliknietyDzien;
+                      _terazniejszyDzien = terazniejszyDzien;
+                    });
+                  },
                 ),
               ),
               Container(
