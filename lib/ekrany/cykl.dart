@@ -226,7 +226,8 @@ class _CyklState extends State<Cykl> {
                             ),
                             child: ListTile(
                               onTap: () => print(""),
-                              title: Text(value[index].title),
+
+                              title: Center(child: Text(value[index].title)),
                             ),
                           );
                         },
