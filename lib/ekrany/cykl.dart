@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartring_demo/ekrany/kalendarz/event.dart';
 import 'package:smartring_demo/main.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -20,8 +21,24 @@ class _CyklState extends State<Cykl> {
 
   //do kalendarza
   DateTime dzisiaj = DateTime.now();
-  DateTime?
-  _kliknietyDzien; // _ jest po to zeby nie dalo sie modiikowac tych zmiennych spoza klasy
+  DateTime? _kliknietyDzien =
+      DateTime.now(); // _ jest po to zeby nie dalo sie modiikowac tych zmiennych spoza klasy i deklarujemy od razu zeby nie byl null, jesli nie klikniemy w dzien na kalendarzu, a damy edit kalendarza
+  Map<DateTime, List<Event>> events =
+      {}; //tworzymy map, ktora bedzie miala w sobie eventy-miesiaczke
+  TextEditingController _eventController = TextEditingController();
+  late final ValueNotifier<List<Event>>
+  _wybraneEventy; //late-zainicjalizujemy ta zmienna pozniej, final-tylko raz inicjalizujemy, potem nie mozna zmienic, ValueNotifier przechowuje liste eventow i powiadamia widgety gdy ta lista sie zmienia
+
+  @override
+  void initState() {
+    super.initState();
+    _wybraneEventy = ValueNotifier(_wezEventyForDay(_kliknietyDzien!));
+  }
+
+  List<Event> _wezEventyForDay(DateTime day) {
+    return events[day] ??
+        []; //jesli events[day] jest null to zwroci pusta liste;
+  }
 
   void zwiekszenie_dni() {
     setState(() {
@@ -69,8 +86,47 @@ class _CyklState extends State<Cykl> {
                 //colorBlendMode: BlendMode.multiply,
               ), //dodanie obrazka
               */
+              FloatingActionButton(
+                onPressed: () {
+                  showDialog(
+                    //otwieramy okno dialogowe
+                    context:
+                        context, //dzieki temu showDialog wie gdzie ma byc dodane okno dialogowe, czyli w miejscu tego przycisku-flutter znajduje navigator i pokazuje dialog nad ekranem
+                    builder: (context) {
+                      return AlertDialog(
+                        scrollable: true,
+                        title: Text('Dzień miesiączki: '),
+                        content: Padding(
+                          padding: EdgeInsets.all(
+                            8,
+                          ), //dookola pola tekstowego przerwa 8 pikseli
+                          child: TextField(controller: _eventController),
+                        ),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () {
+                              events.addAll({
+                                _kliknietyDzien!: [
+                                  //! mowi ze wiadomo ze tu nie bedzie null, czyli ze na pewno cos wpiszemy
+                                  Event(_eventController.text),
+                                ],
+                              });
+                              Navigator.of(
+                                context,
+                              ).pop(); //dzieki temu jak klikniemy dodaj to sie zamyka okno dialogowe
+                            },
+                            child: Text('dodaj'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Icon(Icons.edit),
+              ),
               Container(
                 width: 400,
+                height: 300,
                 child: TableCalendar(
                   locale: Localizations.localeOf(
                     context,
@@ -99,11 +155,14 @@ class _CyklState extends State<Cykl> {
                       dzisiaj = terazniejszyDzien;
                     });
                   },
+                  eventLoader: _wezEventyForDay,
                   startingDayOfWeek: StartingDayOfWeek
                       .monday, //zeby byl od pn-ndz a nie ndz-sb
                   onPageChanged: (terazniejszyDzien) {
+                    //informuje ktory miesiac jest aktualnie widoczny
                     setState(() {
-                      dzisiaj = terazniejszyDzien;
+                      dzisiaj =
+                          terazniejszyDzien; //zmieniamy z tego miesiaca co byl z 'dzisiaj' i zmieniamy na ten klikniety
                     });
                   },
                 ),
