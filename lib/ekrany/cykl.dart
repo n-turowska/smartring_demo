@@ -64,6 +64,7 @@ class _CyklState extends State<Cykl> {
         backgroundColor: const Color.fromARGB(255, 236, 161, 202),
         centerTitle: true,
       ),
+
       body: Stack(
         //zeby tlo nie przykrylo pozniejszych elementow dajemy stack-stos
         fit: StackFit.expand,
@@ -86,46 +87,51 @@ class _CyklState extends State<Cykl> {
                 //colorBlendMode: BlendMode.multiply,
               ), //dodanie obrazka
               */
-              FloatingActionButton(
-                onPressed: () {
-                  showDialog(
-                    //otwieramy okno dialogowe
-                    context:
-                        context, //dzieki temu showDialog wie gdzie ma byc dodane okno dialogowe, czyli w miejscu tego przycisku-flutter znajduje navigator i pokazuje dialog nad ekranem
-                    builder: (context) {
-                      return AlertDialog(
-                        scrollable: true,
-                        title: Text('Dzień miesiączki: '),
-                        content: Padding(
-                          padding: EdgeInsets.all(
-                            8,
-                          ), //dookola pola tekstowego przerwa 8 pikseli
-                          child: TextField(controller: _eventController),
-                        ),
-                        actions: [
-                          ElevatedButton(
-                            onPressed: () {
-                              events.addAll({
-                                _kliknietyDzien!: [
-                                  //! mowi ze wiadomo ze tu nie bedzie null, czyli ze na pewno cos wpiszemy
-                                  Event(_eventController.text),
-                                ],
-                              });
-                              Navigator.of(
-                                context,
-                              ).pop(); //dzieki temu jak klikniemy dodaj to sie zamyka okno dialogowe
-                              _wybraneEventy.value = _wezEventyForDay(
-                                _kliknietyDzien!,
-                              );
-                            },
-                            child: Text('dodaj'),
-                          ),
-                        ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FloatingActionButton(
+                    onPressed: () {
+                      showDialog(
+                        //otwieramy okno dialogowe
+                        context:
+                            context, //dzieki temu showDialog wie gdzie ma byc dodane okno dialogowe, czyli w miejscu tego przycisku-flutter znajduje navigator i pokazuje dialog nad ekranem
+                        builder: (context) {
+                          return AlertDialog(
+                            scrollable: true,
+                            title: Text('Dzień miesiączki: '),
+                            content: Padding(
+                              padding: EdgeInsets.all(
+                                8,
+                              ), //dookola pola tekstowego przerwa 8 pikseli
+                              child: TextField(controller: _eventController),
+                            ),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  events.addAll({
+                                    _kliknietyDzien!: [
+                                      //! mowi ze wiadomo ze tu nie bedzie null, czyli ze na pewno cos wpiszemy
+                                      Event(_eventController.text),
+                                    ],
+                                  });
+                                  Navigator.of(
+                                    context,
+                                  ).pop(); //dzieki temu jak klikniemy dodaj to sie zamyka okno dialogowe
+                                  _wybraneEventy.value = _wezEventyForDay(
+                                    _kliknietyDzien!,
+                                  );
+                                },
+                                child: Text('dodaj'),
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
-                  );
-                },
-                child: Icon(Icons.edit),
+                    child: Icon(Icons.edit),
+                  ),
+                ],
               ),
               Container(
                 width: 400,
@@ -173,6 +179,7 @@ class _CyklState extends State<Cykl> {
                   },
                 ),
               ),
+
               Expanded(
                 child: ValueListenableBuilder<List<Event>>(
                   valueListenable: _wybraneEventy,
@@ -182,7 +189,7 @@ class _CyklState extends State<Cykl> {
                       itemBuilder: (context, index) {
                         return Container(
                           margin: EdgeInsets.symmetric(
-                            horizontal: 12,
+                            horizontal: 80,
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
