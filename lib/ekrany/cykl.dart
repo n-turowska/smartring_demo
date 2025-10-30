@@ -135,7 +135,7 @@ class _CyklState extends State<Cykl> {
               ),
               Container(
                 width: 400,
-                height: 300,
+                height: 280,
                 child: TableCalendar(
                   locale: Localizations.localeOf(
                     context,
