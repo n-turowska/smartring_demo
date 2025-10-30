@@ -13,7 +13,8 @@ class Cykl extends StatefulWidget {
 class _CyklState extends State<Cykl> {
   //do przycisków
   int ilosc_dni_boli_brzuch = 0;
-  int ilosc_dni_do_miesiaczki = 1;
+  int ilosc_dni_do_miesiaczki = 2;
+  double rozmiar_czcionki = 22;
   //kolory
   final Kolor = const Color.fromARGB(255, 252, 212, 232);
   final Kolor_tekstu = Colors.black;
@@ -58,10 +59,11 @@ class _CyklState extends State<Cykl> {
       appBar: AppBar(
         //gora ekranu
         title: const Text(
-          'Mój Cykl',
+          'Kalendarz',
           style: TextStyle(
             color: Colors.black,
-            fontWeight: FontWeight.bold, //grubosc czcionki
+            fontWeight: FontWeight.bold,
+            //grubosc czcionki
           ),
         ),
         backgroundColor: const Color.fromARGB(255, 236, 161, 202),
@@ -110,10 +112,11 @@ class _CyklState extends State<Cykl> {
                 //padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
                 alignment: Alignment.center,
                 child: Text(
-                  'dzień cyklu: 28',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
+                  '28 dzień cyklu',
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    color: Kolor_tekstu,
+                    fontSize: rozmiar_czcionki,
+                  ),
                 ),
               ),
               Container(
@@ -143,10 +146,12 @@ class _CyklState extends State<Cykl> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'do miesiączki: $ilosc_dni_do_miesiaczki dni',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
+                      '$ilosc_dni_do_miesiaczki dni do miesiączki',
+                      style: Theme.of(context).textTheme.headlineMedium!
+                          .copyWith(
+                            color: Kolor_tekstu,
+                            fontSize: rozmiar_czcionki,
+                          ),
                     ),
                     const SizedBox(
                       width: 10,
@@ -183,7 +188,9 @@ class _CyklState extends State<Cykl> {
                             builder: (context) {
                               return AlertDialog(
                                 scrollable: true,
-                                title: Text('Mój cykl: '),
+                                title: Text(
+                                  '${_kliknietyDzien!.day}-${_kliknietyDzien!.month}-${_kliknietyDzien!.year} : ',
+                                ),
                                 content: Padding(
                                   padding: EdgeInsets.all(
                                     8,
