@@ -114,6 +114,9 @@ class _CyklState extends State<Cykl> {
                               Navigator.of(
                                 context,
                               ).pop(); //dzieki temu jak klikniemy dodaj to sie zamyka okno dialogowe
+                              _wybraneEventy.value = _wezEventyForDay(
+                                _kliknietyDzien!,
+                              );
                             },
                             child: Text('dodaj'),
                           ),
@@ -153,6 +156,9 @@ class _CyklState extends State<Cykl> {
                       //zeby powiadomic ze zmienily sie wartosci trzeba przypisac
                       _kliknietyDzien = kliknietyDzien;
                       dzisiaj = terazniejszyDzien;
+                      _wybraneEventy.value = _wezEventyForDay(
+                        _kliknietyDzien!,
+                      ); //zeby pokazywal sie event w zaleznosci od kliknietego dnia, a nie ciagle ten sam
                     });
                   },
                   eventLoader: _wezEventyForDay,
@@ -164,6 +170,52 @@ class _CyklState extends State<Cykl> {
                       dzisiaj =
                           terazniejszyDzien; //zmieniamy z tego miesiaca co byl z 'dzisiaj' i zmieniamy na ten klikniety
                     });
+                  },
+                ),
+              ),
+              Expanded(
+                child: ValueListenableBuilder<List<Event>>(
+                  valueListenable: _wybraneEventy,
+                  builder: (context, value, _) {
+                    return ListView.builder(
+                      itemCount: value.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              15,
+                            ), //do zaokraglenia rogow
+                            color: Kolor, //kolor tla
+                            boxShadow: [
+                              //cienie
+                              BoxShadow(
+                                color: Colors.grey.shade500, //kolor cienia
+                                offset: Offset(
+                                  4.0,
+                                  4.0,
+                                ), //przesunicie wzgledem kontenera
+                                blurRadius: 15.0, //rozmycie cienia
+                                spreadRadius: 1.0, //rozszerzenie cienia
+                              ),
+                              BoxShadow(
+                                color: Colors.white,
+                                offset: Offset(-4.0, -4.0),
+                                blurRadius: 15.0,
+                                spreadRadius: 1.0,
+                              ),
+                            ],
+                          ),
+                          child: ListTile(
+                            onTap: () => print(""),
+                            title: Text(value[index].title),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
               ),
