@@ -14,15 +14,16 @@ class _CyklState extends State<Cykl> {
   //do przycisków
   int ilosc_dni_boli_brzuch = 0;
   int ilosc_dni_do_miesiaczki = 1;
-
   //kolory
   final Kolor = const Color.fromARGB(255, 252, 212, 232);
   final Kolor_tekstu = Colors.black;
 
   //do kalendarza
   DateTime dzisiaj = DateTime.now();
-  DateTime? _kliknietyDzien =
+  DateTime _kliknietyDzien =
       DateTime.now(); // _ jest po to zeby nie dalo sie modiikowac tych zmiennych spoza klasy i deklarujemy od razu zeby nie byl null, jesli nie klikniemy w dzien na kalendarzu, a damy edit kalendarza
+  //int get ilosc_dni_do_miesiaczki => _wybraneEventy.day - dzisiaj.day;
+
   Map<DateTime, List<Event>> events =
       {}; //tworzymy map, ktora bedzie miala w sobie eventy-miesiaczke
   TextEditingController _eventController = TextEditingController();
@@ -180,50 +181,54 @@ class _CyklState extends State<Cykl> {
                 ),
               ),
 
-              Expanded(
-                child: ValueListenableBuilder<List<Event>>(
-                  valueListenable: _wybraneEventy,
-                  builder: (context, value, _) {
-                    return ListView.builder(
-                      itemCount: value.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: 80,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              15,
-                            ), //do zaokraglenia rogow
-                            color: Kolor, //kolor tla
-                            boxShadow: [
-                              //cienie
-                              BoxShadow(
-                                color: Colors.grey.shade500, //kolor cienia
-                                offset: Offset(
-                                  4.0,
-                                  4.0,
-                                ), //przesunicie wzgledem kontenera
-                                blurRadius: 15.0, //rozmycie cienia
-                                spreadRadius: 1.0, //rozszerzenie cienia
-                              ),
-                              BoxShadow(
-                                color: Colors.white,
-                                offset: Offset(-4.0, -4.0),
-                                blurRadius: 15.0,
-                                spreadRadius: 1.0,
-                              ),
-                            ],
-                          ),
-                          child: ListTile(
-                            onTap: () => print(""),
-                            title: Text(value[index].title),
-                          ),
-                        );
-                      },
-                    );
-                  },
+              Container(
+                height: 80,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: ValueListenableBuilder<List<Event>>(
+                    valueListenable: _wybraneEventy,
+                    builder: (context, value, _) {
+                      return ListView.builder(
+                        itemCount: value.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 80,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                15,
+                              ), //do zaokraglenia rogow
+                              color: Kolor, //kolor tla
+                              boxShadow: [
+                                //cienie
+                                BoxShadow(
+                                  color: Colors.grey.shade500, //kolor cienia
+                                  offset: Offset(
+                                    4.0,
+                                    4.0,
+                                  ), //przesunicie wzgledem kontenera
+                                  blurRadius: 15.0, //rozmycie cienia
+                                  spreadRadius: 1.0, //rozszerzenie cienia
+                                ),
+                                BoxShadow(
+                                  color: Colors.white,
+                                  offset: Offset(-4.0, -4.0),
+                                  blurRadius: 15.0,
+                                  spreadRadius: 1.0,
+                                ),
+                              ],
+                            ),
+                            child: ListTile(
+                              onTap: () => print(""),
+                              title: Text(value[index].title),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
               Container(
