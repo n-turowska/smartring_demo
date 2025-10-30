@@ -80,6 +80,56 @@ class _CyklState extends State<Cykl> {
             //scaffold ma jeden widget wiec column musi byc w stack
             mainAxisAlignment: MainAxisAlignment.center, //zeby bylo na srodku
             children: [
+              Padding(
+                padding: EdgeInsets.only(top: 1, right: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FloatingActionButton(
+                      onPressed: () {
+                        showDialog(
+                          //otwieramy okno dialogowe
+                          context:
+                              context, //dzieki temu showDialog wie gdzie ma byc dodane okno dialogowe, czyli w miejscu tego przycisku-flutter znajduje navigator i pokazuje dialog nad ekranem
+                          builder: (context) {
+                            return AlertDialog(
+                              scrollable: true,
+                              title: Text('Mój cykl: '),
+                              content: Padding(
+                                padding: EdgeInsets.all(
+                                  8,
+                                ), //dookola pola tekstowego przerwa 8 pikseli
+                                child: TextField(controller: _eventController),
+                              ),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    events.addAll({
+                                      _kliknietyDzien!: [
+                                        //! mowi ze wiadomo ze tu nie bedzie null, czyli ze na pewno cos wpiszemy
+                                        Event(_eventController.text),
+                                      ],
+                                    });
+                                    Navigator.of(
+                                      context,
+                                    ).pop(); //dzieki temu jak klikniemy dodaj to sie zamyka okno dialogowe
+                                    _wybraneEventy.value = _wezEventyForDay(
+                                      _kliknietyDzien!,
+                                    );
+                                  },
+                                  child: Text('dodaj'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Icon(Icons.edit),
+                    ),
+                  ],
+                ),
+              ),
+
               /*Image.asset(
                 'assets/kalendarz1.png',
                 width: 250,
@@ -88,52 +138,6 @@ class _CyklState extends State<Cykl> {
                 //colorBlendMode: BlendMode.multiply,
               ), //dodanie obrazka
               */
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  FloatingActionButton(
-                    onPressed: () {
-                      showDialog(
-                        //otwieramy okno dialogowe
-                        context:
-                            context, //dzieki temu showDialog wie gdzie ma byc dodane okno dialogowe, czyli w miejscu tego przycisku-flutter znajduje navigator i pokazuje dialog nad ekranem
-                        builder: (context) {
-                          return AlertDialog(
-                            scrollable: true,
-                            title: Text('Dzień miesiączki: '),
-                            content: Padding(
-                              padding: EdgeInsets.all(
-                                8,
-                              ), //dookola pola tekstowego przerwa 8 pikseli
-                              child: TextField(controller: _eventController),
-                            ),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  events.addAll({
-                                    _kliknietyDzien!: [
-                                      //! mowi ze wiadomo ze tu nie bedzie null, czyli ze na pewno cos wpiszemy
-                                      Event(_eventController.text),
-                                    ],
-                                  });
-                                  Navigator.of(
-                                    context,
-                                  ).pop(); //dzieki temu jak klikniemy dodaj to sie zamyka okno dialogowe
-                                  _wybraneEventy.value = _wezEventyForDay(
-                                    _kliknietyDzien!,
-                                  );
-                                },
-                                child: Text('dodaj'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: Icon(Icons.edit),
-                  ),
-                ],
-              ),
               Container(
                 width: 400,
                 height: 280,
