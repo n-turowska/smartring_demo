@@ -17,10 +17,11 @@ class _CyklState extends State<Cykl> {
   //kolory
   final Kolor = const Color.fromARGB(255, 252, 212, 232);
   final Kolor_tekstu = Colors.black;
+  final Kolor_przycisku = Color.fromARGB(255, 236, 161, 202);
 
   //do kalendarza
-  DateTime dzisiaj = DateTime.now();
-  DateTime _kliknietyDzien =
+  late DateTime dzisiaj;
+  DateTime? _kliknietyDzien =
       DateTime.now(); // _ jest po to zeby nie dalo sie modiikowac tych zmiennych spoza klasy i deklarujemy od razu zeby nie byl null, jesli nie klikniemy w dzien na kalendarzu, a damy edit kalendarza
   //int get ilosc_dni_do_miesiaczki => _wybraneEventy.day - dzisiaj.day;
 
@@ -33,6 +34,7 @@ class _CyklState extends State<Cykl> {
   @override
   void initState() {
     super.initState();
+    dzisiaj = DateTime.now();
     _wybraneEventy = ValueNotifier(_wezEventyForDay(_kliknietyDzien!));
   }
 
@@ -75,58 +77,149 @@ class _CyklState extends State<Cykl> {
             'assets/tlo_tel_cykl.png',
             fit: BoxFit.cover,
           ),
+
           Column(
             spacing: 20.0,
             //scaffold ma jeden widget wiec column musi byc w stack
             mainAxisAlignment: MainAxisAlignment.center, //zeby bylo na srodku
             children: [
-              Padding(
-                padding: EdgeInsets.only(top: 1, right: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FloatingActionButton(
-                      onPressed: () {
-                        showDialog(
-                          //otwieramy okno dialogowe
-                          context:
-                              context, //dzieki temu showDialog wie gdzie ma byc dodane okno dialogowe, czyli w miejscu tego przycisku-flutter znajduje navigator i pokazuje dialog nad ekranem
-                          builder: (context) {
-                            return AlertDialog(
-                              scrollable: true,
-                              title: Text('Mój cykl: '),
-                              content: Padding(
-                                padding: EdgeInsets.all(
-                                  8,
-                                ), //dookola pola tekstowego przerwa 8 pikseli
-                                child: TextField(controller: _eventController),
-                              ),
-                              actions: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    events.addAll({
-                                      _kliknietyDzien!: [
-                                        //! mowi ze wiadomo ze tu nie bedzie null, czyli ze na pewno cos wpiszemy
-                                        Event(_eventController.text),
-                                      ],
-                                    });
-                                    Navigator.of(
-                                      context,
-                                    ).pop(); //dzieki temu jak klikniemy dodaj to sie zamyka okno dialogowe
-                                    _wybraneEventy.value = _wezEventyForDay(
-                                      _kliknietyDzien!,
-                                    );
-                                  },
-                                  child: Text('dodaj'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      child: Icon(Icons.edit),
+              Container(
+                height: 50,
+                width: 400,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    15,
+                  ), //do zaokraglenia rogow
+                  color: Kolor, //kolor tla
+                  boxShadow: [
+                    //cienie
+                    BoxShadow(
+                      color: Colors.grey.shade500, //kolor cienia
+                      offset: Offset(4.0, 4.0), //przesunicie wzgledem kontenera
+                      blurRadius: 15.0, //rozmycie cienia
+                      spreadRadius: 1.0, //rozszerzenie cienia
+                    ),
+                    BoxShadow(
+                      color: Colors.white,
+                      offset: Offset(-4.0, -4.0),
+                      blurRadius: 15.0,
+                      spreadRadius: 1.0,
                     ),
                   ],
+                ),
+                //padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
+                alignment: Alignment.center,
+                child: Text(
+                  'dzień cyklu: 28',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
+                ),
+              ),
+              Container(
+                height: 50,
+                width: 400,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Kolor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade500,
+                      offset: Offset(4.0, 4.0),
+                      blurRadius: 15.0,
+                      spreadRadius: 1.0,
+                    ),
+                    BoxShadow(
+                      color: Colors.white,
+                      offset: Offset(-4.0, -4.0),
+                      blurRadius: 15.0,
+                      spreadRadius: 1.0,
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
+
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'do miesiączki: $ilosc_dni_do_miesiaczki dni',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ), //zeby byla przerwa miedzy tekstem a obrazkiem
+                    for (
+                      int i = 0;
+                      i < 4 - ilosc_dni_do_miesiaczki;
+                      i++
+                    ) //wyswietlenie kropelek obok napisu
+                      Image.asset(
+                        'assets/kropelka.jpg',
+                        width: 25,
+                        color: Kolor,
+                        colorBlendMode: BlendMode.multiply,
+                      ),
+                  ],
+                ),
+              ),
+
+              Positioned(
+                top: 0,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 0, right: 16),
+
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      FloatingActionButton(
+                        onPressed: () {
+                          showDialog(
+                            //otwieramy okno dialogowe
+                            context:
+                                context, //dzieki temu showDialog wie gdzie ma byc dodane okno dialogowe, czyli w miejscu tego przycisku-flutter znajduje navigator i pokazuje dialog nad ekranem
+                            builder: (context) {
+                              return AlertDialog(
+                                scrollable: true,
+                                title: Text('Mój cykl: '),
+                                content: Padding(
+                                  padding: EdgeInsets.all(
+                                    8,
+                                  ), //dookola pola tekstowego przerwa 8 pikseli
+                                  child: TextField(
+                                    controller: _eventController,
+                                  ),
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      events.addAll({
+                                        _kliknietyDzien!: [
+                                          //! mowi ze wiadomo ze tu nie bedzie null, czyli ze na pewno cos wpiszemy
+                                          Event(_eventController.text),
+                                        ],
+                                      });
+                                      Navigator.of(
+                                        context,
+                                      ).pop(); //dzieki temu jak klikniemy dodaj to sie zamyka okno dialogowe
+                                      _wybraneEventy.value = _wezEventyForDay(
+                                        _kliknietyDzien!,
+                                      );
+                                    },
+                                    child: Text('dodaj'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        backgroundColor: Kolor_przycisku,
+                        child: Icon(Icons.edit),
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
@@ -236,7 +329,7 @@ class _CyklState extends State<Cykl> {
                   ),
                 ),
               ),
-              Container(
+              /*Container(
                 height: 50,
                 width: 400,
                 decoration: BoxDecoration(
@@ -268,8 +361,8 @@ class _CyklState extends State<Cykl> {
                     context,
                   ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
                 ),
-              ),
-              Container(
+              )*/
+              /*Container(
                 height: 50,
                 width: 400,
                 decoration: BoxDecoration(
@@ -317,8 +410,8 @@ class _CyklState extends State<Cykl> {
                       ),
                   ],
                 ),
-              ),
-              Container(
+              )*/
+              /*Container(
                 height: 50,
                 width: 400,
                 decoration: BoxDecoration(
@@ -359,7 +452,7 @@ class _CyklState extends State<Cykl> {
                     ),
                   ],
                 ),
-              ),
+              )*/
             ],
           ),
         ],
@@ -369,7 +462,7 @@ class _CyklState extends State<Cykl> {
         onPressed: () {
           Navigator.popAndPushNamed(context, '/glowny');
         },
-        backgroundColor: const Color.fromARGB(255, 236, 161, 202),
+        backgroundColor: Kolor_przycisku,
         child: const Icon(Icons.home),
       ),
     );
