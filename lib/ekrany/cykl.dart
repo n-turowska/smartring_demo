@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartring_demo/ekrany/kalendarz/event.dart';
-import 'package:smartring_demo/main.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'kalendarz/event.dart';
 
 class Cykl extends StatefulWidget {
   const Cykl({super.key});
