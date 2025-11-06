@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:smartring_demo/ekrany/aktywnosc.dart';
-import 'package:smartring_demo/ekrany/zdrowie.dart';
-import 'package:smartring_demo/ekrany/cykl.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'ekrany/aktywnosc.dart';
+import 'ekrany/zdrowie.dart';
+import 'ekrany/cykl.dart';
+import 'services/database_service.dart';
+import 'core/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,13 +17,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      title: 'Mira Ring Demo',
+      theme: AppTheme.lightTheme,
       initialRoute: '/glowny',
       routes: {
-        '/aktywnosc': (context) => const Aktywnosc(),
+        '/aktywnosc': (context) => Aktywnosc(
+          databaseService: DatabaseService.instance,
+        ),
         '/zdrowie': (context) => const Zdrowie(),
         '/cykl': (context) => const Cykl(),
         '/glowny': (context) =>

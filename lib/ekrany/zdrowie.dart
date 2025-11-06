@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartring_demo/main.dart';
-import 'package:smartring_demo/wykres_zdrowie/wykres1.dart';
+import '../widgets/common/main_shape.dart';
+import '../wykres_zdrowie/wykres1.dart';
 
 
 class Zdrowie extends StatelessWidget {
