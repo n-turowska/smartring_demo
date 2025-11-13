@@ -24,27 +24,29 @@ class DatabaseService {
   ///
   /// This data matches what's currently hardcoded in aktywnosc.dart
   final List<int> _mockWeeklySteps = [
-    5040,  // Monday
-    6490,  // Tuesday
-    2904,  // Wednesday
+    5040, // Monday
+    6490, // Tuesday
+    2904, // Wednesday
     10075, // Thursday
-    7099,  // Friday
+    7099, // Friday
     12349, // Saturday
-    5607,  // Sunday (today)
+    5607, // Sunday (today)
   ];
 
   /// Mock weekly HRV values (Monday to Sunday)
   ///
   /// This data matches what's currently hardcoded in wykres1.dart
   final List<double> _mockWeeklyHRV = [
-    75.0,  // Monday
-    30.0,  // Tuesday
+    75.0, // Monday
+    30.0, // Tuesday
     120.0, // Wednesday
     130.0, // Thursday
-    20.0,  // Friday
+    20.0, // Friday
     100.0, // Saturday
-    80.0,  // Sunday
+    80.0, // Sunday
   ];
+
+  /// Mock monthly ovulation day
 
   // ============ PUBLIC API ============
 
