@@ -31,37 +31,84 @@ class _CyklState extends State<Cykl> {
   DateTime? _kliknietyDzien =
       DateTime.now(); // _ jest po to zeby nie dalo sie modiikowac tych zmiennych spoza klasy i deklarujemy od razu zeby nie byl null, jesli nie klikniemy w dzien na kalendarzu, a damy edit kalendarza
   //int get ilosc_dni_do_miesiaczki => _wybraneEventy.day - dzisiaj.day;
-
-  Map<DateTime, List<Event>> events =
-      {}; //tworzymy map, ktora bedzie miala w sobie eventy-miesiaczke
+  Map<DateTime, List<dynamic>> _eventsByDay =
+      {}; //mapa wszystkich eventow-user+ovulation
+  //Map<DateTime, List<Event>> events =
+  //   {}; //tworzymy map, ktora bedzie miala w sobie eventy-miesiaczke
   TextEditingController _eventController = TextEditingController();
-  late final ValueNotifier<List<Event>>
+  late final ValueNotifier<List<dynamic>>
   _wybraneEventy; //late-zainicjalizujemy ta zmienna pozniej, final-tylko raz inicjalizujemy, potem nie mozna zmienic, ValueNotifier przechowuje liste eventow i powiadamia widgety gdy ta lista sie zmienia
 
   @override
   void initState() {
     super.initState();
     dzisiaj = DateTime.now();
-    _wybraneEventy = ValueNotifier(_wezEventyForDay(_kliknietyDzien!));
-    final ovulations = widget.databaseService.getAllOvulationDays();
+    _wybraneEventy = ValueNotifier([]);
+    _loadEvents();
+    //_wybraneEventy = ValueNotifier(_wezEventyForDay(_kliknietyDzien!));
   }
 
-  List<Event> _wezEventyForDay(DateTime day) {
-    return events[day] ??
-        []; //jesli events[day] jest null to zwroci pusta liste;
+  Future<void> _loadEvents() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    try {
+      final userEvents = await widget.databaseService.getUserEvents();
+      final predictedOvulation = await widget.databaseService
+          .getAllOvulationDays();
+
+      //grupowanie po dniu
+      final Map<DateTime, List<dynamic>> grouped = {};
+      for (var e in userEvents) {
+        final date = DateTime(e.date.year, e.date.month, e.date.day);
+        grouped[date] = (grouped[date] ?? [])..add(e);
+      }
+      for (var i in predictedOvulation) {
+        final date = DateTime(i.date.year, i.date.month, i.date.day);
+        grouped[date] = (grouped[date] ?? [])..add(i);
+      }
+
+      setState(() {
+        _eventsByDay = grouped;
+        _wybraneEventy.value = _wezEventyForDay(_kliknietyDzien!);
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Nie udało się załadować: &e';
+        _isLoading = false;
+      });
+    }
   }
 
-  void zwiekszenie_dni() {
+  List<dynamic> _wezEventyForDay(DateTime day) {
+    return _eventsByDay[DateTime(day.year, day.month, day.day)] ??
+        []; //jesli _eventsByDay jest null to zwroci pusta liste;
+  }
+
+  /*void zwiekszenie_dni() {
     setState(() {
       //sprawia ze klikniecie przycisku zwieksza ilosc dni na ekranie
       ilosc_dni_boli_brzuch = ilosc_dni_boli_brzuch < 7
           ? ilosc_dni_boli_brzuch + 1
           : 0;
     });
+  }*/
+  //nowy event dodany przez uzytkownika
+  void _addUserEvent(DateTime day, String title) async {
+    final newEvent = Event(title, day);
+    widget.databaseService.addUserEvent(newEvent);
+    final date = DateTime(day.year, day.month, day.day);
+    _eventsByDay[date] = (_eventsByDay[date] ?? [])..add(newEvent);
+    _wybraneEventy.value = _wezEventyForDay(day);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) return const Center(child: CircularProgressIndicator());
+    if (_errorMessage != null) return Center(child: Text(_errorMessage!));
+
     return Scaffold(
       appBar: AppBar(
         //gora ekranu
@@ -209,18 +256,19 @@ class _CyklState extends State<Cykl> {
                                 actions: [
                                   ElevatedButton(
                                     onPressed: () {
-                                      events.addAll({
-                                        _kliknietyDzien!: [
-                                          //! mowi ze wiadomo ze tu nie bedzie null, czyli ze na pewno cos wpiszemy
-                                          Event(_eventController.text),
-                                        ],
-                                      });
+                                      final date = _kliknietyDzien!;
+                                      widget.databaseService.addUserEvent(
+                                        Event(_eventController.text, date),
+                                      );
+                                      _eventsByDay[date] =
+                                          (_eventsByDay[date] ?? [])..add(
+                                            Event(_eventController.text, date),
+                                          );
+                                      _wybraneEventy.value =
+                                          _eventsByDay[date]!;
                                       Navigator.of(
                                         context,
                                       ).pop(); //dzieki temu jak klikniemy dodaj to sie zamyka okno dialogowe
-                                      _wybraneEventy.value = _wezEventyForDay(
-                                        _kliknietyDzien!,
-                                      );
                                     },
                                     child: Text('dodaj'),
                                   ),
@@ -248,7 +296,7 @@ class _CyklState extends State<Cykl> {
               Container(
                 width: 400,
                 height: 280,
-                child: TableCalendar(
+                child: TableCalendar<dynamic>(
                   locale: Localizations.localeOf(
                     context,
                   ).toString(), //toString zamienia na tekst "pl_PL", a to wczesniej pobiera atualny jezyk aplikacji
@@ -282,6 +330,26 @@ class _CyklState extends State<Cykl> {
                   eventLoader: _wezEventyForDay,
                   startingDayOfWeek: StartingDayOfWeek
                       .monday, //zeby byl od pn-ndz a nie ndz-sb
+                  calendarBuilders: CalendarBuilders(
+                    markerBuilder: (context, day, events) {
+                      if (events.isEmpty) return null;
+                      final hasUserEvent = events.any((e) => e is Event);
+                      final hasOvulation = events.any(
+                        (e) => e is PredictedOvulation,
+                      );
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (hasOvulation)
+                            const Icon(
+                              Icons.favorite,
+                              size: 10,
+                              color: Colors.pink,
+                            ),
+                        ],
+                      );
+                    },
+                  ),
                   onPageChanged: (terazniejszyDzien) {
                     //informuje ktory miesiac jest aktualnie widoczny
                     setState(() {
@@ -296,7 +364,7 @@ class _CyklState extends State<Cykl> {
                 height: 80,
                 child: Align(
                   alignment: Alignment.topCenter,
-                  child: ValueListenableBuilder<List<Event>>(
+                  child: ValueListenableBuilder<List<dynamic>>(
                     valueListenable: _wybraneEventy,
                     builder: (context, value, _) {
                       return ListView.builder(

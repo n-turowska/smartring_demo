@@ -48,7 +48,7 @@ class DatabaseService {
   ];
 
   /// Mock annually ovulation day
-  final List<PredictedOvulation> _mockOvultionDay = [
+  final List<PredictedOvulation> _mockOvulationDay = [
     PredictedOvulation(title: 'owulacja', date: DateTime(2025, 11, 15)),
     PredictedOvulation(title: 'owulacja', date: DateTime(2025, 12, 15)),
     PredictedOvulation(title: 'owulacja', date: DateTime(2026, 1, 15)),
@@ -63,7 +63,7 @@ class DatabaseService {
     PredictedOvulation(title: 'owulacja', date: DateTime(2026, 10, 15)),
   ];
   List<PredictedOvulation> getAllOvulationDays() {
-    return _mockOvultionDay;
+    return _mockOvulationDay;
   }
 
   /// added by user events-for example period days
@@ -71,6 +71,11 @@ class DatabaseService {
   List<Event> getUserEvents() {
     return _userEvents;
   }
+
+  void addUserEvent(Event event) {
+    _userEvents.add(event);
+  }
+
   // ============ PUBLIC API ============
 
   /// Get step counts for the last 7 days

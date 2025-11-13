@@ -1,6 +1,7 @@
 class Event {
   final String title;
-  Event(this.title);
+  final DateTime date;
+  Event(this.title, this.date);
 }
 
 class PredictedOvulation {
