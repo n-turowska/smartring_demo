@@ -21,11 +21,10 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       initialRoute: '/glowny',
       routes: {
-        '/aktywnosc': (context) => Aktywnosc(
-          databaseService: DatabaseService.instance,
-        ),
+        '/aktywnosc': (context) =>
+            Aktywnosc(databaseService: DatabaseService.instance),
         '/zdrowie': (context) => const Zdrowie(),
-        '/cykl': (context) => const Cykl(),
+        '/cykl': (context) => Cykl(databaseService: DatabaseService.instance),
         '/glowny': (context) =>
             const MyHomePage(title: 'Mira Ring Demo Home Page'),
       },

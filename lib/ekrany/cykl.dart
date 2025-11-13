@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'kalendarz/event.dart';
+import 'package:smartring_demo/services/database_service.dart';
 
 class Cykl extends StatefulWidget {
-  const Cykl({super.key});
+  final DatabaseService databaseService;
+
+  const Cykl({super.key, required this.databaseService});
 
   @override
   State<Cykl> createState() => _CyklState();
 }
 
 class _CyklState extends State<Cykl> {
+  //loading state
+  bool _isLoading = true;
+  String? _errorMessage;
+
   //do przycisków
   int ilosc_dni_boli_brzuch = 0;
   int ilosc_dni_do_miesiaczki = 2;
@@ -36,6 +43,7 @@ class _CyklState extends State<Cykl> {
     super.initState();
     dzisiaj = DateTime.now();
     _wybraneEventy = ValueNotifier(_wezEventyForDay(_kliknietyDzien!));
+    final ovulations = widget.databaseService.getAllOvulationDays();
   }
 
   List<Event> _wezEventyForDay(DateTime day) {

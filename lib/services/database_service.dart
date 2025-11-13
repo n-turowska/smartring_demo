@@ -65,6 +65,12 @@ class DatabaseService {
   List<PredictedOvulation> getAllOvulationDays() {
     return _mockOvultionDay;
   }
+
+  /// added by user events-for example period days
+  final List<Event> _userEvents = [];
+  List<Event> getUserEvents() {
+    return _userEvents;
+  }
   // ============ PUBLIC API ============
 
   /// Get step counts for the last 7 days
