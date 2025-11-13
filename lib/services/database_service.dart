@@ -1,6 +1,7 @@
 // services/database_service.dart
 
 import '../models/health_metrics.dart';
+import '../ekrany/kalendarz/event.dart';
 
 /// Database service for managing health data persistence
 ///
@@ -46,8 +47,24 @@ class DatabaseService {
     80.0, // Sunday
   ];
 
-  /// Mock monthly ovulation day
-
+  /// Mock annually ovulation day
+  final List<PredictedOvulation> _mockOvultionDay = [
+    PredictedOvulation(title: 'owulacja', date: DateTime(2025, 11, 15)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2025, 12, 15)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 1, 15)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 2, 15)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 3, 15)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 4, 15)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 5, 15)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 6, 15)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 7, 15)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 8, 15)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 9, 15)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 10, 15)),
+  ];
+  List<PredictedOvulation> getAllOvulationDays() {
+    return _mockOvultionDay;
+  }
   // ============ PUBLIC API ============
 
   /// Get step counts for the last 7 days
