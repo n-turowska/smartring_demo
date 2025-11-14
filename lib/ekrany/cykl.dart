@@ -432,26 +432,27 @@ class _CyklState extends State<Cykl> {
                               onTap: () => print(""),
 
                               title: Center(child: Text(value[index].title)),
-                              trailing: IconButton(
-                                icon: const Icon(
-                                  Icons.delete,
-                                  size: 20,
-                                  color: Colors.black,
-                                ),
-                                onPressed: () async {
-                                  final date = _kliknietyDzien;
-                                  await widget.databaseService.deleteEvent(
-                                    value[index],
-                                  );
-                                  _eventsByDay[date]?.removeWhere(
-                                    (e) => e.id == value[index].id,
-                                  );
-                                  _deletedEvents.add(value[index]);
-                                  _wybraneEventy.value =
-                                      _eventsByDay[date] ?? [];
-                                  setState(() {});
-                                },
-                              ),
+                              trailing: value[index] is Event
+                                  ? IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.black,
+                                      ),
+                                      onPressed: () async {
+                                        final date = _kliknietyDzien;
+                                        await widget.databaseService
+                                            .deleteEvent(value[index]);
+                                        _eventsByDay[date]?.removeWhere(
+                                          (e) => e.id == value[index].id,
+                                        );
+                                        _deletedEvents.add(value[index]);
+                                        _wybraneEventy.value =
+                                            _eventsByDay[date] ?? [];
+                                        setState(() {});
+                                      },
+                                    )
+                                  : null,
                             ),
                           );
                         },
