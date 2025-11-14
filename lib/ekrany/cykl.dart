@@ -19,7 +19,7 @@ class _CyklState extends State<Cykl> {
 
   //do przycisków
   int ilosc_dni_boli_brzuch = 0;
-  int ilosc_dni_do_miesiaczki = 2;
+  int ilosc_dni_do_miesiaczki = 14 + 15 - DateTime.now().day;
   double rozmiar_czcionki = 22;
   //kolory
   final Kolor = const Color.fromARGB(255, 252, 212, 232);
@@ -166,7 +166,7 @@ class _CyklState extends State<Cykl> {
                 //padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
                 alignment: Alignment.center,
                 child: Text(
-                  '${14 + dzisiaj.day - 15} dzień cyklu',
+                  '${14 + dzisiaj.day - 15} dzień cyklu', //14dziencyklu(owulacja)-dzien dzisiejszy-dzien owulacji
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     color: Kolor_tekstu,
                     fontSize: rozmiar_czcionki,
@@ -200,7 +200,7 @@ class _CyklState extends State<Cykl> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '$ilosc_dni_do_miesiaczki dni do miesiączki',
+                      '${14 + 15 - dzisiaj.day} dni do miesiączki', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
                       style: Theme.of(context).textTheme.headlineMedium!
                           .copyWith(
                             color: Kolor_tekstu,
@@ -210,6 +210,7 @@ class _CyklState extends State<Cykl> {
                     const SizedBox(
                       width: 10,
                     ), //zeby byla przerwa miedzy tekstem a obrazkiem
+
                     for (
                       int i = 0;
                       i < 4 - ilosc_dni_do_miesiaczki;

@@ -50,17 +50,17 @@ class DatabaseService {
   /// Mock annually ovulation day
   final List<PredictedOvulation> _mockOvulationDay = [
     PredictedOvulation(title: 'owulacja', date: DateTime(2025, 11, 15)),
-    PredictedOvulation(title: 'owulacja', date: DateTime(2025, 12, 15)),
-    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 1, 15)),
-    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 2, 15)),
-    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 3, 15)),
-    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 4, 15)),
-    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 5, 15)),
-    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 6, 15)),
-    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 7, 15)),
-    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 8, 15)),
-    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 9, 15)),
-    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 10, 15)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2025, 12, 13)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 1, 10)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 2, 7)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 3, 7)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 4, 4)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 5, 2)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 5, 30)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 6, 27)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 7, 25)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 8, 22)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 9, 19)),
   ];
   List<PredictedOvulation> getAllOvulationDays() {
     return _mockOvulationDay;
