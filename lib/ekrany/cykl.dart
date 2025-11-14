@@ -166,7 +166,7 @@ class _CyklState extends State<Cykl> {
                 //padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
                 alignment: Alignment.center,
                 child: Text(
-                  '28 dzień cyklu',
+                  '${14 + dzisiaj.day - 15} dzień cyklu',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     color: Kolor_tekstu,
                     fontSize: rozmiar_czcionki,
