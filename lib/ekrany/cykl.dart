@@ -257,15 +257,23 @@ class _CyklState extends State<Cykl> {
                                   ElevatedButton(
                                     onPressed: () {
                                       final date = _kliknietyDzien!;
+                                      final puredate = DateTime(
+                                        date.year,
+                                        date.month,
+                                        date.day,
+                                      ); //zeby bylo bez godziny
                                       widget.databaseService.addUserEvent(
-                                        Event(_eventController.text, date),
+                                        Event(_eventController.text, puredate),
                                       );
-                                      _eventsByDay[date] =
-                                          (_eventsByDay[date] ?? [])..add(
-                                            Event(_eventController.text, date),
+                                      _eventsByDay[puredate] =
+                                          (_eventsByDay[puredate] ?? [])..add(
+                                            Event(
+                                              _eventController.text,
+                                              puredate,
+                                            ),
                                           );
                                       _wybraneEventy.value =
-                                          _eventsByDay[date]!;
+                                          _eventsByDay[puredate]!;
                                       Navigator.of(
                                         context,
                                       ).pop(); //dzieki temu jak klikniemy dodaj to sie zamyka okno dialogowe
@@ -322,17 +330,26 @@ class _CyklState extends State<Cykl> {
                       //zeby powiadomic ze zmienily sie wartosci trzeba przypisac
                       _kliknietyDzien = kliknietyDzien;
                       dzisiaj = terazniejszyDzien;
+                      final date = _kliknietyDzien!;
+                      final puredate = DateTime(
+                        date.year,
+                        date.month,
+                        date.day,
+                      );
                       _wybraneEventy.value = _wezEventyForDay(
-                        _kliknietyDzien!,
+                        puredate,
                       ); //zeby pokazywal sie event w zaleznosci od kliknietego dnia, a nie ciagle ten sam
                     });
                   },
-                  eventLoader: _wezEventyForDay,
+                  eventLoader: (day) {
+                    final puredate = DateTime(day.year, day.month, day.day);
+                    return _eventsByDay[puredate] ?? [];
+                  },
                   startingDayOfWeek: StartingDayOfWeek
                       .monday, //zeby byl od pn-ndz a nie ndz-sb
                   calendarBuilders: CalendarBuilders(
                     markerBuilder: (context, day, events) {
-                      if (events.isEmpty) return null;
+                      if (events.isEmpty) print("events sa empty");
                       final hasUserEvent = events.any((e) => e is Event);
                       final hasOvulation = events.any(
                         (e) => e is PredictedOvulation,
@@ -345,6 +362,12 @@ class _CyklState extends State<Cykl> {
                               Icons.favorite,
                               size: 10,
                               color: Colors.pink,
+                            ),
+                          if (hasUserEvent)
+                            const Icon(
+                              Icons.event,
+                              size: 10,
+                              color: Colors.black,
                             ),
                         ],
                       );
