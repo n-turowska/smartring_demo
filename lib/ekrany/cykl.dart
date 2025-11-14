@@ -349,7 +349,7 @@ class _CyklState extends State<Cykl> {
                       .monday, //zeby byl od pn-ndz a nie ndz-sb
                   calendarBuilders: CalendarBuilders(
                     markerBuilder: (context, day, events) {
-                      if (events.isEmpty) print("events sa empty");
+                      if (events.isEmpty) return null;
                       final hasUserEvent = events.any((e) => e is Event);
                       final hasOvulation = events.any(
                         (e) => e is PredictedOvulation,
@@ -365,9 +365,9 @@ class _CyklState extends State<Cykl> {
                             ),
                           if (hasUserEvent)
                             const Icon(
-                              Icons.event,
-                              size: 10,
-                              color: Colors.black,
+                              Icons.circle,
+                              size: 7,
+                              color: Color.fromARGB(255, 7, 52, 78),
                             ),
                         ],
                       );
