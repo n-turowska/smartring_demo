@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'kalendarz/event.dart';
@@ -38,6 +40,7 @@ class _CyklState extends State<Cykl> {
   TextEditingController _eventController = TextEditingController();
   late final ValueNotifier<List<dynamic>>
   _wybraneEventy; //late-zainicjalizujemy ta zmienna pozniej, final-tylko raz inicjalizujemy, potem nie mozna zmienic, ValueNotifier przechowuje liste eventow i powiadamia widgety gdy ta lista sie zmienia
+  List<dynamic> _deletedEvents = [];
 
   @override
   void initState() {
@@ -83,8 +86,10 @@ class _CyklState extends State<Cykl> {
   }
 
   List<dynamic> _wezEventyForDay(DateTime day) {
-    return _eventsByDay[DateTime(day.year, day.month, day.day)] ??
+    final events =
+        _eventsByDay[DateTime(day.year, day.month, day.day)] ??
         []; //jesli _eventsByDay jest null to zwroci pusta liste;
+    return events.where((e) => !_deletedEvents.contains(e)).toList();
   }
 
   /*void zwiekszenie_dni() {
@@ -427,6 +432,26 @@ class _CyklState extends State<Cykl> {
                               onTap: () => print(""),
 
                               title: Center(child: Text(value[index].title)),
+                              trailing: IconButton(
+                                icon: const Icon(
+                                  Icons.delete,
+                                  size: 20,
+                                  color: Colors.black,
+                                ),
+                                onPressed: () async {
+                                  final date = _kliknietyDzien;
+                                  await widget.databaseService.deleteEvent(
+                                    value[index],
+                                  );
+                                  _eventsByDay[date]?.removeWhere(
+                                    (e) => e.id == value[index].id,
+                                  );
+                                  _deletedEvents.add(value[index]);
+                                  _wybraneEventy.value =
+                                      _eventsByDay[date] ?? [];
+                                  setState(() {});
+                                },
+                              ),
                             ),
                           );
                         },

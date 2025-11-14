@@ -76,6 +76,10 @@ class DatabaseService {
     _userEvents.add(event);
   }
 
+  Future<void> deleteEvent(Event event) async {
+    _userEvents.remove(event);
+  }
+
   // ============ PUBLIC API ============
 
   /// Get step counts for the last 7 days
