@@ -42,7 +42,7 @@ class _CyklState extends State<Cykl> {
   _wybraneEventy; //late-zainicjalizujemy ta zmienna pozniej, final-tylko raz inicjalizujemy, potem nie mozna zmienic, ValueNotifier przechowuje liste eventow i powiadamia widgety gdy ta lista sie zmienia
   final List<dynamic> _deletedEvents = [];
   int dlugoscCyklu = 28;
-  int dzienOwulacji = 14;
+  int get dzienOwulacji => dlugoscCyklu - 14;
 
   @override
   void initState() {
@@ -104,6 +104,13 @@ class _CyklState extends State<Cykl> {
       (i) => i.date.year == today.year && i.date.month == today.month,
     );
     return currentOvulation.date.day;
+  }
+
+  int? getPredictedDlugoscCyklu() {
+    final repo = DatabaseService.instance;
+    final dlCyklu = repo.dlCyklu.first;
+    dlugoscCyklu = dlCyklu;
+    return dlugoscCyklu;
   }
 
   /*void zwiekszenie_dni() {
@@ -186,7 +193,7 @@ class _CyklState extends State<Cykl> {
                 alignment: Alignment.center,
                 child: Text(
                   //dla 28 dnia cyklu reszta z dzielenia to 0, wiec musimy przypisac 28 i przesuwamy zakres -1 zeby z dzielenia bylo od 0-27 i potem dodajemy 1 zeby bylo 1-28
-                  '${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % dlugoscCyklu + 1} dzień cyklu', //(14dziencyklu(owulacja)+dzien dzisiejszy-dzien owulacji)%dlugosc cyklu  zeby dawalo reszte np jesli owulacja jest 7 to po 21 wyswietlalo sie nie 35 dzien cyklu tylko liczylo od 1
+                  '${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień cyklu', //(14dziencyklu(owulacja)+dzien dzisiejszy-dzien owulacji)%dlugosc cyklu  zeby dawalo reszte np jesli owulacja jest 7 to po 21 wyswietlalo sie nie 35 dzien cyklu tylko liczylo od 1
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     color: Kolor_tekstu,
                     fontSize: rozmiar_czcionki,
@@ -220,7 +227,7 @@ class _CyklState extends State<Cykl> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${(dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) % dlugoscCyklu} dni do miesiączki', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
+                      '${(dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) % getPredictedDlugoscCyklu()!} dni do miesiączki', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
                       style: Theme.of(context).textTheme.headlineMedium!
                           .copyWith(
                             color: Kolor_tekstu,

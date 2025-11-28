@@ -68,6 +68,22 @@ class DatabaseService {
     return _mockOvulationDay;
   }
 
+  final List<int> _mockPredictedDlugoscCyklu = [
+    28,
+    28,
+    28,
+    28,
+    28,
+    28,
+    28,
+    28,
+    28,
+    28,
+    28,
+    28,
+  ];
+  List<int> get dlCyklu => _mockPredictedDlugoscCyklu;
+
   /// added by user events-for example period days
   final List<Event> _userEvents = [];
   Future<List<Event>> getUserEvents() async {
