@@ -182,7 +182,7 @@ class _CyklState extends State<Cykl> {
                 //padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
                 alignment: Alignment.center,
                 child: Text(
-                  '${14 + dzisiaj.day - getCurrentOvulation()!} dzień cyklu', //14dziencyklu(owulacja)+dzien dzisiejszy-dzien owulacji
+                  '${(14 + dzisiaj.day - getCurrentOvulation()! - 1) % 28 + 1} dzień cyklu', //(14dziencyklu(owulacja)+dzien dzisiejszy-dzien owulacji-1)%28 +1 zeby dawalo reszte np jesli owulacja jest 7 to po 21 wyswietlalo sie nie 35 dzien cyklu tylko liczylo od 1
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     color: Kolor_tekstu,
                     fontSize: rozmiar_czcionki,
@@ -216,7 +216,7 @@ class _CyklState extends State<Cykl> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${14 + getCurrentOvulation()! - dzisiaj.day} dni do miesiączki', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
+                      '${(14 + getCurrentOvulation()! - dzisiaj.day) % 28} dni do miesiączki', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
                       style: Theme.of(context).textTheme.headlineMedium!
                           .copyWith(
                             color: Kolor_tekstu,
