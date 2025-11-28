@@ -96,7 +96,7 @@ class _CyklState extends State<Cykl> {
   int? getCurrentOvulation() {
     final repo = DatabaseService
         .instance; //musi byc instancja zeby sie moc odwolac do ovulationDays, czyli do gettera
-    final today = DateTime.now();
+    final today = _kliknietyDzien ?? DateTime.now();
     final currentOvulation = repo.ovulationDays.firstWhere(
       (i) => i.date.year == today.year && i.date.month == today.month,
     );
@@ -182,7 +182,7 @@ class _CyklState extends State<Cykl> {
                 //padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
                 alignment: Alignment.center,
                 child: Text(
-                  '${14 + dzisiaj.day - 15} dzień cyklu', //14dziencyklu(owulacja)-dzien dzisiejszy-dzien owulacji
+                  '${14 + dzisiaj.day - getCurrentOvulation()!} dzień cyklu', //14dziencyklu(owulacja)+dzien dzisiejszy-dzien owulacji
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     color: Kolor_tekstu,
                     fontSize: rozmiar_czcionki,
