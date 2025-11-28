@@ -101,7 +101,7 @@ class _CyklState extends State<Cykl> {
     });
   }*/
   //nowy event dodany przez uzytkownika
-  void _addUserEvent(DateTime day, String title) async {
+  Future<void> _addUserEvent(DateTime day, String title) async {
     final newEvent = Event(title, day);
     widget.databaseService.addUserEvent(newEvent);
     final date = DateTime(day.year, day.month, day.day);
