@@ -93,6 +93,16 @@ class _CyklState extends State<Cykl> {
     return events.where((e) => !_deletedEvents.contains(e)).toList();
   }
 
+  int? getCurrentOvulation() {
+    final repo = DatabaseService
+        .instance; //musi byc instancja zeby sie moc odwolac do ovulationDays, czyli do gettera
+    final today = DateTime.now();
+    final currentOvulation = repo.ovulationDays.firstWhere(
+      (i) => i.date.year == today.year && i.date.month == today.month,
+    );
+    return currentOvulation.date.day;
+  }
+
   /*void zwiekszenie_dni() {
     setState(() {
       //sprawia ze klikniecie przycisku zwieksza ilosc dni na ekranie
