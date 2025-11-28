@@ -216,7 +216,7 @@ class _CyklState extends State<Cykl> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${14 + 15 - dzisiaj.day} dni do miesiączki', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
+                      '${14 + getCurrentOvulation()! - dzisiaj.day} dni do miesiączki', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
                       style: Theme.of(context).textTheme.headlineMedium!
                           .copyWith(
                             color: Kolor_tekstu,
