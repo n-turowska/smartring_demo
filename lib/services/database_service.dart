@@ -62,13 +62,13 @@ class DatabaseService {
     PredictedOvulation(title: 'owulacja', date: DateTime(2026, 8, 22)),
     PredictedOvulation(title: 'owulacja', date: DateTime(2026, 9, 19)),
   ];
-  List<PredictedOvulation> getAllOvulationDays() {
+  Future<List<PredictedOvulation>> getAllOvulationDays() async {
     return _mockOvulationDay;
   }
 
   /// added by user events-for example period days
   final List<Event> _userEvents = [];
-  List<Event> getUserEvents() {
+  Future<List<Event>> getUserEvents() async {
     return _userEvents;
   }
 
