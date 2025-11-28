@@ -62,6 +62,8 @@ class DatabaseService {
     PredictedOvulation(title: 'owulacja', date: DateTime(2026, 8, 22)),
     PredictedOvulation(title: 'owulacja', date: DateTime(2026, 9, 19)),
   ];
+  List<PredictedOvulation> get ovulationDays =>
+      _mockOvulationDay; //zeby mozna bylo sie odwolac do danego dnia na zewnatrz pliku
   Future<List<PredictedOvulation>> getAllOvulationDays() async {
     return _mockOvulationDay;
   }

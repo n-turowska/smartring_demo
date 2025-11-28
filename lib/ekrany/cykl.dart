@@ -52,6 +52,7 @@ class _CyklState extends State<Cykl> {
   }
 
   Future<void> _loadEvents() async {
+    //Future, async i await powoduja ze program moze isc dalej pomimo ze to sie jeszcze nie wykona, a jak sie wykona to sie wtedy wyswietli i dzieki temu nic nie stoi i nie czeka na wykonanie tych linijek
     setState(() {
       _isLoading = true;
       _errorMessage = null;
