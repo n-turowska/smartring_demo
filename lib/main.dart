@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'ekrany/aktywnosc.dart';
 import 'ekrany/zdrowie.dart';
 import 'ekrany/cykl.dart';
+import 'ekrany/parowanie.dart';
 import 'services/database_service.dart';
 import 'core/theme.dart';
 
@@ -25,6 +26,8 @@ class MyApp extends StatelessWidget {
             Aktywnosc(databaseService: DatabaseService.instance),
         '/zdrowie': (context) => const Zdrowie(),
         '/cykl': (context) => Cykl(databaseService: DatabaseService.instance),
+        '/parowanie': (context) =>
+            Parowanie(databaseService: DatabaseService.instance),
         '/glowny': (context) =>
             const MyHomePage(title: 'Mira Ring Demo Home Page'),
       },
@@ -114,6 +117,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.black,
                     ),
                   ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/parowanie');
+                  },
+                  child: Text('Połącz z pierścionkiem'),
                 ),
                 //MainShape(kolor: Colors.grey, nazwa: 'segment testowy'),
               ],
