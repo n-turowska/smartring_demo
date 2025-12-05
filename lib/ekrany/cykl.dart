@@ -43,7 +43,7 @@ class _CyklState extends State<Cykl> {
   final List<dynamic> _deletedEvents = [];
   int dlugoscCyklu = 28;
   int get dzienOwulacji => dlugoscCyklu - 14;
-  int myIndex = 0;
+  int myIndex = 2;
 
   @override
   void initState() {

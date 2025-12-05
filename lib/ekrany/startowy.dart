@@ -12,7 +12,7 @@ class StartowyEkran extends StatefulWidget {
 }
 
 class _StartowyEkranState extends State<StartowyEkran> {
-  int myIndex = 0;
+  int myIndex = 1;
   int dlugoscCyklu = 28;
   int get dzienOwulacji => dlugoscCyklu - 14;
   DateTime _kliknietyDzien = DateTime.now();
@@ -37,8 +37,14 @@ class _StartowyEkranState extends State<StartowyEkran> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Podsumowanie")),
+      appBar: AppBar(
+        title: Text("Podsumowanie", textAlign: TextAlign.left),
+        backgroundColor: Colors.white,
+      ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        selectedItemColor: Color.fromARGB(255, 217, 127, 201),
+        unselectedItemColor: Colors.black,
         onTap: (index) {
           setState(() {
             myIndex = index;
@@ -69,7 +75,7 @@ class _StartowyEkranState extends State<StartowyEkran> {
               children: <Widget>[
                 Container(
                   height: 100,
-                  width: 250,
+                  width: 270,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                       15,
@@ -138,7 +144,7 @@ class _StartowyEkranState extends State<StartowyEkran> {
                 ),
                 Container(
                   height: 100,
-                  width: 250,
+                  width: 270,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                       15,
@@ -208,7 +214,7 @@ class _StartowyEkranState extends State<StartowyEkran> {
                 ),
                 Container(
                   height: 100,
-                  width: 250,
+                  width: 270,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                       15,

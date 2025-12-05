@@ -12,7 +12,7 @@ class Zdrowie extends StatefulWidget {
 class _ZdrowieState extends State<Zdrowie> {
   @override
   Widget build(BuildContext context) {
-    int myIndex = 0;
+    int myIndex = 2;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 141, 227, 138),
