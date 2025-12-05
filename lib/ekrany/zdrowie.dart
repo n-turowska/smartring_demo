@@ -15,6 +15,7 @@ class _ZdrowieState extends State<Zdrowie> {
     int myIndex = 2;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 141, 227, 138),
         title: Center(
           child: Text(
@@ -69,6 +70,9 @@ class _ZdrowieState extends State<Zdrowie> {
             Navigator.pushNamed(context, '/glowny');
           }
         },
+        backgroundColor: Colors.white,
+        selectedItemColor: Color.fromARGB(255, 217, 127, 201),
+        unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
         currentIndex: myIndex,
         items: const [
           BottomNavigationBarItem(
@@ -79,7 +83,10 @@ class _ZdrowieState extends State<Zdrowie> {
             icon: Icon(Icons.favorite),
             label: "Podsumowanie",
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.more), label: "Więcej"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.more_horiz),
+            label: "Więcej",
+          ),
         ],
       ),
     );

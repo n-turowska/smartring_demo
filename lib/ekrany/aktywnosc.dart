@@ -64,18 +64,44 @@ class _AktywnoscState extends State<Aktywnosc> {
 
   @override
   Widget build(BuildContext context) {
+    int myIndex = 2;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 64, 155, 197),
         title: const Center(child: Text('Aktywność')),
       ),
       body: _buildBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.popAndPushNamed(context, '/startowy');
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) {
+          setState(() {
+            myIndex = index;
+          });
+          if (index == 1) {
+            Navigator.pushNamed(context, '/startowy');
+          }
+          if (index == 2) {
+            Navigator.pushNamed(context, '/glowny');
+          }
         },
-        backgroundColor: const Color.fromARGB(255, 64, 155, 197),
-        child: const Icon(Icons.home),
+        backgroundColor: Colors.white,
+        selectedItemColor: Color.fromARGB(255, 217, 127, 201),
+        unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+        currentIndex: myIndex,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bluetooth),
+            label: 'Mój Ring',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: "Podsumowanie",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.more_horiz),
+            label: "Więcej",
+          ),
+        ],
       ),
     );
   }
@@ -103,9 +129,9 @@ class _AktywnoscState extends State<Aktywnosc> {
 
     return Stack(
       children: [
-        Positioned.fill(
+        /*Positioned.fill(
           child: Image.asset('assets/tlo_aktywnosc.jpg', fit: BoxFit.cover),
-        ),
+        ),*/
         Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

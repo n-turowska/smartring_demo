@@ -138,6 +138,7 @@ class _CyklState extends State<Cykl> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         //gora ekranu
         title: const Text(
           'Kalendarz',
@@ -624,6 +625,9 @@ class _CyklState extends State<Cykl> {
             Navigator.pushNamed(context, '/glowny');
           }
         },
+        backgroundColor: Colors.white,
+        selectedItemColor: Color.fromARGB(255, 217, 127, 201),
+        unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
         currentIndex: myIndex,
         items: const [
           BottomNavigationBarItem(
@@ -634,7 +638,10 @@ class _CyklState extends State<Cykl> {
             icon: Icon(Icons.favorite),
             label: "Podsumowanie",
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.more), label: "Więcej"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.more_horiz),
+            label: "Więcej",
+          ),
         ],
       ),
     );

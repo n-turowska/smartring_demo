@@ -38,7 +38,11 @@ class _StartowyEkranState extends State<StartowyEkran> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Podsumowanie", textAlign: TextAlign.left),
+        automaticallyImplyLeading: false,
+        title: const Align(
+          alignment: Alignment.centerLeft,
+          child: Text("Podsumowanie", textAlign: TextAlign.left),
+        ),
         backgroundColor: Colors.white,
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -49,6 +53,9 @@ class _StartowyEkranState extends State<StartowyEkran> {
           setState(() {
             myIndex = index;
           });
+          if (index == 1) {
+            Navigator.pushNamed(context, '/startowy');
+          }
           if (index == 2) {
             Navigator.pushNamed(context, '/glowny');
           }
@@ -63,7 +70,10 @@ class _StartowyEkranState extends State<StartowyEkran> {
             icon: Icon(Icons.favorite),
             label: "Podsumowanie",
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.more), label: "Więcej"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.more_horiz),
+            label: "Więcej",
+          ),
         ],
       ),
       body: Stack(
@@ -124,20 +134,23 @@ class _StartowyEkranState extends State<StartowyEkran> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SizedBox(
-                            width: 90,
-                            height: 90,
-                            child: CircularProgressIndicator(
-                              value: 1,
-                              color: const Color.fromARGB(255, 62, 10, 147),
+                      const Spacer(),
+                      Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: 90,
+                              height: 90,
+                              child: CircularProgressIndicator(
+                                value: 1,
+                                color: const Color.fromARGB(255, 62, 10, 147),
+                              ),
                             ),
-                          ),
-                          Text(" 5607\nkroków"),
-                        ],
+                            Text(" 5607\nkroków"),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -194,20 +207,23 @@ class _StartowyEkranState extends State<StartowyEkran> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SizedBox(
-                            width: 90,
-                            height: 90,
-                            child: CircularProgressIndicator(
-                              value: 1,
-                              color: const Color.fromARGB(255, 7, 230, 70),
+                      const Spacer(),
+                      Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: 90,
+                              height: 90,
+                              child: CircularProgressIndicator(
+                                value: 1,
+                                color: const Color.fromARGB(255, 7, 230, 70),
+                              ),
                             ),
-                          ),
-                          Text("   8h\nspania"),
-                        ],
+                            Text("   8h\nspania"),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -264,22 +280,25 @@ class _StartowyEkranState extends State<StartowyEkran> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          SizedBox(
-                            width: 90,
-                            height: 90,
-                            child: CircularProgressIndicator(
-                              value: 1,
-                              color: const Color.fromARGB(255, 235, 53, 183),
+                      const Spacer(),
+                      Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: 90,
+                              height: 90,
+                              child: CircularProgressIndicator(
+                                value: 1,
+                                color: const Color.fromARGB(255, 235, 53, 183),
+                              ),
                             ),
-                          ),
-                          Text(
-                            "okres za\n  ${(dzienOwulacji + getCurrentOvulation()! - DateTime.now().day) % getPredictedDlugoscCyklu()!} dni",
-                          ),
-                        ],
+                            Text(
+                              "okres za\n  ${(dzienOwulacji + getCurrentOvulation()! - DateTime.now().day) % getPredictedDlugoscCyklu()!} dni",
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
