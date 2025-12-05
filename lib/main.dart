@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'ekrany/aktywnosc.dart';
 import 'ekrany/zdrowie.dart';
+import 'ekrany/startowy.dart';
 import 'ekrany/cykl.dart';
 import 'services/database_service.dart';
 import 'core/theme.dart';
@@ -19,8 +20,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mira Ring Demo',
       theme: AppTheme.lightTheme,
-      initialRoute: '/glowny',
+      initialRoute: '/startowy',
       routes: {
+        '/startowy': (context) => const StartowyEkran(title: 'Startowy Ekran'),
         '/aktywnosc': (context) =>
             Aktywnosc(databaseService: DatabaseService.instance),
         '/zdrowie': (context) => const Zdrowie(),
@@ -45,6 +47,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int myIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,21 +55,41 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: const Color.fromARGB(255, 232, 226, 218),
         title: Center(
           child: Text(
-            'Witaj w Mira Ring',
+            '',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) {
+          setState(() {
+            myIndex = index;
+          });
+          if (index == 1) {
+            Navigator.pushNamed(context, '/startowy');
+          }
+        },
+        currentIndex: myIndex,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bluetooth),
+            label: 'Mój Ring',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: "Podsumowanie",
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.more), label: "Więcej"),
+        ],
+      ),
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Image.asset('assets/tlo_główna.jpg', fit: BoxFit.cover),
-          ),
           Center(
             child: Column(
               spacing: 20.0,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Container(),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.popAndPushNamed(context, '/aktywnosc');

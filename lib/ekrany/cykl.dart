@@ -43,6 +43,7 @@ class _CyklState extends State<Cykl> {
   final List<dynamic> _deletedEvents = [];
   int dlugoscCyklu = 28;
   int get dzienOwulacji => dlugoscCyklu - 14;
+  int myIndex = 0;
 
   @override
   void initState() {
@@ -159,7 +160,6 @@ class _CyklState extends State<Cykl> {
             'assets/tlo_tel_cykl.png',
             fit: BoxFit.cover,
           ),
-
           Column(
             spacing: 20.0,
             //scaffold ma jeden widget wiec column musi byc w stack
@@ -612,12 +612,30 @@ class _CyklState extends State<Cykl> {
         ],
       ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.popAndPushNamed(context, '/glowny');
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) {
+          setState(() {
+            myIndex = index;
+          });
+          if (index == 1) {
+            Navigator.pushNamed(context, '/startowy');
+          }
+          if (index == 2) {
+            Navigator.pushNamed(context, '/glowny');
+          }
         },
-        backgroundColor: Kolor_przycisku,
-        child: const Icon(Icons.home),
+        currentIndex: myIndex,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bluetooth),
+            label: 'Mój Ring',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: "Podsumowanie",
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.more), label: "Więcej"),
+        ],
       ),
     );
   }

@@ -6,10 +6,7 @@ import '../services/database_service.dart';
 class Aktywnosc extends StatefulWidget {
   final DatabaseService databaseService;
 
-  const Aktywnosc({
-    super.key,
-    required this.databaseService,
-  });
+  const Aktywnosc({super.key, required this.databaseService});
 
   @override
   State<Aktywnosc> createState() => _AktywnoscState();
@@ -75,7 +72,7 @@ class _AktywnoscState extends State<Aktywnosc> {
       body: _buildBody(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.popAndPushNamed(context, '/glowny');
+          Navigator.popAndPushNamed(context, '/startowy');
         },
         backgroundColor: const Color.fromARGB(255, 64, 155, 197),
         child: const Icon(Icons.home),
@@ -86,9 +83,7 @@ class _AktywnoscState extends State<Aktywnosc> {
   /// Build the body with loading/error/content states
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage != null) {
@@ -100,10 +95,7 @@ class _AktywnoscState extends State<Aktywnosc> {
             const SizedBox(height: 16),
             Text(_errorMessage!),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _loadData,
-              child: const Text('Retry'),
-            ),
+            ElevatedButton(onPressed: _loadData, child: const Text('Retry')),
           ],
         ),
       );
