@@ -13,6 +13,14 @@ class Parowanie extends StatefulWidget{
 
 class _ParowanieState extends State<Parowanie> {
 
+  @override
+  void initState(){
+    super.initState();
+
+    widget.ringService.connectionState.listen((_){
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +42,24 @@ class _ParowanieState extends State<Parowanie> {
 
     if(state==RingConnectionState.disconnected)
     {
-      return const Center(
-        child: Text("Ring is disconnected"),
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text("Ring is disconected"), 
+          ElevatedButton(
+            onPressed: () async {
+               try {
+                  await widget.ringService.connect();
+                } catch (_) {}
+            },
+            child: Text("Połącz"),
+          ),]
+        ),
       );
     }
     else if(state==RingConnectionState.scanning)
     {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Text("Scanning"), CircularProgressIndicator(),]
@@ -49,7 +68,7 @@ class _ParowanieState extends State<Parowanie> {
     }
     else if(state==RingConnectionState.connecting)
     {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Text("Connecting"), CircularProgressIndicator(),]
@@ -58,10 +77,18 @@ class _ParowanieState extends State<Parowanie> {
     }
     else if(state==RingConnectionState.connected)
     {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text("Ring is connected"),]
+          children: [Text("Ring is connected"),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                await widget.ringService.disconnect();
+              } catch (_) {}
+            },
+            child: Text("Rozłącz")
+          ),]
         ),
       );
     }
@@ -75,10 +102,18 @@ class _ParowanieState extends State<Parowanie> {
       );
     }
     else{
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text("ERROR"),]
+          children: [Text("ERROR"),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                widget.ringService.connect();
+              } catch (_) {}
+            },
+            child: Text("Połącz"),
+          ),]
         ),
       );
     }
