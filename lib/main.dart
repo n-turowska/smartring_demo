@@ -5,6 +5,7 @@ import 'ekrany/zdrowie.dart';
 import 'ekrany/cykl.dart';
 import 'ekrany/parowanie.dart';
 import 'services/database_service.dart';
+import 'services/ring_service.dart';
 import 'core/theme.dart';
 
 void main() {
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         '/zdrowie': (context) => const Zdrowie(),
         '/cykl': (context) => Cykl(databaseService: DatabaseService.instance),
         '/parowanie': (context) =>
-            Parowanie(databaseService: DatabaseService.instance),
+            Parowanie(ringService: RingService.instance),
         '/glowny': (context) =>
             const MyHomePage(title: 'Mira Ring Demo Home Page'),
       },
