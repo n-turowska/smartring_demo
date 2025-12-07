@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import '../widgets/common/main_shape.dart';
-import '../services/database_service.dart';
 import '../services/ring_service.dart';
 
 class Parowanie extends StatefulWidget{
-    final DatabaseService databaseService;
+    final RingService ringService;
 
 
-    const Parowanie({super.key,required this.databaseService,});
+    const Parowanie({super.key,required this.ringService,});
 
     @override
   State<Parowanie> createState() => _ParowanieState();
@@ -15,7 +13,6 @@ class Parowanie extends StatefulWidget{
 
 class _ParowanieState extends State<Parowanie> {
 
-  RingConnectionState state = RingConnectionState.scanning;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +30,7 @@ class _ParowanieState extends State<Parowanie> {
   }
 
   Widget _buildBody() {
+    final state = widget.ringService.currentState;
 
     if(state==RingConnectionState.disconnected)
     {
