@@ -68,7 +68,7 @@ class _AktywnoscState extends State<Aktywnosc> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromARGB(255, 64, 155, 197),
+        backgroundColor: Colors.white,
         title: const Center(child: Text('Aktywność')),
       ),
       body: _buildBody(),

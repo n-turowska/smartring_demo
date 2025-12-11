@@ -26,7 +26,7 @@ class _CyklState extends State<Cykl> {
   //kolory
   final Kolor = const Color.fromARGB(255, 252, 212, 232);
   final Kolor_tekstu = Colors.black;
-  final Kolor_przycisku = Color.fromARGB(255, 236, 161, 202);
+  final Kolor_przycisku = Colors.white;
 
   //do kalendarza
   late DateTime dzisiaj;
@@ -148,7 +148,7 @@ class _CyklState extends State<Cykl> {
             //grubosc czcionki
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 236, 161, 202),
+        backgroundColor: Colors.white,
         centerTitle: true,
       ),
 
@@ -156,17 +156,17 @@ class _CyklState extends State<Cykl> {
         //zeby tlo nie przykrylo pozniejszych elementow dajemy stack-stos
         fit: StackFit.expand,
         children: [
-          Image.asset(
+          /*Image.asset(
             //'assets/tlo.png',
             'assets/tlo_tel_cykl.png',
             fit: BoxFit.cover,
-          ),
+          ),*/
           Column(
-            spacing: 20.0,
+            spacing: 10.0,
             //scaffold ma jeden widget wiec column musi byc w stack
             mainAxisAlignment: MainAxisAlignment.center, //zeby bylo na srodku
             children: [
-              Container(
+              /*Container(
                 height: 50,
                 width: 400,
                 decoration: BoxDecoration(
@@ -200,60 +200,7 @@ class _CyklState extends State<Cykl> {
                     fontSize: rozmiar_czcionki,
                   ),
                 ),
-              ),
-              Container(
-                height: 50,
-                width: 400,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Kolor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: Offset(-4.0, -4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ],
-                ),
-                alignment: Alignment.center,
-
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '${(dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) % getPredictedDlugoscCyklu()!} dni do miesiączki', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
-                      style: Theme.of(context).textTheme.headlineMedium!
-                          .copyWith(
-                            color: Kolor_tekstu,
-                            fontSize: rozmiar_czcionki,
-                          ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ), //zeby byla przerwa miedzy tekstem a obrazkiem
-
-                    for (
-                      int i = 0;
-                      i < 4 - ilosc_dni_do_miesiaczki;
-                      i++
-                    ) //wyswietlenie kropelek obok napisu
-                      Image.asset(
-                        'assets/kropelka.jpg',
-                        width: 25,
-                        color: Kolor,
-                        colorBlendMode: BlendMode.multiply,
-                      ),
-                  ],
-                ),
-              ),
-
+              )*/
               Positioned(
                 top: 0,
                 child: Padding(
@@ -332,7 +279,7 @@ class _CyklState extends State<Cykl> {
               */
               Container(
                 width: 400,
-                height: 280,
+                height: 300,
                 child: TableCalendar<dynamic>(
                   locale: Localizations.localeOf(
                     context,
@@ -413,6 +360,59 @@ class _CyklState extends State<Cykl> {
               ),
 
               Container(
+                height: 70,
+                width: 300,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade500,
+                      offset: Offset(4.0, 4.0),
+                      blurRadius: 15.0,
+                      spreadRadius: 1.0,
+                    ),
+                    BoxShadow(
+                      color: Colors.white,
+                      offset: Offset(-4.0, -4.0),
+                      blurRadius: 15.0,
+                      spreadRadius: 1.0,
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
+
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'okres: za ${(dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) % getPredictedDlugoscCyklu()!} dni\ncykl: ${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
+                      style: Theme.of(context).textTheme.headlineMedium!
+                          .copyWith(
+                            color: Kolor_tekstu,
+                            fontSize: rozmiar_czcionki,
+                            fontWeight: FontWeight.normal,
+                          ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ), //zeby byla przerwa miedzy tekstem a obrazkiem
+
+                    for (
+                      int i = 0;
+                      i < 4 - ilosc_dni_do_miesiaczki;
+                      i++
+                    ) //wyswietlenie kropelek obok napisu
+                      Image.asset(
+                        'assets/kropelka.jpg',
+                        width: 25,
+                        color: Kolor,
+                        colorBlendMode: BlendMode.multiply,
+                      ),
+                  ],
+                ),
+              ),
+              Container(
                 height: 80,
                 child: Align(
                   alignment: Alignment.topCenter,
@@ -484,130 +484,6 @@ class _CyklState extends State<Cykl> {
                   ),
                 ),
               ),
-              /*Container(
-                height: 50,
-                width: 400,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    15,
-                  ), //do zaokraglenia rogow
-                  color: Kolor, //kolor tla
-                  boxShadow: [
-                    //cienie
-                    BoxShadow(
-                      color: Colors.grey.shade500, //kolor cienia
-                      offset: Offset(4.0, 4.0), //przesunicie wzgledem kontenera
-                      blurRadius: 15.0, //rozmycie cienia
-                      spreadRadius: 1.0, //rozszerzenie cienia
-                    ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: Offset(-4.0, -4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ],
-                ),
-                //padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
-                alignment: Alignment.center,
-                child: Text(
-                  'dzień cyklu: 28',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
-                ),
-              )*/
-              /*Container(
-                height: 50,
-                width: 400,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Kolor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: Offset(-4.0, -4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ],
-                ),
-                alignment: Alignment.center,
-
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'do miesiączki: $ilosc_dni_do_miesiaczki dni',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ), //zeby byla przerwa miedzy tekstem a obrazkiem
-                    for (
-                      int i = 0;
-                      i < 4 - ilosc_dni_do_miesiaczki;
-                      i++
-                    ) //wyswietlenie kropelek obok napisu
-                      Image.asset(
-                        'assets/kropelka.jpg',
-                        width: 25,
-                        color: Kolor,
-                        colorBlendMode: BlendMode.multiply,
-                      ),
-                  ],
-                ),
-              )*/
-              /*Container(
-                height: 50,
-                width: 400,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Kolor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: Offset(-4.0, -4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'bolący brzuch: $ilosc_dni_boli_brzuch ',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
-                    ),
-                    FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                      ),
-                      onPressed: zwiekszenie_dni,
-                      child: const Text('+'),
-                    ),
-                  ],
-                ),
-              )*/
             ],
           ),
         ],

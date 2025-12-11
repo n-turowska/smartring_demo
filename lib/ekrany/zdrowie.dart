@@ -16,7 +16,7 @@ class _ZdrowieState extends State<Zdrowie> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color.fromARGB(255, 141, 227, 138),
+        backgroundColor: Colors.white,
         title: Center(
           child: Text(
             'Zdrowie',
@@ -26,13 +26,12 @@ class _ZdrowieState extends State<Zdrowie> {
       ),
       body: Stack(
         children: [
-          Positioned.fill(
+          /*Positioned.fill(
             child: Image.asset(
               'assets/zielone_kształty.jpg',
               fit: BoxFit.cover,
             ),
-          ),
-
+          ),*/
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
