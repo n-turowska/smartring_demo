@@ -70,51 +70,51 @@ class DatabaseService {
 
   final List<PredictedMenstruation> _mockMenstruationDay = [
     PredictedMenstruation(
-      title: '1st day of period',
+      title: 'miesiączka: 1 dzień',
       date: DateTime(2025, 12, 27),
     ),
     PredictedMenstruation(
-      title: '2nd day of period',
+      title: 'miesiączka: 2 dzień',
       date: DateTime(2025, 12, 28),
     ),
     PredictedMenstruation(
-      title: '3rd day of period',
+      title: 'miesiączka: 3 dzień',
       date: DateTime(2025, 12, 29),
     ),
     PredictedMenstruation(
-      title: '1st day of period',
+      title: 'miesiączka: 1 dzień',
       date: DateTime(2026, 1, 24),
     ),
     PredictedMenstruation(
-      title: '2nd day of period',
+      title: 'miesiączka: 2 dzień',
       date: DateTime(2026, 1, 25),
     ),
     PredictedMenstruation(
-      title: '3rd day of period',
+      title: 'miesiączka: 3 dzień',
       date: DateTime(2026, 1, 26),
     ),
     PredictedMenstruation(
-      title: '1st day of period',
+      title: 'miesiączka: 1 dzień',
       date: DateTime(2026, 2, 21),
     ),
     PredictedMenstruation(
-      title: '2nd day of period',
+      title: 'miesiączka: 2 dzień',
       date: DateTime(2026, 2, 22),
     ),
     PredictedMenstruation(
-      title: '3rd day of period',
+      title: 'miesiączka: 3 dzień',
       date: DateTime(2026, 2, 23),
     ),
     PredictedMenstruation(
-      title: '1st day of period',
+      title: 'miesiączka: 1 dzień',
       date: DateTime(2026, 3, 21),
     ),
     PredictedMenstruation(
-      title: '2nd day of period',
+      title: 'miesiączka: 2 dzień',
       date: DateTime(2026, 3, 22),
     ),
     PredictedMenstruation(
-      title: '3rd day of period',
+      title: 'miesiączka: 3 dzień',
       date: DateTime(2026, 3, 23),
     ),
   ];

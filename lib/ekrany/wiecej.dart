@@ -11,6 +11,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int myIndex = 2;
+  final double width_container = 270;
+  final double height_container = 100;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,12 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Center(
             child: Column(
-              spacing: 50.0,
+              spacing: 80.0,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  height: 70,
-                  width: 230,
+                  height: height_container,
+                  width: width_container,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                       15,
@@ -135,8 +137,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 Container(
-                  height: 70,
-                  width: 230,
+                  height: height_container,
+                  width: width_container,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                       15,
@@ -206,8 +208,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 Container(
-                  height: 70,
-                  width: 230,
+                  height: height_container,
+                  width: width_container,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                       15,

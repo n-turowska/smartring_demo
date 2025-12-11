@@ -255,8 +255,10 @@ class _StartowyEkranState extends State<StartowyEkran> {
                       ),
                     ],
                   ),
+
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
+
                     children: [
                       const SizedBox(width: 10),
                       ElevatedButton(
