@@ -68,6 +68,61 @@ class DatabaseService {
     return _mockOvulationDay;
   }
 
+  final List<PredictedMenstruation> _mockMenstruationDay = [
+    PredictedMenstruation(
+      title: '1st day of period',
+      date: DateTime(2025, 12, 27),
+    ),
+    PredictedMenstruation(
+      title: '2nd day of period',
+      date: DateTime(2025, 12, 28),
+    ),
+    PredictedMenstruation(
+      title: '3rd day of period',
+      date: DateTime(2025, 12, 29),
+    ),
+    PredictedMenstruation(
+      title: '1st day of period',
+      date: DateTime(2026, 1, 24),
+    ),
+    PredictedMenstruation(
+      title: '2nd day of period',
+      date: DateTime(2026, 1, 25),
+    ),
+    PredictedMenstruation(
+      title: '3rd day of period',
+      date: DateTime(2026, 1, 26),
+    ),
+    PredictedMenstruation(
+      title: '1st day of period',
+      date: DateTime(2026, 2, 21),
+    ),
+    PredictedMenstruation(
+      title: '2nd day of period',
+      date: DateTime(2026, 2, 22),
+    ),
+    PredictedMenstruation(
+      title: '3rd day of period',
+      date: DateTime(2026, 2, 23),
+    ),
+    PredictedMenstruation(
+      title: '1st day of period',
+      date: DateTime(2026, 3, 21),
+    ),
+    PredictedMenstruation(
+      title: '2nd day of period',
+      date: DateTime(2026, 3, 22),
+    ),
+    PredictedMenstruation(
+      title: '3rd day of period',
+      date: DateTime(2026, 3, 23),
+    ),
+  ];
+  List<PredictedMenstruation> get menstruationDays => _mockMenstruationDay;
+  Future<List<PredictedMenstruation>> getAllMenstruationDays() async {
+    return _mockMenstruationDay;
+  }
+
   final List<int> _mockPredictedDlugoscCyklu = [
     28,
     28,

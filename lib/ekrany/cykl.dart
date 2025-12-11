@@ -65,6 +65,8 @@ class _CyklState extends State<Cykl> {
       final userEvents = await widget.databaseService.getUserEvents();
       final predictedOvulation = await widget.databaseService
           .getAllOvulationDays();
+      final predictedMenstruation = await widget.databaseService
+          .getAllMenstruationDays();
 
       //grupowanie po dniu
       final Map<DateTime, List<dynamic>> grouped = {};
@@ -73,6 +75,10 @@ class _CyklState extends State<Cykl> {
         grouped[date] = (grouped[date] ?? [])..add(e);
       }
       for (var i in predictedOvulation) {
+        final date = DateTime(i.date.year, i.date.month, i.date.day);
+        grouped[date] = (grouped[date] ?? [])..add(i);
+      }
+      for (var i in predictedMenstruation) {
         final date = DateTime(i.date.year, i.date.month, i.date.day);
         grouped[date] = (grouped[date] ?? [])..add(i);
       }
@@ -149,7 +155,7 @@ class _CyklState extends State<Cykl> {
           ),
         ),
         backgroundColor: Colors.white,
-        centerTitle: true,
+        centerTitle: false,
       ),
 
       body: Stack(
@@ -330,12 +336,21 @@ class _CyklState extends State<Cykl> {
                       final hasOvulation = events.any(
                         (e) => e is PredictedOvulation,
                       );
+                      final hasMenstruation = events.any(
+                        (e) => e is PredictedMenstruation,
+                      );
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           if (hasOvulation)
                             const Icon(
                               Icons.favorite,
+                              size: 10,
+                              color: Colors.pink,
+                            ),
+                          if (hasMenstruation)
+                            const Icon(
+                              Icons.opacity,
                               size: 10,
                               color: Colors.pink,
                             ),
@@ -358,131 +373,138 @@ class _CyklState extends State<Cykl> {
                   },
                 ),
               ),
-
-              Container(
-                height: 70,
-                width: 300,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                    BoxShadow(
+              Row(
+                children: [
+                  const SizedBox(width: 60),
+                  Container(
+                    height: 70,
+                    width: 180,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
                       color: Colors.white,
-                      offset: Offset(-4.0, -4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade500,
+                          offset: Offset(4.0, 4.0),
+                          blurRadius: 15.0,
+                          spreadRadius: 1.0,
+                        ),
+                        BoxShadow(
+                          color: Colors.white,
+                          offset: Offset(-4.0, -4.0),
+                          blurRadius: 15.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                alignment: Alignment.center,
+                    alignment: Alignment.center,
 
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'okres: za ${(dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) % getPredictedDlugoscCyklu()!} dni\ncykl: ${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
-                      style: Theme.of(context).textTheme.headlineMedium!
-                          .copyWith(
-                            color: Kolor_tekstu,
-                            fontSize: rozmiar_czcionki,
-                            fontWeight: FontWeight.normal,
-                          ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'okres: za ${(dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) % getPredictedDlugoscCyklu()!} dni\ncykl: ${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
+                          style: Theme.of(context).textTheme.headlineMedium!
+                              .copyWith(
+                                color: Kolor_tekstu,
+                                fontSize: rozmiar_czcionki,
+                                fontWeight: FontWeight.normal,
+                              ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ), //zeby byla przerwa miedzy tekstem a obrazkiem
+                        /*for (
+                          int i = 0;
+                          i < 4 - ilosc_dni_do_miesiaczki;
+                          i++
+                        ) //wyswietlenie kropelek obok napisu
+                          Image.asset(
+                            'assets/kropelka.jpg',
+                            width: 25,
+                            color: Kolor,
+                            colorBlendMode: BlendMode.multiply,
+                          ),*/
+                      ],
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ), //zeby byla przerwa miedzy tekstem a obrazkiem
-
-                    for (
-                      int i = 0;
-                      i < 4 - ilosc_dni_do_miesiaczki;
-                      i++
-                    ) //wyswietlenie kropelek obok napisu
-                      Image.asset(
-                        'assets/kropelka.jpg',
-                        width: 25,
-                        color: Kolor,
-                        colorBlendMode: BlendMode.multiply,
-                      ),
-                  ],
-                ),
-              ),
-              Container(
-                height: 80,
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: ValueListenableBuilder<List<dynamic>>(
-                    valueListenable: _wybraneEventy,
-                    builder: (context, value, _) {
-                      return ListView.builder(
-                        itemCount: value.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.symmetric(
-                              horizontal: 80,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                15,
-                              ), //do zaokraglenia rogow
-                              color: Kolor, //kolor tla
-                              boxShadow: [
-                                //cienie
-                                BoxShadow(
-                                  color: Colors.grey.shade500, //kolor cienia
-                                  offset: Offset(
-                                    4.0,
-                                    4.0,
-                                  ), //przesunicie wzgledem kontenera
-                                  blurRadius: 15.0, //rozmycie cienia
-                                  spreadRadius: 1.0, //rozszerzenie cienia
+                  ),
+                  Container(
+                    height: 80,
+                    width: 300,
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: ValueListenableBuilder<List<dynamic>>(
+                        valueListenable: _wybraneEventy,
+                        builder: (context, value, _) {
+                          return ListView.builder(
+                            itemCount: value.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: EdgeInsets.symmetric(
+                                  horizontal: 80,
+                                  vertical: 4,
                                 ),
-                                BoxShadow(
-                                  color: Colors.white,
-                                  offset: Offset(-4.0, -4.0),
-                                  blurRadius: 15.0,
-                                  spreadRadius: 1.0,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    15,
+                                  ), //do zaokraglenia rogow
+                                  color: Kolor, //kolor tla
+                                  boxShadow: [
+                                    //cienie
+                                    BoxShadow(
+                                      color:
+                                          Colors.grey.shade500, //kolor cienia
+                                      offset: Offset(
+                                        4.0,
+                                        4.0,
+                                      ), //przesunicie wzgledem kontenera
+                                      blurRadius: 15.0, //rozmycie cienia
+                                      spreadRadius: 1.0, //rozszerzenie cienia
+                                    ),
+                                    BoxShadow(
+                                      color: Colors.white,
+                                      offset: Offset(-4.0, -4.0),
+                                      blurRadius: 15.0,
+                                      spreadRadius: 1.0,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: ListTile(
-                              onTap: () => print(""),
+                                child: ListTile(
+                                  onTap: () => print(""),
 
-                              title: Center(child: Text(value[index].title)),
-                              trailing: value[index] is Event
-                                  ? IconButton(
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        size: 20,
-                                        color: Colors.black,
-                                      ),
-                                      onPressed: () async {
-                                        final date = _kliknietyDzien;
-                                        await widget.databaseService
-                                            .deleteEvent(value[index]);
-                                        _eventsByDay[date]?.removeWhere(
-                                          (e) => e.id == value[index].id,
-                                        );
-                                        _deletedEvents.add(value[index]);
-                                        _wybraneEventy.value =
-                                            _eventsByDay[date] ?? [];
-                                        setState(() {});
-                                      },
-                                    )
-                                  : null,
-                            ),
+                                  title: Center(
+                                    child: Text(value[index].title),
+                                  ),
+                                  trailing: value[index] is Event
+                                      ? IconButton(
+                                          icon: const Icon(
+                                            Icons.delete,
+                                            size: 20,
+                                            color: Colors.black,
+                                          ),
+                                          onPressed: () async {
+                                            final date = _kliknietyDzien;
+                                            await widget.databaseService
+                                                .deleteEvent(value[index]);
+                                            _eventsByDay[date]?.removeWhere(
+                                              (e) => e.id == value[index].id,
+                                            );
+                                            _deletedEvents.add(value[index]);
+                                            _wybraneEventy.value =
+                                                _eventsByDay[date] ?? [];
+                                            setState(() {});
+                                          },
+                                        )
+                                      : null,
+                                ),
+                              );
+                            },
                           );
                         },
-                      );
-                    },
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
