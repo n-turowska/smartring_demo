@@ -450,7 +450,7 @@ class _CyklState extends State<Cykl> {
                               const Icon(
                                 Icons.opacity,
                                 size: 10,
-                                color: Colors.pink,
+                                color: const Color.fromARGB(255, 235, 53, 183),
                               ),
 
                           if (hasUserEvent)
