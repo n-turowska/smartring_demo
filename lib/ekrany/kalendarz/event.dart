@@ -10,3 +10,9 @@ class PredictedOvulation {
 
   PredictedOvulation({required this.title, required this.date});
 }
+
+class PredictedMenstruation {
+  final String title;
+  final DateTime date;
+  PredictedMenstruation({required this.title, required this.date});
+}
