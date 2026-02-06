@@ -22,11 +22,11 @@ class _CyklState extends State<Cykl> {
   //do przycisków
   int ilosc_dni_boli_brzuch = 0;
   int ilosc_dni_do_miesiaczki = 14 + 15 - DateTime.now().day;
-  double rozmiar_czcionki = 22;
+  double rozmiar_czcionki = 25;
   //kolory
   final Kolor = const Color.fromARGB(255, 252, 212, 232);
-  final Kolor_tekstu = Colors.black;
-  final Kolor_przycisku = Color.fromARGB(255, 236, 161, 202);
+  final Kolor_tekstu = const Color.fromARGB(255, 235, 53, 183);
+  final Kolor_przycisku = Colors.white;
 
   //do kalendarza
   late DateTime dzisiaj;
@@ -43,6 +43,7 @@ class _CyklState extends State<Cykl> {
   final List<dynamic> _deletedEvents = [];
   int dlugoscCyklu = 28;
   int get dzienOwulacji => dlugoscCyklu - 14;
+  int myIndex = 2;
 
   @override
   void initState() {
@@ -64,6 +65,8 @@ class _CyklState extends State<Cykl> {
       final userEvents = await widget.databaseService.getUserEvents();
       final predictedOvulation = await widget.databaseService
           .getAllOvulationDays();
+      final predictedMenstruation = await widget.databaseService
+          .getAllMenstruationDays();
 
       //grupowanie po dniu
       final Map<DateTime, List<dynamic>> grouped = {};
@@ -72,6 +75,10 @@ class _CyklState extends State<Cykl> {
         grouped[date] = (grouped[date] ?? [])..add(e);
       }
       for (var i in predictedOvulation) {
+        final date = DateTime(i.date.year, i.date.month, i.date.day);
+        grouped[date] = (grouped[date] ?? [])..add(i);
+      }
+      for (var i in predictedMenstruation) {
         final date = DateTime(i.date.year, i.date.month, i.date.day);
         grouped[date] = (grouped[date] ?? [])..add(i);
       }
@@ -137,6 +144,7 @@ class _CyklState extends State<Cykl> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         //gora ekranu
         title: const Text(
           'Kalendarz',
@@ -146,66 +154,30 @@ class _CyklState extends State<Cykl> {
             //grubosc czcionki
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 236, 161, 202),
-        centerTitle: true,
+        backgroundColor: Colors.white,
+        centerTitle: false,
       ),
 
       body: Stack(
         //zeby tlo nie przykrylo pozniejszych elementow dajemy stack-stos
         fit: StackFit.expand,
         children: [
-          Image.asset(
+          /*Image.asset(
             //'assets/tlo.png',
             'assets/tlo_tel_cykl.png',
             fit: BoxFit.cover,
-          ),
-
+          ),*/
           Column(
-            spacing: 20.0,
+            spacing: 10.0,
             //scaffold ma jeden widget wiec column musi byc w stack
             mainAxisAlignment: MainAxisAlignment.center, //zeby bylo na srodku
             children: [
               Container(
-                height: 50,
-                width: 400,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    15,
-                  ), //do zaokraglenia rogow
-                  color: Kolor, //kolor tla
-                  boxShadow: [
-                    //cienie
-                    BoxShadow(
-                      color: Colors.grey.shade500, //kolor cienia
-                      offset: Offset(4.0, 4.0), //przesunicie wzgledem kontenera
-                      blurRadius: 15.0, //rozmycie cienia
-                      spreadRadius: 1.0, //rozszerzenie cienia
-                    ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: Offset(-4.0, -4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ],
-                ),
-                //padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
-                alignment: Alignment.center,
-                child: Text(
-                  //dla 28 dnia cyklu reszta z dzielenia to 0, wiec musimy przypisac 28 i przesuwamy zakres -1 zeby z dzielenia bylo od 0-27 i potem dodajemy 1 zeby bylo 1-28
-                  '${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień cyklu', //(14dziencyklu(owulacja)+dzien dzisiejszy-dzien owulacji)%dlugosc cyklu  zeby dawalo reszte np jesli owulacja jest 7 to po 21 wyswietlalo sie nie 35 dzien cyklu tylko liczylo od 1
-                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    color: Kolor_tekstu,
-                    fontSize: rozmiar_czcionki,
-                  ),
-                ),
-              ),
-              Container(
-                height: 50,
-                width: 400,
+                height: 100,
+                width: 270,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: Kolor,
+                  color: Colors.white,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.shade500,
@@ -221,38 +193,117 @@ class _CyklState extends State<Cykl> {
                     ),
                   ],
                 ),
-                alignment: Alignment.center,
 
+                alignment: Alignment.center,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      '${(dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) % getPredictedDlugoscCyklu()!} dni do miesiączki', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
+                    Text.rich(
+                      TextSpan(
+                        text:
+                            ((dzienOwulacji +
+                                            getCurrentOvulation()! -
+                                            dzisiaj.day) %
+                                        getPredictedDlugoscCyklu()! !=
+                                    0 &&
+                                (dzienOwulacji +
+                                            getCurrentOvulation()! -
+                                            dzisiaj.day) %
+                                        getPredictedDlugoscCyklu()! !=
+                                    27 &&
+                                (dzienOwulacji +
+                                            getCurrentOvulation()! -
+                                            dzisiaj.day) %
+                                        getPredictedDlugoscCyklu()! !=
+                                    26)
+                            ? 'okres: za '
+                            : '',
+                        style: TextStyle(color: Colors.black, fontSize: 25),
+
+                        children: [
+                          TextSpan(
+                            text:
+                                ((dzienOwulacji +
+                                                getCurrentOvulation()! -
+                                                dzisiaj.day) %
+                                            getPredictedDlugoscCyklu()! !=
+                                        0 &&
+                                    (dzienOwulacji +
+                                                getCurrentOvulation()! -
+                                                dzisiaj.day) %
+                                            getPredictedDlugoscCyklu()! !=
+                                        27 &&
+                                    (dzienOwulacji +
+                                                getCurrentOvulation()! -
+                                                dzisiaj.day) %
+                                            getPredictedDlugoscCyklu()! !=
+                                        26)
+                                ? '${(dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) % getPredictedDlugoscCyklu()!} dni\n'
+                                : '',
+                            style: TextStyle(
+                              color: Kolor_tekstu,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'cykl: ',
+                            style: TextStyle(color: Colors.black, fontSize: 25),
+                          ),
+                          TextSpan(
+                            text:
+                                '${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
+                            style: TextStyle(
+                              color: Kolor_tekstu,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    /*Text(
+                      ((dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) %
+                                      getPredictedDlugoscCyklu()! !=
+                                  0 &&
+                              (dzienOwulacji +
+                                          getCurrentOvulation()! -
+                                          dzisiaj.day) %
+                                      getPredictedDlugoscCyklu()! !=
+                                  27 &&
+                              (dzienOwulacji +
+                                          getCurrentOvulation()! -
+                                          dzisiaj.day) %
+                                      getPredictedDlugoscCyklu()! !=
+                                  26)
+                          ? 'okres: za ${(dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) % getPredictedDlugoscCyklu()!} dni\ncykl: ${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień'
+                          : 'cykl: ${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
+                      //:'cykl: ${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień',
                       style: Theme.of(context).textTheme.headlineMedium!
                           .copyWith(
                             color: Kolor_tekstu,
                             fontSize: rozmiar_czcionki,
+                            fontWeight: FontWeight.normal,
                           ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ), //zeby byla przerwa miedzy tekstem a obrazkiem
-
-                    for (
-                      int i = 0;
-                      i < 4 - ilosc_dni_do_miesiaczki;
-                      i++
-                    ) //wyswietlenie kropelek obok napisu
-                      Image.asset(
-                        'assets/kropelka.jpg',
-                        width: 25,
-                        color: Kolor,
-                        colorBlendMode: BlendMode.multiply,
-                      ),
+                    ),*/
+                    /*const SizedBox(
+                          width: 10,
+                        ), */
+                    //zeby byla przerwa miedzy tekstem a obrazkiem
+                    /*for (
+                          int i = 0;
+                          i < 4 - ilosc_dni_do_miesiaczki;
+                          i++
+                        ) //wyswietlenie kropelek obok napisu
+                          Image.asset(
+                            'assets/kropelka.jpg',
+                            width: 25,
+                            color: Kolor,
+                            colorBlendMode: BlendMode.multiply,
+                          ),*/
                   ],
                 ),
               ),
-
               Positioned(
                 top: 0,
                 child: Padding(
@@ -331,7 +382,7 @@ class _CyklState extends State<Cykl> {
               */
               Container(
                 width: 400,
-                height: 280,
+                height: 300,
                 child: TableCalendar<dynamic>(
                   locale: Localizations.localeOf(
                     context,
@@ -382,15 +433,26 @@ class _CyklState extends State<Cykl> {
                       final hasOvulation = events.any(
                         (e) => e is PredictedOvulation,
                       );
+                      final hasMenstruation = events.any(
+                        (e) => e is PredictedMenstruation,
+                      );
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           if (hasOvulation)
                             const Icon(
-                              Icons.favorite,
+                              Icons.circle_sharp,
                               size: 10,
-                              color: Colors.pink,
+                              color: Color.fromARGB(255, 118, 117, 109),
                             ),
+                          if (hasMenstruation)
+                            for (int i = 0; i < 3; i++)
+                              const Icon(
+                                Icons.opacity,
+                                size: 10,
+                                color: Colors.pink,
+                              ),
+
                           if (hasUserEvent)
                             const Icon(
                               Icons.circle,
@@ -412,7 +474,8 @@ class _CyklState extends State<Cykl> {
               ),
 
               Container(
-                height: 80,
+                height: 90,
+                width: 290,
                 child: Align(
                   alignment: Alignment.topCenter,
                   child: ValueListenableBuilder<List<dynamic>>(
@@ -422,6 +485,8 @@ class _CyklState extends State<Cykl> {
                         itemCount: value.length,
                         itemBuilder: (context, index) {
                           return Container(
+                            height: 70,
+                            width: 300,
                             margin: EdgeInsets.symmetric(
                               horizontal: 80,
                               vertical: 4,
@@ -430,7 +495,7 @@ class _CyklState extends State<Cykl> {
                               borderRadius: BorderRadius.circular(
                                 15,
                               ), //do zaokraglenia rogow
-                              color: Kolor, //kolor tla
+                              color: Colors.white, //kolor tla
                               boxShadow: [
                                 //cienie
                                 BoxShadow(
@@ -450,10 +515,16 @@ class _CyklState extends State<Cykl> {
                                 ),
                               ],
                             ),
+
                             child: ListTile(
                               onTap: () => print(""),
 
-                              title: Center(child: Text(value[index].title)),
+                              title: Center(
+                                child: Text(
+                                  value[index].title,
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ),
                               trailing: value[index] is Event
                                   ? IconButton(
                                       icon: const Icon(
@@ -483,141 +554,41 @@ class _CyklState extends State<Cykl> {
                   ),
                 ),
               ),
-              /*Container(
-                height: 50,
-                width: 400,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    15,
-                  ), //do zaokraglenia rogow
-                  color: Kolor, //kolor tla
-                  boxShadow: [
-                    //cienie
-                    BoxShadow(
-                      color: Colors.grey.shade500, //kolor cienia
-                      offset: Offset(4.0, 4.0), //przesunicie wzgledem kontenera
-                      blurRadius: 15.0, //rozmycie cienia
-                      spreadRadius: 1.0, //rozszerzenie cienia
-                    ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: Offset(-4.0, -4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ],
-                ),
-                //padding: EdgeInsets.all(20), //odleglosc tekstu od krawedzi
-                alignment: Alignment.center,
-                child: Text(
-                  'dzień cyklu: 28',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
-                ),
-              )*/
-              /*Container(
-                height: 50,
-                width: 400,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Kolor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: Offset(-4.0, -4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ],
-                ),
-                alignment: Alignment.center,
-
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'do miesiączki: $ilosc_dni_do_miesiaczki dni',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ), //zeby byla przerwa miedzy tekstem a obrazkiem
-                    for (
-                      int i = 0;
-                      i < 4 - ilosc_dni_do_miesiaczki;
-                      i++
-                    ) //wyswietlenie kropelek obok napisu
-                      Image.asset(
-                        'assets/kropelka.jpg',
-                        width: 25,
-                        color: Kolor,
-                        colorBlendMode: BlendMode.multiply,
-                      ),
-                  ],
-                ),
-              )*/
-              /*Container(
-                height: 50,
-                width: 400,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Kolor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: Offset(-4.0, -4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'bolący brzuch: $ilosc_dni_boli_brzuch ',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.headlineMedium!.copyWith(color: Kolor_tekstu),
-                    ),
-                    FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                      ),
-                      onPressed: zwiekszenie_dni,
-                      child: const Text('+'),
-                    ),
-                  ],
-                ),
-              )*/
             ],
           ),
         ],
       ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.popAndPushNamed(context, '/glowny');
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) {
+          setState(() {
+            myIndex = index;
+          });
+          if (index == 1) {
+            Navigator.pushNamed(context, '/startowy');
+          }
+          if (index == 2) {
+            Navigator.pushNamed(context, '/glowny');
+          }
         },
-        backgroundColor: Kolor_przycisku,
-        child: const Icon(Icons.home),
+        backgroundColor: Colors.white,
+        selectedItemColor: Color.fromARGB(255, 217, 127, 201),
+        unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+        currentIndex: myIndex,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bluetooth),
+            label: 'Mój Ring',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: "Podsumowanie",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.more_horiz),
+            label: "Więcej",
+          ),
+        ],
       ),
     );
   }
