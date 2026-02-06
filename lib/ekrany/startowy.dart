@@ -53,6 +53,9 @@ class _StartowyEkranState extends State<StartowyEkran> {
           setState(() {
             myIndex = index;
           });
+          if (index == 0) {
+            Navigator.pushNamed(context, '/parowanie');
+          }
           if (index == 1) {
             Navigator.pushNamed(context, '/startowy');
           }
