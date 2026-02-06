@@ -24,15 +24,43 @@ class _ParowanieState extends State<Parowanie> {
 
   @override
   Widget build(BuildContext context) {
+    int myIndex = 0;
     return Scaffold(
       
       body: _buildBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.popAndPushNamed(context, '/glowny');
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) {
+          setState(() {
+            myIndex = index;
+          });
+          if (index == 0) {
+            Navigator.pushNamed(context, '/parowanie');
+          }
+          if (index == 1) {
+            Navigator.pushNamed(context, '/startowy');
+          }
+          if (index == 2) {
+            Navigator.pushNamed(context, '/glowny');
+          }
         },
-        backgroundColor: const Color.fromARGB(255, 64, 155, 197),
-        child: const Icon(Icons.home),
+        backgroundColor: Colors.white,
+        selectedItemColor: Color.fromARGB(255, 217, 127, 201),
+        unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+        currentIndex: myIndex,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bluetooth),
+            label: 'Mój Ring',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: "Podsumowanie",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.more_horiz),
+            label: "Więcej",
+          ),
+        ],
       ),
     );
   }
