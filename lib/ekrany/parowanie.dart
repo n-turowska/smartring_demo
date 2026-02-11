@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/ring_service.dart';
+import '../services/ble_service.dart';
 
 class Parowanie extends StatefulWidget{
     final RingService ringService;
@@ -20,6 +21,8 @@ class _ParowanieState extends State<Parowanie> {
     widget.ringService.connectionState.listen((_){
       setState(() {});
     });
+
+    BleService.instance.listenToAdapterState();
   }
 
   @override
