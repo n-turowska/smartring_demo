@@ -3,6 +3,10 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class BleService {
 
+  // singleton
+  BleService._(); // Private constructor
+  static final BleService instance = BleService._();
+
   /// Nasłuchiwanie stanu adaptera BLE (stream)
   StreamSubscription<BluetoothAdapterState>? _adapterStateSubscription;
 
