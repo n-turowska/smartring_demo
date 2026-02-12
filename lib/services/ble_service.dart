@@ -18,6 +18,7 @@ class BleService {
       switch (state) {
         case BluetoothAdapterState.on:
           print("Bluetooth jest WŁĄCZONY");
+          scanning();
           break;
         case BluetoothAdapterState.off:
           print("Bluetooth jest WYŁĄCZONY");
@@ -33,6 +34,31 @@ class BleService {
       }
     });
   }
+
+  // Scanowanie
+  void scanning() async{
+    print("zaczynamy skanowanie");
+    var subscription = FlutterBluePlus.onScanResults.listen((results) {
+        if (results.isNotEmpty) {
+            ScanResult r = results.last; // the most recently found device
+            print('${r.device.remoteId}: "${r.advertisementData.advName}" found!');
+        }
+    },
+    onError: (e) => print(e),
+    );
+
+    FlutterBluePlus.cancelWhenScanComplete(subscription);
+
+    
+
+    await FlutterBluePlus.startScan(
+    withNames:["Mira", "MIRA", "MiraRing"], 
+    timeout: Duration(seconds:10));
+
+    await FlutterBluePlus.isScanning.where((val) => val == false).first;
+    print("scanowanie zakonczone");
+  }
+
 
   /// Zwolnienie streama
   void dispose() {

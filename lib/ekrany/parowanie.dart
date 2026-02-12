@@ -13,21 +13,24 @@ class Parowanie extends StatefulWidget{
 }
 
 class _ParowanieState extends State<Parowanie> {
+  final BleService bleService = BleService.instance;
+  int myIndex = 0;
+  
 
   @override
   void initState(){
     super.initState();
 
+    bleService.listenToAdapterState();
+
     widget.ringService.connectionState.listen((_){
       setState(() {});
     });
 
-    BleService.instance.listenToAdapterState();
   }
 
   @override
   Widget build(BuildContext context) {
-    int myIndex = 0;
     return Scaffold(
       
       body: _buildBody(),
@@ -37,7 +40,7 @@ class _ParowanieState extends State<Parowanie> {
             myIndex = index;
           });
           if (index == 0) {
-            Navigator.pushNamed(context, '/parowanie');
+            return;
           }
           if (index == 1) {
             Navigator.pushNamed(context, '/startowy');
@@ -69,6 +72,20 @@ class _ParowanieState extends State<Parowanie> {
   }
 
   Widget _buildBody() {
+
+    return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text("..."), 
+          ElevatedButton(
+            onPressed: () {
+              bleService.scanning();
+            },
+            child: Text("scanowanie"),
+          ),]
+        ),
+      );
+    /*
     final state = widget.ringService.currentState;
 
     if(state==RingConnectionState.disconnected)
@@ -147,6 +164,7 @@ class _ParowanieState extends State<Parowanie> {
           ),]
         ),
       );
-    }
+    }*/
   }
+  
 }
