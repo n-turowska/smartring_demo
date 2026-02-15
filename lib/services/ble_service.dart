@@ -10,27 +10,24 @@ class BleService {
   /// Nasłuchiwanie stanu adaptera BLE (stream)
   StreamSubscription<BluetoothAdapterState>? _adapterStateSubscription;
 
-  void listenToAdapterState() {
-    _adapterStateSubscription =
-        FlutterBluePlus.adapterState.listen((BluetoothAdapterState state) {
-      print("Stan adaptera: $state");
+  void listenToAdapterState() async{
+    // first, check if bluetooth is supported by your hardware
+    // Note: The platform is initialized on the first call to any FlutterBluePlus method.
+    if (await FlutterBluePlus.isSupported == false) {
+        print("Bluetooth not supported by this device");
+        return;
+    }
 
-      switch (state) {
-        case BluetoothAdapterState.on:
-          print("Bluetooth jest WŁĄCZONY");
+    // handle bluetooth on & off
+    // note: for iOS the initial state is typically BluetoothAdapterState.unknown
+    // note: if you have permissions issues you will get stuck at BluetoothAdapterState.unauthorized
+    _adapterStateSubscription = FlutterBluePlus.adapterState.listen((BluetoothAdapterState state) {
+        print(state);
+        if (state == BluetoothAdapterState.on) {
+            print("Bluetooth włączony");
           scanning();
-          break;
-        case BluetoothAdapterState.off:
-          print("Bluetooth jest WYŁĄCZONY");
-          break;
-        case BluetoothAdapterState.unavailable:
-          print("Bluetooth niedostępny na urządzeniu");
-          break;
-        case BluetoothAdapterState.unauthorized:
-          print("Brak uprawnień do Bluetooth");
-          break;
-        default:
-          print("Inny stan: $state");
+        } else {
+            print("Bluetooth wyłączony");
       }
     });
   }
