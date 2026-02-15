@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class BleService {
 
@@ -25,35 +26,63 @@ class BleService {
         print(state);
         if (state == BluetoothAdapterState.on) {
             print("Bluetooth włączony");
-          scanning();
+            scanning();
         } else {
             print("Bluetooth wyłączony");
-      }
+        }
     });
   }
 
   // Scanowanie
   void scanning() async{
-    print("zaczynamy skanowanie");
+    List<ScanResult> allResults = [];
+    // listen to scan results
+    // Note: `onScanResults` clears the results between scans. You should use
+    //  `scanResults` if you want the current scan results *or* the results from the previous scan.
     var subscription = FlutterBluePlus.onScanResults.listen((results) {
-        if (results.isNotEmpty) {
-            ScanResult r = results.last; // the most recently found device
-            print('${r.device.remoteId}: "${r.advertisementData.advName}" found!');
-        }
-    },
-    onError: (e) => print(e),
+      allResults = results;
+            if (results.isNotEmpty) {
+                ScanResult r = results.last; // the most recently found device
+                print('${r.device.remoteId}: "${r.advertisementData.advName}" found!');
+            }
+        },
+        onError: (e) => print(e),
     );
 
+    // cleanup: cancel subscription when scanning stops
     FlutterBluePlus.cancelWhenScanComplete(subscription);
 
-    
+    // Wait for Bluetooth enabled & permission granted
+    // In your real app you should use `FlutterBluePlus.adapterState.listen` to handle all states
+    await FlutterBluePlus.adapterState.where((val) => val == BluetoothAdapterState.on).first;
+    requestPermissions();
 
+    // Start scanning w/ timeout
+    // Optional: use `stopScan()` as an alternative to timeout
     await FlutterBluePlus.startScan(
-    withNames:["Mira", "MIRA", "MiraRing"], 
-    timeout: Duration(seconds:10));
+      //withServices:[Guid("180D")], // match any of the specified services
+      withNames:["Test advertising raw data", "Mi Smart Band 5"], // *or* any of the specified names
+      timeout: Duration(seconds:10));
 
+    // wait for scanning to stop
     await FlutterBluePlus.isScanning.where((val) => val == false).first;
-    print("scanowanie zakonczone");
+
+    print("  ");
+    print("Znalezione urządzenia:");
+    for(ScanResult r in allResults)
+    {
+      print('${r.device.remoteId}: "${r.advertisementData.advName}"');
+    }
+  }
+  
+  
+  Future<void> requestPermissions() async {
+    // Poproś o wszystkie potrzebne uprawnienia
+    await [
+      Permission.bluetoothScan,
+      Permission.bluetoothConnect,
+      Permission.location,
+    ].request();
   }
 
 
