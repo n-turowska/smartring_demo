@@ -53,7 +53,11 @@ class BleService {
     // Note: `onScanResults` clears the results between scans. You should use
     //  `scanResults` if you want the current scan results *or* the results from the previous scan.
     var subscription = FlutterBluePlus.onScanResults.listen((results) {
-      allResults = results;
+      var sortedResults = List<ScanResult>.from(results)
+      ..sort((a, b) => b.rssi.compareTo(a.rssi));
+
+      allResults = sortedResults;
+      
             if (results.isNotEmpty) {
                 _deviceControler.add(results.last);
                 ScanResult r = results.last; // the most recently found device

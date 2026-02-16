@@ -98,7 +98,7 @@ class _ParowanieState extends State<Parowanie> {
           ),
           Text(bleService.allResults.isEmpty ? "Nie znaleziono urządzeń" : "Znalezione urządzenia:"),
           for(var r in bleService.allResults)
-            Text('${r.device.remoteId}: "${r.advertisementData.advName}"'),
+            Text('${r.device.remoteId}: "${r.advertisementData.advName}" RSSI: ${r.rssi} dBm'),
           ]
         ),
       );
