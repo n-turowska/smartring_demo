@@ -115,10 +115,24 @@ class _ParowanieState extends State<Parowanie> {
           Text(bleService.allResults.isEmpty ? "Nie znaleziono urządzeń" : "Znalezione urządzenia:"),
           for(var r in bleService.allResults)
             Container(
-              height: 50,
+              height: 100,
               color: Colors.lightBlue[100],
               child: Center(
-                child: Text('${r.device.remoteId}: "${r.advertisementData.advName}" RSSI: ${r.rssi} dBm'),
+                child: Column(children: [
+                  Text('Nazwa: "${r.advertisementData.advName}"'),
+                  Text('MAC: ${r.device.remoteId}'),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [Text('RSSI: ${r.rssi} dBm'),
+                    if (r.rssi >= -50)
+                      Icon(Icons.signal_cellular_alt)
+                    else if (r.rssi >= -60)
+                      Icon(Icons.signal_cellular_alt_2_bar)
+                    else if (r.rssi >= -70)
+                      Icon(Icons.signal_cellular_alt_1_bar)
+                    else
+                      Icon(Icons.signal_cellular_off),],),
+                  ],)
                 ),
             ),
           ]
