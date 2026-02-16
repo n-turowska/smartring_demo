@@ -80,11 +80,17 @@ class _ParowanieState extends State<Parowanie> {
   Widget _buildBody() {
     final state = bleService.currentState;
 
-    return Center(
-        child: Column(
-          spacing: 10.0,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [if(state) CircularProgressIndicator(), 
+    return RefreshIndicator(
+      onRefresh: () async{
+        if(!bleService.isScanning){
+          await bleService.scanning();
+        }
+      },
+        child: ListView(
+          //spacing: 10.0,
+          //mainAxisAlignment: MainAxisAlignment.center,
+          padding: const EdgeInsets.all(8),
+          children: [ 
           ElevatedButton(
             onPressed: () {
               if(!bleService.isScanning){
@@ -98,7 +104,13 @@ class _ParowanieState extends State<Parowanie> {
           ),
           Text(bleService.allResults.isEmpty ? "Nie znaleziono urządzeń" : "Znalezione urządzenia:"),
           for(var r in bleService.allResults)
-            Text('${r.device.remoteId}: "${r.advertisementData.advName}" RSSI: ${r.rssi} dBm'),
+            Container(
+              height: 50,
+              color: Colors.lightBlue[100],
+              child: Center(
+                child: Text('${r.device.remoteId}: "${r.advertisementData.advName}" RSSI: ${r.rssi} dBm'),
+                ),
+            ),
           ]
         ),
       );

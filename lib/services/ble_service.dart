@@ -46,7 +46,7 @@ class BleService {
   }
 
   // Scanowanie
-  void scanning() async{
+  Future<void> scanning() async{
     isScanning = true;
     _controler.add(true);
     // listen to scan results
@@ -57,7 +57,7 @@ class BleService {
       ..sort((a, b) => b.rssi.compareTo(a.rssi));
 
       allResults = sortedResults;
-      
+
             if (results.isNotEmpty) {
                 _deviceControler.add(results.last);
                 ScanResult r = results.last; // the most recently found device
