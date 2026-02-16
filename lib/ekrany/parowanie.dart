@@ -29,6 +29,9 @@ class _ParowanieState extends State<Parowanie> {
     bleService.scanningState.listen((data){
       setState(() {});
     });
+    bleService.devicesState.listen((data){
+      setState(() {});
+    });
 
   }
 
@@ -93,6 +96,9 @@ class _ParowanieState extends State<Parowanie> {
             },
             child: Text(state ? "anuluj" : "skanuj"),
           ),
+          Text(bleService.allResults.isEmpty ? "Nie znaleziono urządzeń" : "Znalezione urządzenia:"),
+          for(var r in bleService.allResults)
+            Text('${r.device.remoteId}: "${r.advertisementData.advName}"'),
           ]
         ),
       );

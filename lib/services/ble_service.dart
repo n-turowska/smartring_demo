@@ -4,6 +4,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 class BleService {
   var isScanning = false;
+  
+  List<ScanResult> allResults = [];
 
   // singleton
   BleService._(); // Private constructor
@@ -12,6 +14,9 @@ class BleService {
   // ============ STREAMS ============
   final _controler = StreamController<bool>.broadcast();
   Stream<bool> get scanningState => _controler.stream;
+
+  final _deviceControler = StreamController<ScanResult>.broadcast();
+  Stream<ScanResult> get devicesState => _deviceControler.stream;
 
   bool get currentState => isScanning;
 
@@ -44,13 +49,13 @@ class BleService {
   void scanning() async{
     isScanning = true;
     _controler.add(true);
-    List<ScanResult> allResults = [];
     // listen to scan results
     // Note: `onScanResults` clears the results between scans. You should use
     //  `scanResults` if you want the current scan results *or* the results from the previous scan.
     var subscription = FlutterBluePlus.onScanResults.listen((results) {
       allResults = results;
             if (results.isNotEmpty) {
+                _deviceControler.add(results.last);
                 ScanResult r = results.last; // the most recently found device
                 print('${r.device.remoteId}: "${r.advertisementData.advName}" found!');
             }
@@ -70,7 +75,7 @@ class BleService {
     // Optional: use `stopScan()` as an alternative to timeout
     await FlutterBluePlus.startScan(
       //withServices:[Guid("180D")], // match any of the specified services
-      withNames:["Test advertising raw data", "Mi Smart Band 5"], // *or* any of the specified names
+      //withNames:["Test advertising raw data", "Mi Smart Band 5"], // *or* any of the specified names
       timeout: Duration(seconds:10));
 
     // wait for scanning to stop
