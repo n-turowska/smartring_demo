@@ -38,7 +38,17 @@ class _ParowanieState extends State<Parowanie> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        title: const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Mój Ring',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+          ),
+        ),
+      ),
       body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
