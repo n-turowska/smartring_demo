@@ -3,6 +3,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class BleService {
+  var isScanning = false;
 
   // singleton
   BleService._(); // Private constructor
@@ -35,6 +36,7 @@ class BleService {
 
   // Scanowanie
   void scanning() async{
+    isScanning = true;
     List<ScanResult> allResults = [];
     // listen to scan results
     // Note: `onScanResults` clears the results between scans. You should use
@@ -73,6 +75,11 @@ class BleService {
     {
       print('${r.device.remoteId}: "${r.advertisementData.advName}"');
     }
+    isScanning = false;
+  }
+
+  void stopScan () async{
+    await FlutterBluePlus.stopScan();
   }
   
   

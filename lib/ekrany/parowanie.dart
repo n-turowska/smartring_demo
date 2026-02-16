@@ -75,13 +75,24 @@ class _ParowanieState extends State<Parowanie> {
 
     return Center(
         child: Column(
+          spacing: 10.0,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Text("..."), 
           ElevatedButton(
             onPressed: () {
-              bleService.scanning();
+              if(!bleService.isScanning){
+                bleService.scanning();
+              }
             },
             child: Text("scanowanie"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if(bleService.isScanning){
+                bleService.stopScan();
+              }
+            },
+            child: Text("Anuluj"),
           ),]
         ),
       );
