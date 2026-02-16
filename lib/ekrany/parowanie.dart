@@ -26,6 +26,9 @@ class _ParowanieState extends State<Parowanie> {
     widget.ringService.connectionState.listen((_){
       setState(() {});
     });
+    bleService.scanningState.listen((data){
+      setState(() {});
+    });
 
   }
 
@@ -72,28 +75,25 @@ class _ParowanieState extends State<Parowanie> {
   }
 
   Widget _buildBody() {
+    final state = bleService.currentState;
 
     return Center(
         child: Column(
           spacing: 10.0,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text("..."), 
+          children: [if(state) CircularProgressIndicator(), 
           ElevatedButton(
             onPressed: () {
               if(!bleService.isScanning){
                 bleService.scanning();
               }
-            },
-            child: Text("scanowanie"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if(bleService.isScanning){
+              else{
                 bleService.stopScan();
               }
             },
-            child: Text("Anuluj"),
-          ),]
+            child: Text(state ? "anuluj" : "skanuj"),
+          ),
+          ]
         ),
       );
     /*

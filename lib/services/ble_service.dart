@@ -9,6 +9,12 @@ class BleService {
   BleService._(); // Private constructor
   static final BleService instance = BleService._();
 
+  // ============ STREAMS ============
+  final _controler = StreamController<bool>.broadcast();
+  Stream<bool> get scanningState => _controler.stream;
+
+  bool get currentState => isScanning;
+
   /// Nasłuchiwanie stanu adaptera BLE (stream)
   StreamSubscription<BluetoothAdapterState>? _adapterStateSubscription;
 
@@ -37,6 +43,7 @@ class BleService {
   // Scanowanie
   void scanning() async{
     isScanning = true;
+    _controler.add(true);
     List<ScanResult> allResults = [];
     // listen to scan results
     // Note: `onScanResults` clears the results between scans. You should use
@@ -76,6 +83,7 @@ class BleService {
       print('${r.device.remoteId}: "${r.advertisementData.advName}"');
     }
     isScanning = false;
+    _controler.add(false);
   }
 
   void stopScan () async{
