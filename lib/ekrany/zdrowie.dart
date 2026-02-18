@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/common/main_shape.dart';
-import '../wykres_zdrowie/wykres1.dart';
+import '../wykresy/wykres_temp.dart';
+//import '../wykresy/wykres_zdrowie.dart';
+import '../services/database_service.dart';
 
 class Zdrowie extends StatefulWidget {
   const Zdrowie({super.key});
@@ -8,6 +10,7 @@ class Zdrowie extends StatefulWidget {
   @override
   State<Zdrowie> createState() => _ZdrowieState();
 }
+
 
 class _ZdrowieState extends State<Zdrowie> {
   @override
@@ -50,7 +53,7 @@ class _ZdrowieState extends State<Zdrowie> {
                   max_liczba: 5,
                   nazwa: "                Poziom stresu: ",
                 ), //tak na daną chwilę, potem użyje Stack zamiac Row
-                SizedBox(height: 200, width: 400, child: StressChart()),
+                SizedBox(height: 200, width: 400, child: TempChart()),
                 //Image.asset('assets/wykres.png', width: 400, height: 300, fit: BoxFit.contain),
               ],
             ),
@@ -91,6 +94,7 @@ class _ZdrowieState extends State<Zdrowie> {
     );
   }
 }
+
 
 class Stres extends StatefulWidget {
   final dynamic kolor;

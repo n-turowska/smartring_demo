@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../services/database_service.dart';
 
 class StressChart extends StatelessWidget {
-  const StressChart ({super.key});
+  final DatabaseService db;
+  const StressChart ({super.key, required this.db});
 
   @override
   Widget build(BuildContext context){
-    final hrvValues = [75,30,120,130,20,100,80];
-    //final stressValues = [3,4,1,1,5,3,3];
-    final days = ['Pn','Wt','Śr','Cz','Pt','So','Nd'];
-
+    final hrvValues = db.hrvValues;
+    final days = db.days;
     return BarChart(
       BarChartData(
         maxY: 130,
