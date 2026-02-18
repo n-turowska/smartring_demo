@@ -1,0 +1,223 @@
+import 'package:flutter/material.dart';
+import '../services/ring_service.dart';
+import '../services/ble_service.dart';
+
+class Parowanie extends StatefulWidget{
+    final RingService ringService;
+
+
+    const Parowanie({super.key,required this.ringService,});
+
+    @override
+  State<Parowanie> createState() => _ParowanieState();
+}
+
+class _ParowanieState extends State<Parowanie> {
+  final BleService bleService = BleService.instance;
+  int myIndex = 0;
+  
+
+  @override
+  void initState(){
+    super.initState();
+
+    bleService.listenToAdapterState();
+
+    widget.ringService.connectionState.listen((_){
+      setState(() {});
+    });
+    bleService.scanningState.listen((data){
+      setState(() {});
+    });
+    bleService.devicesState.listen((data){
+      setState(() {});
+    });
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        title: const Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Mój Ring',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+          ),
+        ),
+      ),
+      body: _buildBody(),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) {
+          setState(() {
+            myIndex = index;
+          });
+          if (index == 0) {
+            return;
+          }
+          if (index == 1) {
+            Navigator.pushNamed(context, '/startowy');
+          }
+          if (index == 2) {
+            Navigator.pushNamed(context, '/glowny');
+          }
+        },
+        backgroundColor: Colors.white,
+        selectedItemColor: Color.fromARGB(255, 217, 127, 201),
+        unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+        currentIndex: myIndex,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bluetooth),
+            label: 'Mój Ring',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: "Podsumowanie",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.more_horiz),
+            label: "Więcej",
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    final state = bleService.currentState;
+
+    return RefreshIndicator(
+      onRefresh: () async{
+        if(!bleService.isScanning){
+          await bleService.scanning();
+        }
+      },
+        child: ListView(
+          //spacing: 10.0,
+          //mainAxisAlignment: MainAxisAlignment.center,
+          padding: const EdgeInsets.all(8),
+          children: [ 
+          ElevatedButton(
+            onPressed: () {
+              if(!bleService.isScanning){
+                bleService.scanning();
+              }
+              else{
+                bleService.stopScan();
+              }
+            },
+            child: Text(state ? "anuluj" : "skanuj"),
+          ),
+          Text(bleService.allResults.isEmpty ? "Nie znaleziono urządzeń" : "Znalezione urządzenia:"),
+          for(var r in bleService.allResults)
+            Container(
+              height: 100,
+              color: Colors.lightBlue[100],
+              child: Center(
+                child: Column(children: [
+                  Text('Nazwa: "${r.advertisementData.advName}"'),
+                  Text('MAC: ${r.device.remoteId}'),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [Text('RSSI: ${r.rssi} dBm'),
+                    if (r.rssi >= -50)
+                      Icon(Icons.signal_cellular_alt)
+                    else if (r.rssi >= -60)
+                      Icon(Icons.signal_cellular_alt_2_bar)
+                    else if (r.rssi >= -70)
+                      Icon(Icons.signal_cellular_alt_1_bar)
+                    else
+                      Icon(Icons.signal_cellular_off),],),
+                  ],)
+                ),
+            ),
+          ]
+        ),
+      );
+    /*
+    final state = widget.ringService.currentState;
+
+    if(state==RingConnectionState.disconnected)
+    {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text("Ring is disconected"), 
+          ElevatedButton(
+            onPressed: () async {
+               try {
+                  await widget.ringService.connect();
+                } catch (_) {}
+            },
+            child: Text("Połącz"),
+          ),]
+        ),
+      );
+    }
+    else if(state==RingConnectionState.scanning)
+    {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text("Scanning"), CircularProgressIndicator(),]
+        ),
+      );
+    }
+    else if(state==RingConnectionState.connecting)
+    {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text("Connecting"), CircularProgressIndicator(),]
+        ),
+      );
+    }
+    else if(state==RingConnectionState.connected)
+    {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text("Ring is connected"),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                await widget.ringService.disconnect();
+              } catch (_) {}
+            },
+            child: Text("Rozłącz")
+          ),]
+        ),
+      );
+    }
+    else if(state==RingConnectionState.syncing)
+    {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text("Scyncing"), CircularProgressIndicator(),]
+        ),
+      );
+    }
+    else{
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text("ERROR"),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                widget.ringService.connect();
+              } catch (_) {}
+            },
+            child: Text("Połącz"),
+          ),]
+        ),
+      );
+    }*/
+  }
+  
+}
