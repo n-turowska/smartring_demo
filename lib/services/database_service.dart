@@ -3,6 +3,7 @@
 import '../models/health_metrics.dart';
 import '../ekrany/kalendarz/event.dart';
 import '../models/temp_entry.dart';
+import 'package:sqflite/sqflite.dart';
 
 /// Database service for managing health data persistence
 ///
@@ -163,16 +164,21 @@ class DatabaseService {
   void generateSyntheticTempData() {
     _temperatureData.clear();
 
-    for(int i=0;i<7;i++){
-      final measurements =List<double>.generate(3, (_) => 36.5 +(0.5-(0.5*i)/6));
+    for (int i = 0; i < 7; i++) {
+      final measurements = List<double>.generate(
+        3,
+        (_) => 36.5 + (0.5 - (0.5 * i) / 6),
+      );
 
-      final avg = measurements.fold(0.0, (sum, e) => sum + e) / measurements.length;
-      final date =DateTime.now().subtract(Duration(days:6-i));
+      final avg =
+          measurements.fold(0.0, (sum, e) => sum + e) / measurements.length;
+      final date = DateTime.now().subtract(Duration(days: 6 - i));
 
-      _temperatureData.add(TemperatureEntry(date:date,value:avg));
+      _temperatureData.add(TemperatureEntry(date: date, value: avg));
     }
   }
-    // Dodawanie nowego pomiaru
+
+  // Dodawanie nowego pomiaru
   void addTemperature(double value) {
     final entry = TemperatureEntry(date: DateTime.now(), value: value);
     _temperatureData.add(entry);
@@ -183,21 +189,21 @@ class DatabaseService {
       _temperatureData.removeAt(0); // usuwa najstarszy
     }
   }
-  //Pobieranie 7 dni
-  List<TemperatureEntry> getLast7Days(){
-    _temperatureData.sort((a,b) => a.date.compareTo(b.date));
 
-    if(_temperatureData.length <=7){
+  //Pobieranie 7 dni
+  List<TemperatureEntry> getLast7Days() {
+    _temperatureData.sort((a, b) => a.date.compareTo(b.date));
+
+    if (_temperatureData.length <= 7) {
       return _temperatureData;
     }
-    return _temperatureData.sublist(_temperatureData.length -7);
+    return _temperatureData.sublist(_temperatureData.length - 7);
   }
-
 
   //wykre_zdrowie_dane //
 
-    final hrvValues = [75,30,120,130,20,100,80];
-    final days = ['Pn','Wt','Śr','Cz','Pt','So','Nd'];
+  final hrvValues = [75, 30, 120, 130, 20, 100, 80];
+  final days = ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So', 'Nd'];
 
   // ============ PUBLIC API ============
 
@@ -329,5 +335,4 @@ class DatabaseService {
   Future<void> close() async {
     // For now, do nothing
   }
-
 }

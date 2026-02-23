@@ -30,8 +30,7 @@ class MyApp extends StatelessWidget {
             Aktywnosc(databaseService: DatabaseService.instance),
         '/zdrowie': (context) => const Zdrowie(),
         '/cykl': (context) => Cykl(databaseService: DatabaseService.instance),
-        '/parowanie': (context) =>
-            Parowanie(ringService: RingService.instance),
+        '/parowanie': (context) => Parowanie(ringService: RingService.instance),
         '/glowny': (context) =>
             const MyHomePage(title: 'Mira Ring Demo More Page'),
       },
