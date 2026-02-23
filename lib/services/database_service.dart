@@ -1,5 +1,7 @@
 // services/database_service.dart
 
+import 'package:path/path.dart';
+
 import '../models/health_metrics.dart';
 import '../ekrany/kalendarz/event.dart';
 import '../models/temp_entry.dart';
@@ -17,10 +19,86 @@ import 'package:sqflite/sqflite.dart';
 /// - Reuse data access across multiple screens
 class DatabaseService {
   // Singleton pattern - only one instance of DatabaseService exists
-  DatabaseService._();
   DatabaseService();
-  static final DatabaseService instance = DatabaseService._();
+  static Database? _db;
+  static final DatabaseService instance = DatabaseService._constructor();
+  final String _cycleTableName = 'cycle events';
+  final String _cycleIdColumnName = 'id';
+  final String _cycleDateColumnName = 'date';
+  final String _cycleEventTypeColumnName = 'event type';
 
+  DatabaseService._constructor();
+
+  Future<Database> get database async {
+    if (_db != null) return _db!;
+    _db = await getDatabase();
+    return _db!;
+  }
+
+  Future<Database> getDatabase() async {
+    //asynchroniczna, nie zwraca od razu->od razu zwraca future, czyli cos co w przyszlosci bedzie
+    final databaseDirPath = await getDatabasesPath();
+    final databasePath = join(databaseDirPath, "master_db.db");
+    final database = await openDatabase(
+      databasePath,
+      onCreate: (db, version) {
+        db.execute('''
+        CREATE TABLE $_cycleTableName(
+        $_cycleIdColumnName INTEGER PRIMARY KEY,
+        $_cycleDateColumnName TEXT NOT NULL,
+        $_cycleEventTypeColumnName TEXT NOT NULL CHECK(
+          $_cycleEventTypeColumnName IN(
+            'period_start',
+            'period_end',
+            'ovulation_predicted',
+            'ovulation_confirmed',
+            'fertile_window'
+          )
+        )
+      )
+''');
+      },
+    );
+    return database;
+  }
+  // ============ FUTURE DATABASE METHODS ============
+  // These will be implemented when we add actual SQLite database
+
+  /// Initialize database
+  ///
+  /// TODO: Implement SQLite database initialization
+  Future<void> initialize() async {
+    // For now, do nothing
+    // Later: Create database, run migrations, etc.
+  }
+
+  /// Insert health metrics for a date
+  ///
+  /// TODO: Implement database insert
+  Future<int> insertHealthMetrics(HealthMetrics metrics) async {
+    throw UnimplementedError('Database insert not yet implemented');
+  }
+
+  /// Update health metrics
+  ///
+  /// TODO: Implement database update
+  Future<int> updateHealthMetrics(HealthMetrics metrics) async {
+    throw UnimplementedError('Database update not yet implemented');
+  }
+
+  /// Delete all data
+  ///
+  /// TODO: Implement database deletion
+  Future<void> deleteAllData() async {
+    throw UnimplementedError('Database deletion not yet implemented');
+  }
+
+  /// Close database connection
+  ///
+  /// TODO: Implement when database is added
+  Future<void> close() async {
+    // For now, do nothing
+  }
   // ============ MOCK DATA ============
   // TODO: Replace with actual database queries when ready
 
@@ -295,44 +373,5 @@ class DatabaseService {
     final steps = _mockWeeklySteps.last;
     final meters = steps * 0.75;
     return (meters / 1000).round(); // ~4-5 km for 5607 steps
-  }
-
-  // ============ FUTURE DATABASE METHODS ============
-  // These will be implemented when we add actual SQLite database
-
-  /// Initialize database
-  ///
-  /// TODO: Implement SQLite database initialization
-  Future<void> initialize() async {
-    // For now, do nothing
-    // Later: Create database, run migrations, etc.
-  }
-
-  /// Insert health metrics for a date
-  ///
-  /// TODO: Implement database insert
-  Future<int> insertHealthMetrics(HealthMetrics metrics) async {
-    throw UnimplementedError('Database insert not yet implemented');
-  }
-
-  /// Update health metrics
-  ///
-  /// TODO: Implement database update
-  Future<int> updateHealthMetrics(HealthMetrics metrics) async {
-    throw UnimplementedError('Database update not yet implemented');
-  }
-
-  /// Delete all data
-  ///
-  /// TODO: Implement database deletion
-  Future<void> deleteAllData() async {
-    throw UnimplementedError('Database deletion not yet implemented');
-  }
-
-  /// Close database connection
-  ///
-  /// TODO: Implement when database is added
-  Future<void> close() async {
-    // For now, do nothing
   }
 }
