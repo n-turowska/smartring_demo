@@ -6,6 +6,7 @@ import '../models/health_metrics.dart';
 import '../ekrany/kalendarz/event.dart';
 import '../models/temp_entry.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:smartring_demo/services/database_helper.dart';
 
 /// Database service for managing health data persistence
 ///
@@ -22,53 +23,13 @@ class DatabaseService {
   DatabaseService();
   static Database? _db;
   static final DatabaseService instance = DatabaseService._constructor();
-  final String _cycleTableName = 'cycle events';
-  final String _cycleIdColumnName = 'id';
-  final String _cycleDateColumnName = 'date';
-  final String _cycleEventTypeColumnName = 'event type';
+  final String _cycleTableName = 'cycle_events';
 
   DatabaseService._constructor();
 
-  Future<Database> get database async {
-    if (_db != null) return _db!;
-    _db = await getDatabase();
-    return _db!;
-  }
-
-  Future<Database> getDatabase() async {
-    //asynchroniczna, nie zwraca od razu->od razu zwraca future, czyli cos co w przyszlosci bedzie
-    final databaseDirPath = await getDatabasesPath();
-    final databasePath = join(databaseDirPath, "master_db.db");
-    final database = await openDatabase(
-      databasePath,
-      onCreate: (db, version) {
-        db.execute('''
-        CREATE TABLE $_cycleTableName(
-        $_cycleIdColumnName INTEGER PRIMARY KEY,
-        $_cycleDateColumnName TEXT NOT NULL,
-        $_cycleEventTypeColumnName TEXT NOT NULL CHECK(
-          $_cycleEventTypeColumnName IN(
-            'period_start',
-            'period_end',
-            'ovulation_predicted',
-            'ovulation_confirmed',
-            'fertile_window'
-          )
-        )
-      )
-''');
-      },
-    );
-    return database;
-  }
-
   void addCycleEvent(String eventType, int id, String date) async {
-    final db = await database;
-    await db.insert(_cycleTableName, {
-      _cycleDateColumnName: date,
-      _cycleIdColumnName: id,
-      _cycleEventTypeColumnName: eventType,
-    });
+    final db = await DatabaseHelper.instance.database;
+    await db.insert(_cycleTableName, Event.toMap());
   }
 
   // ============ FUTURE DATABASE METHODS ============
