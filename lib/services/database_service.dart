@@ -61,6 +61,16 @@ class DatabaseService {
     );
     return database;
   }
+
+  void addCycleEvent(String eventType, int id, String date) async {
+    final db = await database;
+    await db.insert(_cycleTableName, {
+      _cycleDateColumnName: date,
+      _cycleIdColumnName: id,
+      _cycleEventTypeColumnName: eventType,
+    });
+  }
+
   // ============ FUTURE DATABASE METHODS ============
   // These will be implemented when we add actual SQLite database
 
