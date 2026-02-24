@@ -21,13 +21,15 @@ import 'package:smartring_demo/services/database_helper.dart';
 class DatabaseService {
   // Singleton pattern - only one instance of DatabaseService exists
   DatabaseService();
-  static Database? _db;
   static final DatabaseService instance = DatabaseService._constructor();
   final String _cycleTableName = 'cycle_events';
+  final String _cycleIdColumnName = 'id';
+  final String _cycleDateColumnName = 'date';
+  final String _cycleEventTypeColumnName = 'event_type';
 
   DatabaseService._constructor();
 
-  void addUserEvent(Event event) async {
+  Future<void> addUserEvent(Event event) async {
     final db = await DatabaseHelper.instance.database;
     await db.insert(_cycleTableName, event.toMap());
   }
@@ -192,13 +194,13 @@ class DatabaseService {
   List<int> get dlCyklu => _mockPredictedDlugoscCyklu;
 
   /// added by user events-for example period days
-  final List<Event> _userEvents = [];
+
   Future<List<Event>> getUserEvents() async {
     final db = await DatabaseHelper.instance.database;
     final maps = await db.query(
       //czyli wybieramy z cycle_events to co event_type='user_event'
-      'cycle_events',
-      where: 'event_type=?',
+      _cycleTableName,
+      where: '$_cycleEventTypeColumnName=?',
       whereArgs: ['user_event'],
     );
     return maps

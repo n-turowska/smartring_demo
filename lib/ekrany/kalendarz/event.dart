@@ -2,6 +2,7 @@ class Event {
   final String title;
   final int? id;
   final DateTime date;
+
   Event(this.title, this.date, {this.id});
   Map<String, dynamic> toMap() {
     return {

@@ -40,7 +40,7 @@ class _CyklState extends State<Cykl> {
   TextEditingController _eventController = TextEditingController();
   late final ValueNotifier<List<dynamic>>
   _wybraneEventy; //late-zainicjalizujemy ta zmienna pozniej, final-tylko raz inicjalizujemy, potem nie mozna zmienic, ValueNotifier przechowuje liste eventow i powiadamia widgety gdy ta lista sie zmienia
-  final List<dynamic> _deletedEvents = [];
+
   int dlugoscCyklu = 28;
   int get dzienOwulacji => dlugoscCyklu - 14;
   int myIndex = 2;
@@ -90,17 +90,15 @@ class _CyklState extends State<Cykl> {
       });
     } catch (e) {
       setState(() {
-        _errorMessage = 'Nie udało się załadować: &e';
+        _errorMessage = 'Nie udało się załadować eventów';
         _isLoading = false;
       });
     }
   }
 
   List<dynamic> _wezEventyForDay(DateTime day) {
-    final events =
-        _eventsByDay[DateTime(day.year, day.month, day.day)] ??
+    return _eventsByDay[DateTime(day.year, day.month, day.day)] ??
         []; //jesli _eventsByDay jest null to zwroci pusta liste;
-    return events.where((e) => !_deletedEvents.contains(e)).toList();
   }
 
   int? getCurrentOvulation() {
@@ -131,7 +129,7 @@ class _CyklState extends State<Cykl> {
   //nowy event dodany przez uzytkownika
   Future<void> _addUserEvent(DateTime day, String title) async {
     final newEvent = Event(title, day);
-    widget.databaseService.addUserEvent(newEvent);
+    await widget.databaseService.addUserEvent(newEvent);
     final date = DateTime(day.year, day.month, day.day);
     _eventsByDay[date] = (_eventsByDay[date] ?? [])..add(newEvent);
     _wybraneEventy.value = _wezEventyForDay(day);
@@ -533,16 +531,20 @@ class _CyklState extends State<Cykl> {
                                         color: Colors.black,
                                       ),
                                       onPressed: () async {
-                                        final date = _kliknietyDzien;
+                                        final date = DateTime(
+                                          _kliknietyDzien!.year,
+                                          _kliknietyDzien!.month,
+                                          _kliknietyDzien!.day,
+                                        );
+
                                         await widget.databaseService
                                             .deleteEvent(value[index]);
                                         _eventsByDay[date]?.removeWhere(
                                           (e) => e.id == value[index].id,
                                         );
-                                        _deletedEvents.add(value[index]);
-                                        _wybraneEventy.value =
-                                            _eventsByDay[date] ?? [];
-                                        setState(() {});
+                                        _wybraneEventy.value = List.from(
+                                          _wezEventyForDay(date),
+                                        );
                                       },
                                     )
                                   : null,

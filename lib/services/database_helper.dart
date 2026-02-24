@@ -40,7 +40,7 @@ class DatabaseHelper {
             'period_end',
             'ovulation_predicted',
             'ovulation_confirmed',
-            'fertile_window'
+            'fertile_window',
             'user_event'
           )
         ),
