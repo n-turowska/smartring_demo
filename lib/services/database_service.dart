@@ -27,7 +27,7 @@ class DatabaseService {
 
   DatabaseService._constructor();
 
-  void addCycleEvent(Event event) async {
+  void addUserEvent(Event event) async {
     final db = await DatabaseHelper.instance.database;
     await db.insert(_cycleTableName, event.toMap());
   }
@@ -194,11 +194,16 @@ class DatabaseService {
   /// added by user events-for example period days
   final List<Event> _userEvents = [];
   Future<List<Event>> getUserEvents() async {
-    return _userEvents;
-  }
-
-  void addUserEvent(Event event) {
-    _userEvents.add(event);
+    final db = await DatabaseHelper.instance.database;
+    final maps = await db.query(
+      //czyli wybieramy z cycle_events to co event_type='user_event'
+      'cycle_events',
+      where: 'event_type=?',
+      whereArgs: ['user_event'],
+    );
+    return maps
+        .map((e) => Event.fromMap(e))
+        .toList(); //dzieki temu lista z mapa zmienia sie na liste z eventami
   }
 
   Future<void> deleteEvent(Event event) async {
