@@ -27,9 +27,9 @@ class DatabaseService {
 
   DatabaseService._constructor();
 
-  void addCycleEvent(String eventType, int id, String date) async {
+  void addCycleEvent(Event event) async {
     final db = await DatabaseHelper.instance.database;
-    await db.insert(_cycleTableName, Event.toMap());
+    await db.insert(_cycleTableName, event.toMap());
   }
 
   // ============ FUTURE DATABASE METHODS ============
