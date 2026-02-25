@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:smartring_demo/ekrany/pairing/device_discovery_screen.dart';
 import 'ekrany/aktywnosc.dart';
 import 'ekrany/zdrowie.dart';
 import 'ekrany/startowy.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
             Aktywnosc(databaseService: DatabaseService.instance),
         '/zdrowie': (context) => const Zdrowie(),
         '/cykl': (context) => Cykl(databaseService: DatabaseService.instance),
-        '/parowanie': (context) => Parowanie(ringService: RingService.instance),
+        '/parowanie': (context) => DeviceDiscoveryScreen(),
         '/glowny': (context) =>
             const MyHomePage(title: 'Mira Ring Demo More Page'),
       },
