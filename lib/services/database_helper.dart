@@ -1,6 +1,8 @@
 import 'package:smartring_demo/services/database_service.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:sqflite_sqlcipher/sqflite.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
@@ -12,6 +14,20 @@ class DatabaseHelper {
   static const String _passwordKey = 'dbPassword';
   static Database? _db;
   DatabaseHelper._init();
+
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+
+  Future<String> _getPassword() async {
+    String? password = await _secureStorage.read(key: _passwordKey);
+    if (password == null) {
+      password = List<int>.generate(
+        32,
+        (_) => DateTime.now().millisecondsSinceEpoch % 256,
+      ).map((e) => e.toRadixString(16).padLeft(2, '0')).join();
+      await _secureStorage.write(key: _passwordKey, value: password);
+    }
+    return password;
+  }
 
   Future<Database> get database async {
     if (_db != null) return _db!;
