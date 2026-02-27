@@ -8,6 +8,8 @@ class DatabaseHelper {
   final String _cycleIdColumnName = 'id';
   final String _cycleDateColumnName = 'date';
   final String _cycleEventTypeColumnName = 'event_type';
+  static const String _dbName = "encrypted_data.db";
+  static const String _passwordKey = 'dbPassword';
   static Database? _db;
   DatabaseHelper._init();
 
@@ -20,7 +22,7 @@ class DatabaseHelper {
   Future<Database> _getDatabase() async {
     //asynchroniczna, nie zwraca od razu->od razu zwraca future, czyli cos co w przyszlosci bedzie
     final databaseDirPath = await getDatabasesPath();
-    final databasePath = join(databaseDirPath, "MiraRing.db");
+    final databasePath = join(databaseDirPath, _dbName);
     final database = await openDatabase(
       databasePath,
       version: 1,
