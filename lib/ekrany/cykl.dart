@@ -138,6 +138,9 @@ class _CyklState extends State<Cykl> {
       final date = DateTime(day.year, day.month, day.day);
       _eventsByDay[date] = (_eventsByDay[date] ?? [])..add(newEvent);
       _wybraneEventy.value = _wezEventyForDay(day);
+      setState(() {
+        _isLoading = false;
+      });
     } catch (e) {
       setState(() {
         _errorMessage = 'Nie udało się dodać wydarzenia.';
@@ -571,11 +574,14 @@ class _CyklState extends State<Cykl> {
                                           _wybraneEventy.value = List.from(
                                             _wezEventyForDay(date),
                                           );
-                                        } catch (e) {
                                           setState(() {
                                             _isLoading = false;
+                                          });
+                                        } catch (e) {
+                                          setState(() {
                                             _errorMessage =
                                                 'Nie udało się usunąć wydarzenia.';
+                                            _isLoading = false;
                                           });
                                         }
                                       },
