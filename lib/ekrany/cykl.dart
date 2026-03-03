@@ -90,7 +90,7 @@ class _CyklState extends State<Cykl> {
       });
     } catch (e) {
       setState(() {
-        _errorMessage = 'Nie udało się załadować eventów';
+        _errorMessage = 'Nie udało załadować się danych. Spróbuj ponownie';
         _isLoading = false;
       });
     }
@@ -128,6 +128,10 @@ class _CyklState extends State<Cykl> {
   }*/
   //nowy event dodany przez uzytkownika
   Future<void> _addUserEvent(DateTime day, String title) async {
+    setState(() {
+      _errorMessage = null;
+      _isLoading = true;
+    });
     try {
       final newEvent = Event(title, day);
       await widget.databaseService.addUserEvent(newEvent);
@@ -135,7 +139,10 @@ class _CyklState extends State<Cykl> {
       _eventsByDay[date] = (_eventsByDay[date] ?? [])..add(newEvent);
       _wybraneEventy.value = _wezEventyForDay(day);
     } catch (e) {
-      throw ('database error: $e');
+      setState(() {
+        _errorMessage = 'Nie udało się usunąć wydarzenia.';
+        _isLoading = false;
+      });
     }
   }
 
@@ -535,20 +542,32 @@ class _CyklState extends State<Cykl> {
                                         color: Colors.black,
                                       ),
                                       onPressed: () async {
-                                        final date = DateTime(
-                                          _kliknietyDzien!.year,
-                                          _kliknietyDzien!.month,
-                                          _kliknietyDzien!.day,
-                                        );
+                                        setState(() {
+                                          _errorMessage = null;
+                                          _isLoading = true;
+                                        });
+                                        try {
+                                          final date = DateTime(
+                                            _kliknietyDzien!.year,
+                                            _kliknietyDzien!.month,
+                                            _kliknietyDzien!.day,
+                                          );
 
-                                        await widget.databaseService
-                                            .deleteEvent(value[index]);
-                                        _eventsByDay[date]?.removeWhere(
-                                          (e) => e.id == value[index].id,
-                                        );
-                                        _wybraneEventy.value = List.from(
-                                          _wezEventyForDay(date),
-                                        );
+                                          await widget.databaseService
+                                              .deleteEvent(value[index]);
+                                          _eventsByDay[date]?.removeWhere(
+                                            (e) => e.id == value[index].id,
+                                          );
+                                          _wybraneEventy.value = List.from(
+                                            _wezEventyForDay(date),
+                                          );
+                                        } catch (e) {
+                                          setState(() {
+                                            _isLoading = false;
+                                            _errorMessage = 'error: $e';
+                                          });
+                                          throw ("$_errorMessage");
+                                        }
                                       },
                                     )
                                   : null,
