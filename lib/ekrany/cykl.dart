@@ -105,10 +105,14 @@ class _CyklState extends State<Cykl> {
     final repo = DatabaseService
         .instance; //musi byc instancja zeby sie moc odwolac do ovulationDays, czyli do gettera
     final today = _kliknietyDzien ?? DateTime.now();
-    final currentOvulation = repo.ovulationDays.firstWhere(
-      (i) => i.date.year == today.year && i.date.month == today.month,
-    );
-    return currentOvulation.date.day;
+    try {
+      final currentOvulation = repo.ovulationDays.firstWhere(
+        (i) => i.date.year == today.year && i.date.month == today.month,
+      );
+      return currentOvulation.date.day;
+    } catch (e) {
+      return null;
+    }
   }
 
   int? getPredictedDlugoscCyklu() {
