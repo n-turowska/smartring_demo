@@ -62,31 +62,33 @@ class _CyklState extends State<Cykl> {
       _errorMessage = null;
     });
     try {
-      final userEvents = await widget.databaseService.getUserEvents();
-      final predictedOvulation = await widget.databaseService
-          .getAllOvulationDays();
-      final predictedMenstruation = await widget.databaseService
-          .getAllMenstruationDays();
+      await _runAction(() async {
+        final userEvents = await widget.databaseService.getUserEvents();
+        final predictedOvulation = await widget.databaseService
+            .getAllOvulationDays();
+        final predictedMenstruation = await widget.databaseService
+            .getAllMenstruationDays();
 
-      //grupowanie po dniu
-      final Map<DateTime, List<dynamic>> grouped = {};
-      for (var e in userEvents) {
-        final date = DateTime(e.date.year, e.date.month, e.date.day);
-        grouped[date] = (grouped[date] ?? [])..add(e);
-      }
-      for (var i in predictedOvulation) {
-        final date = DateTime(i.date.year, i.date.month, i.date.day);
-        grouped[date] = (grouped[date] ?? [])..add(i);
-      }
-      for (var i in predictedMenstruation) {
-        final date = DateTime(i.date.year, i.date.month, i.date.day);
-        grouped[date] = (grouped[date] ?? [])..add(i);
-      }
+        //grupowanie po dniu
+        final Map<DateTime, List<dynamic>> grouped = {};
+        for (var e in userEvents) {
+          final date = DateTime(e.date.year, e.date.month, e.date.day);
+          grouped[date] = (grouped[date] ?? [])..add(e);
+        }
+        for (var i in predictedOvulation) {
+          final date = DateTime(i.date.year, i.date.month, i.date.day);
+          grouped[date] = (grouped[date] ?? [])..add(i);
+        }
+        for (var i in predictedMenstruation) {
+          final date = DateTime(i.date.year, i.date.month, i.date.day);
+          grouped[date] = (grouped[date] ?? [])..add(i);
+        }
 
-      setState(() {
-        _eventsByDay = grouped;
-        _wybraneEventy.value = _wezEventyForDay(_kliknietyDzien!);
-        _isLoading = false;
+        setState(() {
+          _eventsByDay = grouped;
+          _wybraneEventy.value = _wezEventyForDay(_kliknietyDzien!);
+          _isLoading = false;
+        });
       });
     } catch (e) {
       setState(() {
@@ -138,17 +140,40 @@ class _CyklState extends State<Cykl> {
       _isLoading = true;
     });
     try {
-      final newEvent = Event(title, day);
-      await widget.databaseService.addUserEvent(newEvent);
-      final date = DateTime(day.year, day.month, day.day);
-      _eventsByDay[date] = (_eventsByDay[date] ?? [])..add(newEvent);
-      _wybraneEventy.value = _wezEventyForDay(day);
+      await _runAction(() async {
+        final newEvent = Event(title, day);
+        await widget.databaseService.addUserEvent(newEvent);
+        final date = DateTime(day.year, day.month, day.day);
+        _eventsByDay[date] = (_eventsByDay[date] ?? [])..add(newEvent);
+        _wybraneEventy.value = _wezEventyForDay(day);
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Nie udało się dodać wydarzenia.';
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> Function()? _lastFailedAction;
+
+  Future<void> _runAction(Function() action) async {
+    setState(() {
+      _errorMessage = null;
+      _isLoading = true;
+    });
+    try {
+      await action();
       setState(() {
         _isLoading = false;
       });
     } catch (e) {
       setState(() {
-        _errorMessage = 'Nie udało się dodać wydarzenia.';
+        _errorMessage = "Wystąpił błąd. Spróbuj ponownie.";
+        _lastFailedAction = action();
         _isLoading = false;
       });
     }
@@ -159,13 +184,27 @@ class _CyklState extends State<Cykl> {
     if (_isLoading) return const Center(child: CircularProgressIndicator());
     if (_errorMessage != null) {
       return Center(
-        child: Text(
-          _errorMessage!,
-          style: TextStyle(
-            color: Colors.purple,
-            decoration: TextDecoration.none,
-            fontSize: 16,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              _errorMessage!,
+              style: TextStyle(
+                color: Colors.purple,
+                decoration: TextDecoration.none,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                if (_lastFailedAction != null) {
+                  _runAction(_lastFailedAction!);
+                }
+              },
+              child: const Text('Odśwież'),
+            ),
+          ],
         ),
       );
     }
@@ -566,22 +605,24 @@ class _CyklState extends State<Cykl> {
                                           _isLoading = true;
                                         });
                                         try {
-                                          final date = DateTime(
-                                            _kliknietyDzien!.year,
-                                            _kliknietyDzien!.month,
-                                            _kliknietyDzien!.day,
-                                          );
+                                          await _runAction(() async {
+                                            final date = DateTime(
+                                              _kliknietyDzien!.year,
+                                              _kliknietyDzien!.month,
+                                              _kliknietyDzien!.day,
+                                            );
 
-                                          await widget.databaseService
-                                              .deleteEvent(value[index]);
-                                          _eventsByDay[date]?.removeWhere(
-                                            (e) => e.id == value[index].id,
-                                          );
-                                          _wybraneEventy.value = List.from(
-                                            _wezEventyForDay(date),
-                                          );
-                                          setState(() {
-                                            _isLoading = false;
+                                            await widget.databaseService
+                                                .deleteEvent(value[index]);
+                                            _eventsByDay[date]?.removeWhere(
+                                              (e) => e.id == value[index].id,
+                                            );
+                                            _wybraneEventy.value = List.from(
+                                              _wezEventyForDay(date),
+                                            );
+                                            setState(() {
+                                              _isLoading = false;
+                                            });
                                           });
                                         } catch (e) {
                                           setState(() {
