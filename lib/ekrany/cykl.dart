@@ -140,7 +140,7 @@ class _CyklState extends State<Cykl> {
       _wybraneEventy.value = _wezEventyForDay(day);
     } catch (e) {
       setState(() {
-        _errorMessage = 'Nie udało się usunąć wydarzenia.';
+        _errorMessage = 'Nie udało się dodać wydarzenia.';
         _isLoading = false;
       });
     }
@@ -149,7 +149,17 @@ class _CyklState extends State<Cykl> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return const Center(child: CircularProgressIndicator());
-    if (_errorMessage != null) return Center(child: Text(_errorMessage!));
+    if (_errorMessage != null)
+      return Center(
+        child: Text(
+          _errorMessage!,
+          style: TextStyle(
+            color: Colors.purple,
+            decoration: TextDecoration.none,
+            fontSize: 16,
+          ),
+        ),
+      );
 
     return Scaffold(
       appBar: AppBar(
@@ -564,9 +574,9 @@ class _CyklState extends State<Cykl> {
                                         } catch (e) {
                                           setState(() {
                                             _isLoading = false;
-                                            _errorMessage = 'error: $e';
+                                            _errorMessage =
+                                                'Nie udało się usunąć wydarzenia.';
                                           });
-                                          throw ("$_errorMessage");
                                         }
                                       },
                                     )
