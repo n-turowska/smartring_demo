@@ -160,7 +160,7 @@ class _CyklState extends State<Cykl> {
 
   Future<void> Function()? _lastFailedAction;
 
-  Future<void> _runAction(Function() action) async {
+  Future<void> _runAction(Future<void> Function() action) async {
     setState(() {
       _errorMessage = null;
       _isLoading = true;
@@ -173,7 +173,7 @@ class _CyklState extends State<Cykl> {
     } catch (e) {
       setState(() {
         _errorMessage = "Wystąpił błąd. Spróbuj ponownie.";
-        _lastFailedAction = action();
+        _lastFailedAction = action;
         _isLoading = false;
       });
     }
