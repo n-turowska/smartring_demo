@@ -105,6 +105,7 @@ class _CyklState extends State<Cykl> {
     final repo = DatabaseService
         .instance; //musi byc instancja zeby sie moc odwolac do ovulationDays, czyli do gettera
     final today = _kliknietyDzien ?? DateTime.now();
+
     try {
       final currentOvulation = repo.ovulationDays.firstWhere(
         (i) => i.date.year == today.year && i.date.month == today.month,
@@ -156,7 +157,7 @@ class _CyklState extends State<Cykl> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) return const Center(child: CircularProgressIndicator());
-    if (_errorMessage != null)
+    if (_errorMessage != null) {
       return Center(
         child: Text(
           _errorMessage!,
@@ -167,7 +168,20 @@ class _CyklState extends State<Cykl> {
           ),
         ),
       );
-
+    }
+    final ovulation = getCurrentOvulation();
+    final cycleLength = getPredictedDlugoscCyklu();
+    if (ovulation == null || cycleLength == null) {
+      return const Center(
+        child: Text(
+          'Brak danych cyklu',
+          style: TextStyle(
+            color: Colors.purple,
+            decoration: TextDecoration.none,
+          ),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -227,20 +241,14 @@ class _CyklState extends State<Cykl> {
                     Text.rich(
                       TextSpan(
                         text:
-                            ((dzienOwulacji +
-                                            getCurrentOvulation()! -
-                                            dzisiaj.day) %
-                                        getPredictedDlugoscCyklu()! !=
+                            ((dzienOwulacji + ovulation - dzisiaj.day) %
+                                        cycleLength !=
                                     0 &&
-                                (dzienOwulacji +
-                                            getCurrentOvulation()! -
-                                            dzisiaj.day) %
-                                        getPredictedDlugoscCyklu()! !=
+                                (dzienOwulacji + ovulation - dzisiaj.day) %
+                                        cycleLength !=
                                     27 &&
-                                (dzienOwulacji +
-                                            getCurrentOvulation()! -
-                                            dzisiaj.day) %
-                                        getPredictedDlugoscCyklu()! !=
+                                (dzienOwulacji + ovulation - dzisiaj.day) %
+                                        cycleLength !=
                                     26)
                             ? 'okres: za '
                             : '',
@@ -249,22 +257,16 @@ class _CyklState extends State<Cykl> {
                         children: [
                           TextSpan(
                             text:
-                                ((dzienOwulacji +
-                                                getCurrentOvulation()! -
-                                                dzisiaj.day) %
-                                            getPredictedDlugoscCyklu()! !=
+                                ((dzienOwulacji + ovulation - dzisiaj.day) %
+                                            cycleLength !=
                                         0 &&
-                                    (dzienOwulacji +
-                                                getCurrentOvulation()! -
-                                                dzisiaj.day) %
-                                            getPredictedDlugoscCyklu()! !=
+                                    (dzienOwulacji + ovulation - dzisiaj.day) %
+                                            cycleLength !=
                                         27 &&
-                                    (dzienOwulacji +
-                                                getCurrentOvulation()! -
-                                                dzisiaj.day) %
-                                            getPredictedDlugoscCyklu()! !=
+                                    (dzienOwulacji + ovulation - dzisiaj.day) %
+                                            cycleLength !=
                                         26)
-                                ? '${(dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) % getPredictedDlugoscCyklu()!} dni\n'
+                                ? '${(dzienOwulacji + ovulation - dzisiaj.day) % cycleLength} dni\n'
                                 : '',
                             style: TextStyle(
                               color: Kolor_tekstu,
@@ -278,7 +280,7 @@ class _CyklState extends State<Cykl> {
                           ),
                           TextSpan(
                             text:
-                                '${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
+                                '${(dzienOwulacji + _kliknietyDzien!.day - ovulation - 1) % cycleLength + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
                             style: TextStyle(
                               color: Kolor_tekstu,
                               fontWeight: FontWeight.bold,
@@ -289,22 +291,22 @@ class _CyklState extends State<Cykl> {
                       ),
                     ),
                     /*Text(
-                      ((dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) %
-                                      getPredictedDlugoscCyklu()! !=
+                      ((dzienOwulacji + ovulation - dzisiaj.day) %
+                                      cycleLength !=
                                   0 &&
                               (dzienOwulacji +
-                                          getCurrentOvulation()! -
+                                          ovulation -
                                           dzisiaj.day) %
-                                      getPredictedDlugoscCyklu()! !=
+                                      cycleLength !=
                                   27 &&
                               (dzienOwulacji +
-                                          getCurrentOvulation()! -
+                                          ovulation -
                                           dzisiaj.day) %
-                                      getPredictedDlugoscCyklu()! !=
+                                      cycleLength !=
                                   26)
-                          ? 'okres: za ${(dzienOwulacji + getCurrentOvulation()! - dzisiaj.day) % getPredictedDlugoscCyklu()!} dni\ncykl: ${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień'
-                          : 'cykl: ${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
-                      //:'cykl: ${(dzienOwulacji + _kliknietyDzien!.day - getCurrentOvulation()! - 1) % getPredictedDlugoscCyklu()! + 1} dzień',
+                          ? 'okres: za ${(dzienOwulacji + ovulation - dzisiaj.day) % cycleLength} dni\ncykl: ${(dzienOwulacji + _kliknietyDzien!.day - ovulation - 1) % cycleLength + 1} dzień'
+                          : 'cykl: ${(dzienOwulacji + _kliknietyDzien!.day - ovulation - 1) % cycleLength + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
+                      //:'cykl: ${(dzienOwulacji + _kliknietyDzien!.day - ovulation - 1) % cycleLength + 1} dzień',
                       style: Theme.of(context).textTheme.headlineMedium!
                           .copyWith(
                             color: Kolor_tekstu,
