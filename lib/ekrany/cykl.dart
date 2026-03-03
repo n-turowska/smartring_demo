@@ -128,11 +128,15 @@ class _CyklState extends State<Cykl> {
   }*/
   //nowy event dodany przez uzytkownika
   Future<void> _addUserEvent(DateTime day, String title) async {
-    final newEvent = Event(title, day);
-    await widget.databaseService.addUserEvent(newEvent);
-    final date = DateTime(day.year, day.month, day.day);
-    _eventsByDay[date] = (_eventsByDay[date] ?? [])..add(newEvent);
-    _wybraneEventy.value = _wezEventyForDay(day);
+    try {
+      final newEvent = Event(title, day);
+      await widget.databaseService.addUserEvent(newEvent);
+      final date = DateTime(day.year, day.month, day.day);
+      _eventsByDay[date] = (_eventsByDay[date] ?? [])..add(newEvent);
+      _wybraneEventy.value = _wezEventyForDay(day);
+    } catch (e) {
+      throw ('database error: $e');
+    }
   }
 
   @override

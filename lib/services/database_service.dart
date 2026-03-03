@@ -31,6 +31,7 @@ class DatabaseService {
 
   Future<void> addUserEvent(Event event) async {
     final db = await DatabaseHelper.instance.database;
+
     await db.insert(_cycleTableName, event.toMap());
   }
 
