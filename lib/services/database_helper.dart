@@ -7,9 +7,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   final String _cycleTableName = 'cycle_events';
-  final String _cycleIdColumnName = 'id';
+  final String _idColumnName = 'id';
   final String _cycleDateColumnName = 'date';
   final String _cycleEventTypeColumnName = 'event_type';
+  final String _userTableName = 'user_profile';
+  final String _userAvrCycleLengthColumnName = 'average_cycle_length';
+  final String _userLastPeriodColumnName = "last_period_start";
+  final String _userCreatedTableColumnName = 'created_at';
+  final String _userUpdatedTableColumnName = 'updated_at';
   static const String _dbName = "encrypted_data.db";
   static const String _passwordKey = 'dbPassword';
   static Database? _db;
@@ -54,7 +59,7 @@ class DatabaseHelper {
   Future _createDB(Database db, int version) async {
     await db.execute('''
         CREATE TABLE $_cycleTableName(
-        $_cycleIdColumnName INTEGER PRIMARY KEY AUTOINCREMENT,
+        $_idColumnName INTEGER PRIMARY KEY AUTOINCREMENT,
         $_cycleDateColumnName TEXT NOT NULL,
         $_cycleEventTypeColumnName TEXT NOT NULL CHECK(
           $_cycleEventTypeColumnName IN(
@@ -68,6 +73,15 @@ class DatabaseHelper {
         ),
         title TEXT
       )
+''');
+    await db.execute('''
+    CREATE TABLE $_userTableName(
+    $_idColumnName INTEGER PRIMARY KEY CHECK(id=1),
+    $_userAvrCycleLengthColumnName INTEGER DEFAULT 28,
+    $_userLastPeriodColumnName TEXT,
+    $_userCreatedTableColumnName TEXT NOT NULL,
+    $_userUpdatedTableColumnName TEXT NOT NUL
+    )
 ''');
   }
 }
