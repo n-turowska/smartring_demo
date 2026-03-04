@@ -58,6 +58,22 @@ class DatabaseHelper {
 
   Future _createDB(Database db, int version) async {
     await db.execute('''
+    CREATE TABLE $_userTableName(
+    $_idColumnName INTEGER PRIMARY KEY CHECK(id=1),
+    $_userAvrCycleLengthColumnName INTEGER DEFAULT 28,
+    $_userLastPeriodColumnName TEXT,
+    $_userCreatedTableColumnName TEXT NOT NULL,
+    $_userUpdatedTableColumnName TEXT NOT NUL
+    )
+''');
+    await db.insert('$_userTableName', {
+      '$_idColumnName': 1,
+      '$_userAvrCycleLengthColumnName': 28,
+      '$_userCreatedTableColumnName': DateTime.now().toIso8601String(),
+      '$_userUpdatedTableColumnName': DateTime.now().toIso8601String(),
+    });
+
+    await db.execute('''
         CREATE TABLE $_cycleTableName(
         $_idColumnName INTEGER PRIMARY KEY AUTOINCREMENT,
         $_cycleDateColumnName TEXT NOT NULL,
@@ -73,15 +89,6 @@ class DatabaseHelper {
         ),
         title TEXT
       )
-''');
-    await db.execute('''
-    CREATE TABLE $_userTableName(
-    $_idColumnName INTEGER PRIMARY KEY CHECK(id=1),
-    $_userAvrCycleLengthColumnName INTEGER DEFAULT 28,
-    $_userLastPeriodColumnName TEXT,
-    $_userCreatedTableColumnName TEXT NOT NULL,
-    $_userUpdatedTableColumnName TEXT NOT NUL
-    )
 ''');
   }
 }
