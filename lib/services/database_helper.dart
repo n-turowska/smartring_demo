@@ -8,13 +8,21 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   final String _cycleTableName = 'cycle_events';
   final String _idColumnName = 'id';
-  final String _cycleDateColumnName = 'date';
+  final String _dateColumnName = 'date';
   final String _cycleEventTypeColumnName = 'event_type';
   final String _userTableName = 'user_profile';
   final String _userAvrCycleLengthColumnName = 'average_cycle_length';
   final String _userLastPeriodColumnName = "last_period_start";
-  final String _userCreatedTableColumnName = 'created_at';
+  final String _createdTableColumnName = 'created_at';
   final String _userUpdatedTableColumnName = 'updated_at';
+  final String _healthTableName = "health_metrics";
+  final String _stepColumnName = "step_count";
+  final String _basalTempColumnName = "basal_temperature";
+  final String _hrvColumnName = "hrv";
+  final String _restHeartRateColumnName = "resting_heart_rate ";
+  final String _sleepHoursColumnName = "sleep_hours";
+  final String _sleepQualityColumnName = "sleep_quality";
+  final String _readinessColumnName = "readiness_score";
   static const String _dbName = "encrypted_data.db";
   static const String _passwordKey = 'dbPassword';
   static Database? _db;
@@ -62,21 +70,36 @@ class DatabaseHelper {
     $_idColumnName INTEGER PRIMARY KEY CHECK(id=1),
     $_userAvrCycleLengthColumnName INTEGER DEFAULT 28,
     $_userLastPeriodColumnName TEXT,
-    $_userCreatedTableColumnName TEXT NOT NULL,
+    $_createdTableColumnName TEXT NOT NULL,
     $_userUpdatedTableColumnName TEXT NOT NUL
     )
 ''');
     await db.insert('$_userTableName', {
       '$_idColumnName': 1,
       '$_userAvrCycleLengthColumnName': 28,
-      '$_userCreatedTableColumnName': DateTime.now().toIso8601String(),
+      '$_createdTableColumnName': DateTime.now().toIso8601String(),
       '$_userUpdatedTableColumnName': DateTime.now().toIso8601String(),
     });
 
     await db.execute('''
+    CREATE TABLE $_healthTableName(
+    $_idColumnName INTEGER PRIMARY KEY AUTOINCREMENT,
+    $_dateColumnName TEXT NOT NULL UNIQUE,
+    $_stepColumnName INTEGER,
+    $_basalTempColumnName REAL,
+    $_hrvColumnName REAL,
+    $_restHeartRateColumnName INTEGER,
+    $_sleepHoursColumnName REAL,
+    $_sleepQualityColumnName INTEGER CHECK ($_sleepQualityColumnName BETWEEN 1 AND 5),
+    $_readinessColumnName INTEGER CHECK ($_readinessColumnName BETWEEN 0 AND 100),
+    $_createdTableColumnName TEXT NOT NULL
+    )
+''');
+
+    await db.execute('''
         CREATE TABLE $_cycleTableName(
         $_idColumnName INTEGER PRIMARY KEY AUTOINCREMENT,
-        $_cycleDateColumnName TEXT NOT NULL,
+        $_dateColumnName TEXT NOT NULL,
         $_cycleEventTypeColumnName TEXT NOT NULL CHECK(
           $_cycleEventTypeColumnName IN(
             'period_start',
