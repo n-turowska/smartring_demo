@@ -10,6 +10,9 @@ class DatabaseHelper {
   final String _idColumnName = 'id';
   final String _dateColumnName = 'date';
   final String _cycleEventTypeColumnName = 'event_type';
+  final String _predictionColumnName = "is_prediction";
+  final String _confidenceColumnName = "confidence";
+  final String _notesColumnName = "notes";
   final String _userTableName = 'user_profile';
   final String _userAvrCycleLengthColumnName = 'average_cycle_length';
   final String _userLastPeriodColumnName = "last_period_start";
@@ -110,8 +113,48 @@ class DatabaseHelper {
             'user_event'
           )
         ),
+        $_predictionColumnName INTEGER,
+        $_confidenceColumnName REAL CHECK ($_confidenceColumnName BETWEEN 0.0 AND 1.0)
+        $_notesColumnName TEXT,
+        $_createdTableColumnName TEXT NOT NULL
         title TEXT
       )
 ''');
+    await db.execute('''
+    CREATE TABLE symptoms (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      date TEXT NOT NULL,
+      symptom_type TEXT NOT NULL,
+      category TEXT NOT NULL CHECK (
+        category IN ('physical','mood','other')
+      ),
+      intensity INTEGER NOT NULL CHECK (intensity BETWEEN 1 AND 5),
+      notes TEXT,
+      created_at TEXT NOT NULL
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE calendar_notes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      date TEXT NOT NULL,
+      title TEXT NOT NULL,
+      description TEXT,
+      created_at TEXT NOT NULL
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE sync_history (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      sync_start TEXT NOT NULL,
+      sync_end TEXT,
+      records_synced INTEGER DEFAULT 0,
+      status TEXT NOT NULL CHECK (
+        status IN ('in_progress','completed','failed')
+      ),
+      error_message TEXT
+    )
+  ''');
   }
 }
