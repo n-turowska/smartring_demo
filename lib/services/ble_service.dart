@@ -95,6 +95,32 @@ class BleService {
     _controler.add(false);
   }
 
+  Future<void> connect(BluetoothDevice device) async {
+    // listen for disconnection
+    var subscription = device.connectionState.listen((BluetoothConnectionState state) async {
+        if (state == BluetoothConnectionState.disconnected) {
+            // 1. typically, start a periodic timer that tries to 
+            //    reconnect, or just call connect() again right now
+            // 2. you must always re-discover services after disconnection!
+            print("${device.disconnectReason?.code} ${device.disconnectReason?.description}");
+        }
+    });
+
+    // cleanup: cancel subscription when disconnected
+    //   - [delayed] This option is only meant for `connectionState` subscriptions.  
+    //     When `true`, we cancel after a small delay. This ensures the `connectionState` 
+    //     listener receives the `disconnected` event.
+    //   - [next] if true, the the stream will be canceled only on the *next* disconnection,
+    //     not the current disconnection. This is useful if you setup your subscriptions
+    //     before you connect.
+    device.cancelWhenDisconnected(subscription, delayed:true, next:true);
+
+    // Connect to the device
+    await device.connect(license: License.free);
+    await Future.delayed(const Duration(seconds: 10));
+    await device.disconnect();
+  }
+
   void stopScan () async{
     await FlutterBluePlus.stopScan();
   }
