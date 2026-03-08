@@ -139,7 +139,7 @@ class _DeviceDiscoveryScreenState extends State<DeviceDiscoveryScreen> {
                     ),
                   );
 
-                  //await bleService.connect(r.device);
+                  await bleService.connect(r.device);
                 },
               ),
           ]
