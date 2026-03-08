@@ -26,7 +26,7 @@ enum PairingState {
 
 class BleService {
   var isScanning = false;
-  
+  PairingState pairingState = PairingState.idle;
   List<ScanResult> allResults = [];
 
   // singleton
@@ -41,6 +41,11 @@ class BleService {
   Stream<ScanResult> get devicesState => _deviceControler.stream;
 
   bool get currentState => isScanning;
+
+  final _pairingController = StreamController<PairingState>.broadcast();
+  Stream<PairingState> get pairingStateStream => _pairingController.stream;
+
+  PairingState get currentPairingState => pairingState;
 
   /// Nasłuchiwanie stanu adaptera BLE (stream)
   StreamSubscription<BluetoothAdapterState>? _adapterStateSubscription;
