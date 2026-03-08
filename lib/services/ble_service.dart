@@ -123,6 +123,8 @@ class BleService {
   }
 
   Future<void> connect(BluetoothDevice device) async {
+    pairingState = PairingState.connecting;
+    _pairingController.add(PairingState.connecting);
     // listen for disconnection
     var subscription = device.connectionState.listen((BluetoothConnectionState state) async {
         if (state == BluetoothConnectionState.disconnected) {
