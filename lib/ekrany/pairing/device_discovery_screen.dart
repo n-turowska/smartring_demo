@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '/services/ble_service.dart';
 import '../pairing/widgets/radar_animation.dart';
 import "../pairing/widgets/device_list_tile.dart";
+import "../pairing/pairing_screen.dart";
 
 
 class DeviceDiscoveryScreen extends StatefulWidget{
@@ -136,6 +137,13 @@ class _DeviceDiscoveryScreenState extends State<DeviceDiscoveryScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text("Łączenie z urządzeniem..."),
+                    ),
+                  );
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PairingScreen(),
                     ),
                   );
 
