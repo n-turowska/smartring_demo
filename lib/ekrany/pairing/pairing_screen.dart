@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '/services/ble_service.dart';
-import '../pairing/widgets/radar_animation.dart';
-import "../pairing/widgets/device_list_tile.dart";
 
 
 class PairingScreen extends StatefulWidget{
