@@ -2,6 +2,28 @@ import 'dart:async';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+enum PairingState {
+  /// No process running
+  idle,
+
+  /// Connecting to device
+  connecting,
+
+  /// Discovering device services
+  discoveringServices,
+
+  /// Pairing with device
+  pairing,
+
+  /// Pairing successful
+  success,
+
+  /// Pairing failed
+  faild,
+  
+}
+
+
 class BleService {
   var isScanning = false;
   
