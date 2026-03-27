@@ -42,6 +42,7 @@ class BleService {
 
   bool get currentState => isScanning;
 
+  //pairing state stream
   final _pairingController = StreamController<PairingState>.broadcast();
   Stream<PairingState> get pairingStateStream => _pairingController.stream;
 
@@ -146,6 +147,16 @@ class BleService {
 
     // Connect to the device
     await device.connect(license: License.free);
+
+    //DISCOVER SERVICES
+    // Note: You must call discoverServices after every re-connection!
+    List<BluetoothService> services = await device.discoverServices();
+    pairingState = PairingState.discoveringServices;
+    _pairingController.add(PairingState.discoveringServices);
+    services.forEach((service) {
+        print(service);
+    });
+
     await Future.delayed(const Duration(seconds: 10));
     await device.disconnect();
   }
