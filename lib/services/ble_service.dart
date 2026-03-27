@@ -112,13 +112,13 @@ class BleService {
 
     // wait for scanning to stop
     await FlutterBluePlus.isScanning.where((val) => val == false).first;
-
+/*
     print("  ");
     print("Znalezione urządzenia:");
     for(ScanResult r in allResults)
     {
       print('${r.device.remoteId}: "${r.advertisementData.advName}"');
-    }
+    }*/
     isScanning = false;
     _controler.add(false);
   }
@@ -154,8 +154,30 @@ class BleService {
     pairingState = PairingState.discoveringServices;
     _pairingController.add(PairingState.discoveringServices);
     services.forEach((service) {
-        print(service);
+        //print(service);
     });
+
+    //CREATE BOND
+    final bsSubscription = device.bondState.listen((value) {
+        //print("$value prev:{$device.prevBondState}");
+    });
+
+    // cleanup: cancel subscription when disconnected
+    device.cancelWhenDisconnected(bsSubscription);
+
+    // Force the bonding popup to show now (Android Only) 
+    print(" ");
+    print("PRED PAROWANIEM");
+    print(" ");
+    await device.createBond();
+    print(" ");
+    print("BOOOOOOOND");
+    print(" ");
+
+    await Future.delayed(const Duration(seconds: 10));
+
+    // remove bond
+    await device.removeBond();
 
     await Future.delayed(const Duration(seconds: 10));
     await device.disconnect();
