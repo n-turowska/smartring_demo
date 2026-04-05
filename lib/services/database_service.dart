@@ -342,7 +342,7 @@ class DatabaseService {
   /// Get step counts for the last 7 days
   ///
   /// Returns: List of 7 integers (Monday to Sunday)
-  Future<List<int>> getWeeklySteps(BuildContext context) async {
+  Future<List<int>> getWeeklySteps() async {
     try {
       final db = await DatabaseHelper.instance.database;
       final result = await db.query(
@@ -357,9 +357,6 @@ class DatabaseService {
           .reversed
           .toList();
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Weekly steps error")));
       throw Exception("Weekly steps error: $e");
     }
   }
@@ -367,7 +364,7 @@ class DatabaseService {
   /// Get today's step count
   ///
   /// Returns: Integer step count for today
-  Future<int> getTodaySteps(BuildContext context) async {
+  Future<int> getTodaySteps() async {
     try {
       final db = await DatabaseHelper.instance.database;
       final result = await db.query(
@@ -379,9 +376,6 @@ class DatabaseService {
 
       return result.first['step_count'] as int? ?? 0;
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Today steps error")));
       throw Exception("Today steps error: $e");
     }
   }
@@ -389,7 +383,7 @@ class DatabaseService {
   /// Get HRV values for the last 7 days
   ///
   /// Returns: List of 7 doubles (Monday to Sunday)
-  Future<List<double>> getWeeklyHRV(BuildContext context) async {
+  Future<List<double>> getWeeklyHRV() async {
     try {
       final db = await DatabaseHelper.instance.database;
       final result = await db.query(
@@ -404,9 +398,6 @@ class DatabaseService {
           .reversed
           .toList();
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Weekly hrv error")));
       throw Exception("Weekly hrv error: $e");
     }
   }
@@ -414,7 +405,7 @@ class DatabaseService {
   /// Get today's HRV value
   ///
   /// Returns: Double HRV value for today in milliseconds
-  Future<double> getTodayHRV(BuildContext context) async {
+  Future<double> getTodayHRV() async {
     try {
       final db = await DatabaseHelper.instance.database;
       final result = await db.query(
@@ -425,9 +416,6 @@ class DatabaseService {
       );
       return result.first['hrv'] as double? ?? 0;
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Today hrv error")));
       throw ("Today HRV error: $e");
     }
   }
@@ -435,7 +423,7 @@ class DatabaseService {
   /// Get calories burned today (calculated from steps)
   ///
   /// Returns: Integer calories burned
-  Future<int> getTodayCalories(BuildContext context) async {
+  Future<int> getTodayCalories() async {
     try {
       final db = await DatabaseHelper.instance.database;
       final result = await db.query(
@@ -448,9 +436,6 @@ class DatabaseService {
       return ((result.first['step_count'] as int? ?? 0) * 0.105)
           .round(); // ~590 calories for 5607 steps
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Today calories error")));
       throw ("Today calories error: $e");
     }
   }
@@ -458,7 +443,7 @@ class DatabaseService {
   /// Get distance traveled today in kilometers (calculated from steps)
   ///
   /// Returns: Integer distance in km
-  Future<int> getTodayDistanceKm(BuildContext context) async {
+  Future<int> getTodayDistanceKm() async {
     try {
       final db = await DatabaseHelper.instance.database;
       final result = await db.query(
@@ -473,9 +458,6 @@ class DatabaseService {
           0.75; // Simple calculation: ~0.75m per step for average personreturn (meters / 1000).round();// ~4-5 km for 5607 steps
       return (meters / 1000).round();
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Today distance error")));
       throw ("Today distance error: $e");
     }
   }
