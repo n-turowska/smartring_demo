@@ -409,11 +409,20 @@ class DatabaseService {
   ///
   /// Returns: Integer calories burned
   Future<int> getTodayCalories() async {
-    await Future.delayed(const Duration(milliseconds: 50));
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final result = await db.query(
+        'health_metrics',
+        columns: ['step_count'],
+        orderBy: 'date DESC',
+        limit: 1,
+      );
 
-    // Simple calculation: ~0.04 calories per step for average person
-    final steps = _mockWeeklySteps.last;
-    return (steps * 0.105).round(); // ~590 calories for 5607 steps
+      return ((result.first['step_count'] as int? ?? 0) * 0.105)
+          .round(); // ~590 calories for 5607 steps
+    } catch (e) {
+      throw ("Today calories error: $e");
+    }
   }
 
   /// Get distance traveled today in kilometers (calculated from steps)
