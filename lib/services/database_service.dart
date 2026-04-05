@@ -49,7 +49,21 @@ class DatabaseService {
   ///
   /// TODO: Implement database insert
   Future<int> insertHealthMetrics(HealthMetrics metrics) async {
-    throw UnimplementedError('Database insert not yet implemented');
+    try {
+      final db = await DatabaseHelper.instance.database;
+      return await db.insert('health_metrics', {
+        'date': metrics.date.toIso8601String(),
+        'step_count': metrics.stepCount,
+        'basal_temperature': metrics.basalTemperature,
+        'hrv': metrics.hrv,
+        "resting_heart_rate": metrics.restingHeartRate,
+        "sleep_hours": metrics.sleepHours,
+        'readiness_score': metrics.readinessScore,
+        'created_at': DateTime.now().toIso8601String(),
+      }, conflictAlgorithm: ConflictAlgorithm.replace);
+    } catch (e) {
+      throw ("DATABASE INSERT FAILED, ERROR: $e");
+    }
   }
 
   /// Update health metrics

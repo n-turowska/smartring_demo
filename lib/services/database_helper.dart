@@ -22,7 +22,7 @@ class DatabaseHelper {
   final String _stepColumnName = "step_count";
   final String _basalTempColumnName = "basal_temperature";
   final String _hrvColumnName = "hrv";
-  final String _restHeartRateColumnName = "resting_heart_rate ";
+  final String _restHeartRateColumnName = "resting_heart_rate";
   final String _sleepHoursColumnName = "sleep_hours";
   final String _sleepQualityColumnName = "sleep_quality";
   final String _readinessColumnName = "readiness_score";
@@ -74,7 +74,7 @@ class DatabaseHelper {
     $_userAvrCycleLengthColumnName INTEGER DEFAULT 28,
     $_userLastPeriodColumnName TEXT,
     $_createdTableColumnName TEXT NOT NULL,
-    $_userUpdatedTableColumnName TEXT NOT NUL
+    $_userUpdatedTableColumnName TEXT NOT NULL
     )
 ''');
     await db.insert('$_userTableName', {
@@ -114,7 +114,7 @@ class DatabaseHelper {
           )
         ),
         $_predictionColumnName INTEGER,
-        $_confidenceColumnName REAL CHECK ($_confidenceColumnName BETWEEN 0.0 AND 1.0)
+        $_confidenceColumnName REAL CHECK ($_confidenceColumnName BETWEEN 0.0 AND 1.0),
         $_notesColumnName TEXT,
         $_createdTableColumnName TEXT NOT NULL
         title TEXT
