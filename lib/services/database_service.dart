@@ -114,7 +114,7 @@ class DatabaseService {
       final result = await db.query(
         'health_metrics',
         where: 'date=?',
-        whereArgs: [date],
+        whereArgs: [date.toIso8601String()],
       );
       if (result.isEmpty) {
         return null;
@@ -344,10 +344,6 @@ class DatabaseService {
     } catch (e) {
       throw ("Weekly steps error: $e");
     }
-    /*// Simulate async database query with small delay
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    return List.from(_mockWeeklySteps);*/
   }
 
   /// Get today's step count
@@ -364,9 +360,22 @@ class DatabaseService {
   ///
   /// Returns: List of 7 doubles (Monday to Sunday)
   Future<List<double>> getWeeklyHRV() async {
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    return List.from(_mockWeeklyHRV);
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final result = await db.query(
+        'health_metrics',
+        columns: ['hrv'],
+        orderBy: 'date DESC',
+        limit: 7,
+      );
+      return result
+          .map((e) => e['hrv'] as double? ?? 0)
+          .toList()
+          .reversed
+          .toList();
+    } catch (e) {
+      throw ("Weekly hrv error: $e");
+    }
   }
 
   /// Get today's HRV value
