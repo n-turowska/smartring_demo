@@ -31,8 +31,12 @@ class DatabaseService {
   DatabaseService._constructor();
 
   Future<void> addUserEvent(Event event) async {
-    final db = await DatabaseHelper.instance.database;
-    await db.insert(_cycleTableName, event.toMap());
+    try {
+      final db = await DatabaseHelper.instance.database;
+      await db.insert(_cycleTableName, event.toMap());
+    } catch (e) {
+      throw Exception("add user event error: $e");
+    }
   }
 
   // ============ FUTURE DATABASE METHODS ============
@@ -61,7 +65,7 @@ class DatabaseService {
         'created_at': DateTime.now().toIso8601String(),
       }, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
-      throw ("DATABASE INSERT FAILED, ERROR: $e");
+      throw Exception("DATABASE INSERT FAILED, ERROR: $e");
     }
   }
 
@@ -83,7 +87,7 @@ class DatabaseService {
         whereArgs: [metrics.date.toIso8601String()],
       );
     } catch (e) {
-      throw ("DATABASE UPDATE FAILED, ERROR: $e");
+      throw Exception("DATABASE UPDATE FAILED, ERROR: $e");
     }
   }
 
@@ -132,7 +136,7 @@ class DatabaseService {
         readinessScore: data['readiness_score'] as int? ?? 0,
       );
     } catch (e) {
-      throw ("DATABASE ERROR: $e");
+      throw Exception("DATABASE ERROR: $e");
     }
   }
 
