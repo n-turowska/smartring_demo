@@ -421,7 +421,7 @@ class DatabaseService {
   /// Get calories burned today (calculated from steps)
   ///
   /// Returns: Integer calories burned
-  Future<int> getTodayCalories() async {
+  Future<int> getTodayCalories(BuildContext context) async {
     try {
       final db = await DatabaseHelper.instance.database;
       final result = await db.query(
@@ -434,6 +434,9 @@ class DatabaseService {
       return ((result.first['step_count'] as int? ?? 0) * 0.105)
           .round(); // ~590 calories for 5607 steps
     } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Today calories error")));
       throw ("Today calories error: $e");
     }
   }
