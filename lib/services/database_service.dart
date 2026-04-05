@@ -375,7 +375,7 @@ class DatabaseService {
   /// Get HRV values for the last 7 days
   ///
   /// Returns: List of 7 doubles (Monday to Sunday)
-  Future<List<double>> getWeeklyHRV() async {
+  Future<List<double>> getWeeklyHRV(BuildContext context) async {
     try {
       final db = await DatabaseHelper.instance.database;
       final result = await db.query(
@@ -390,7 +390,10 @@ class DatabaseService {
           .reversed
           .toList();
     } catch (e) {
-      throw ("Weekly hrv error: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Today steps error")));
+      throw Exception("Weekly hrv error: $e");
     }
   }
 
