@@ -333,7 +333,7 @@ class DatabaseService {
       final result = await db.query(
         'health_metrics',
         columns: ['step_count'],
-        orderBy: 'date DESC',
+        orderBy: 'date DESC', //bo chcemy najnowsze dni jako pierwsze
         limit: 7,
       );
       return result
@@ -350,10 +350,19 @@ class DatabaseService {
   ///
   /// Returns: Integer step count for today
   Future<int> getTodaySteps() async {
-    await Future.delayed(const Duration(milliseconds: 50));
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final result = await db.query(
+        'health_metrics',
+        columns: ['step_count'],
+        orderBy: 'date DESC',
+        limit: 1,
+      );
 
-    // Today is last day of the week (Sunday)
-    return _mockWeeklySteps.last;
+      return result.first['step_count'] as int? ?? 0;
+    } catch (e) {
+      throw ("Today step error: $e");
+    }
   }
 
   /// Get HRV values for the last 7 days
