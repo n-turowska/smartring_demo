@@ -39,15 +39,17 @@ class DatabaseService {
     }
   }
 
-  // ============ FUTURE DATABASE METHODS ============
-  // These will be implemented when we add actual SQLite database
+  // ============ DATABASE METHODS ============
 
   /// Initialize database
   ///
-  /// TODO: Implement SQLite database initialization
+
   Future<void> initialize() async {
-    // For now, do nothing
-    // Later: Create database, run migrations, etc.
+    try {
+      await DatabaseHelper.instance.database;
+    } catch (e) {
+      print("Database initialization error: $e");
+    }
   }
 
   /// Insert health metrics for a date
