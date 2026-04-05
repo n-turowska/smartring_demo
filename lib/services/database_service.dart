@@ -257,16 +257,20 @@ class DatabaseService {
   /// added by user events-for example period days
 
   Future<List<Event>> getUserEvents() async {
-    final db = await DatabaseHelper.instance.database;
-    final maps = await db.query(
-      //czyli wybieramy z cycle_events to co event_type='user_event'
-      _cycleTableName,
-      where: '$_cycleEventTypeColumnName=?',
-      whereArgs: ['user_event'],
-    );
-    return maps
-        .map((e) => Event.fromMap(e))
-        .toList(); //dzieki temu lista z mapa zmienia sie na liste z eventami
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final maps = await db.query(
+        //czyli wybieramy z cycle_events to co event_type='user_event'
+        _cycleTableName,
+        where: '$_cycleEventTypeColumnName=?',
+        whereArgs: ['user_event'],
+      );
+      return maps
+          .map((e) => Event.fromMap(e))
+          .toList(); //dzieki temu lista z mapa zmienia sie na liste z eventami
+    } catch (e) {
+      throw Exception("Get user events error: $e");
+    }
   }
 
   Future<void> deleteEvent(Event event) async {
