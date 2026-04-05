@@ -274,8 +274,12 @@ class DatabaseService {
   }
 
   Future<void> deleteEvent(Event event) async {
-    final db = await DatabaseHelper.instance.database;
-    await db.delete('cycle_events', where: 'id=?', whereArgs: [event.id]);
+    try {
+      final db = await DatabaseHelper.instance.database;
+      await db.delete('cycle_events', where: 'id=?', whereArgs: [event.id]);
+    } catch (e) {
+      throw Exception("delete user events error: $e");
+    }
   }
 
   //Mock temperature data for testing//
