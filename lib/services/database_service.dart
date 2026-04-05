@@ -46,8 +46,6 @@ class DatabaseService {
   }
 
   /// Insert health metrics for a date
-  ///
-  /// TODO: Implement database insert
   Future<int> insertHealthMetrics(HealthMetrics metrics) async {
     try {
       final db = await DatabaseHelper.instance.database;
@@ -67,8 +65,6 @@ class DatabaseService {
   }
 
   /// Update health metrics
-  ///
-  /// TODO: Implement database update
   Future<int> updateHealthMetrics(HealthMetrics metrics) async {
     try {
       final db = await DatabaseHelper.instance.database;
@@ -105,6 +101,58 @@ class DatabaseService {
   }
   // ============ MOCK DATA ============
   // TODO: Replace with actual database queries when ready
+  /// Get health metrics for a specific date
+  ///
+  /// Parameters:
+  ///   - date: The date to get metrics for
+  ///
+  /// Returns: HealthMetrics object or null if no data
+  Future<HealthMetrics?> getHealthMetricsForDate(DateTime date) async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final result = await db.query(
+        'health_metrics',
+        where: 'date=?',
+        whereArgs: [date],
+      );
+      if (result.isEmpty) {
+        return null;
+      }
+      final data = result.first;
+      return HealthMetrics(
+        id: data['id'] as int,
+        date: DateTime.parse(data['date'] as String),
+        stepCount: data['step_count'] as int? ?? 0,
+        basalTemperature: data['basal_temperature'] as double? ?? 0,
+        hrv: data['hrv'] as double? ?? 0,
+        restingHeartRate: data['resting_heart_rate'] as int? ?? 0,
+        sleepHours: data['sleep_hours'] as double? ?? 0,
+        readinessScore: data['readiness_score'] as int? ?? 0,
+      );
+    } catch (e) {
+      throw ("DATABASE ERROR: $e");
+    }
+    /*await Future.delayed(const Duration(milliseconds: 100));
+
+    // For now, return mock data for today
+    final today = DateTime.now();
+    if (date.day == today.day &&
+        date.month == today.month &&
+        date.year == today.year) {
+      return HealthMetrics(
+        id: 1,
+        date: date,
+        stepCount: _mockWeeklySteps.last,
+        basalTemperature: 36.6,
+        hrv: _mockWeeklyHRV.last,
+        restingHeartRate: 65,
+        sleepHours: 8.0,
+        readinessScore: 75,
+      );
+    }
+
+    return null;*/
+  }
 
   /// Mock weekly step counts (Monday to Sunday)
   ///
@@ -331,35 +379,6 @@ class DatabaseService {
     await Future.delayed(const Duration(milliseconds: 50));
 
     return _mockWeeklyHRV.last;
-  }
-
-  /// Get health metrics for a specific date
-  ///
-  /// Parameters:
-  ///   - date: The date to get metrics for
-  ///
-  /// Returns: HealthMetrics object or null if no data
-  Future<HealthMetrics?> getHealthMetricsForDate(DateTime date) async {
-    await Future.delayed(const Duration(milliseconds: 100));
-
-    // For now, return mock data for today
-    final today = DateTime.now();
-    if (date.day == today.day &&
-        date.month == today.month &&
-        date.year == today.year) {
-      return HealthMetrics(
-        id: 1,
-        date: date,
-        stepCount: _mockWeeklySteps.last,
-        basalTemperature: 36.6,
-        hrv: _mockWeeklyHRV.last,
-        restingHeartRate: 65,
-        sleepHours: 8.0,
-        readinessScore: 75,
-      );
-    }
-
-    return null;
   }
 
   /// Get calories burned today (calculated from steps)
