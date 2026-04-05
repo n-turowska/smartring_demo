@@ -70,7 +70,24 @@ class DatabaseService {
   ///
   /// TODO: Implement database update
   Future<int> updateHealthMetrics(HealthMetrics metrics) async {
-    throw UnimplementedError('Database update not yet implemented');
+    try {
+      final db = await DatabaseHelper.instance.database;
+      return await db.update(
+        'health_metrics',
+        {
+          'step_count': metrics.stepCount,
+          'basal_temperature': metrics.basalTemperature,
+          'hrv': metrics.hrv,
+          "resting_heart_rate": metrics.restingHeartRate,
+          "sleep_hours": metrics.sleepHours,
+          'readiness_score': metrics.readinessScore,
+        },
+        where: 'date = ?',
+        whereArgs: [metrics.date.toIso8601String()],
+      );
+    } catch (e) {
+      throw ("DATABASE UPDATE FAILED, ERROR: $e");
+    }
   }
 
   /// Delete all data
