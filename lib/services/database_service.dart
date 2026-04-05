@@ -101,6 +101,7 @@ class DatabaseService {
   }
   // ============ MOCK DATA ============
   // TODO: Replace with actual database queries when ready
+
   /// Get health metrics for a specific date
   ///
   /// Parameters:
@@ -132,26 +133,6 @@ class DatabaseService {
     } catch (e) {
       throw ("DATABASE ERROR: $e");
     }
-    /*await Future.delayed(const Duration(milliseconds: 100));
-
-    // For now, return mock data for today
-    final today = DateTime.now();
-    if (date.day == today.day &&
-        date.month == today.month &&
-        date.year == today.year) {
-      return HealthMetrics(
-        id: 1,
-        date: date,
-        stepCount: _mockWeeklySteps.last,
-        basalTemperature: 36.6,
-        hrv: _mockWeeklyHRV.last,
-        restingHeartRate: 65,
-        sleepHours: 8.0,
-        readinessScore: 75,
-      );
-    }
-
-    return null;*/
   }
 
   /// Mock weekly step counts (Monday to Sunday)
@@ -347,10 +328,26 @@ class DatabaseService {
   ///
   /// Returns: List of 7 integers (Monday to Sunday)
   Future<List<int>> getWeeklySteps() async {
-    // Simulate async database query with small delay
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final result = await db.query(
+        'health_metrics',
+        columns: ['step_count'],
+        orderBy: 'date DESC',
+        limit: 7,
+      );
+      return result
+          .map((e) => e['step_count'] as int? ?? 0)
+          .toList()
+          .reversed
+          .toList();
+    } catch (e) {
+      throw ("Weekly steps error: $e");
+    }
+    /*// Simulate async database query with small delay
     await Future.delayed(const Duration(milliseconds: 100));
 
-    return List.from(_mockWeeklySteps);
+    return List.from(_mockWeeklySteps);*/
   }
 
   /// Get today's step count
