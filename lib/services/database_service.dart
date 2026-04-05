@@ -392,7 +392,7 @@ class DatabaseService {
     } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("Today steps error")));
+      ).showSnackBar(SnackBar(content: Text("Weekly hrv error")));
       throw Exception("Weekly hrv error: $e");
     }
   }
@@ -400,7 +400,7 @@ class DatabaseService {
   /// Get today's HRV value
   ///
   /// Returns: Double HRV value for today in milliseconds
-  Future<double> getTodayHRV() async {
+  Future<double> getTodayHRV(BuildContext context) async {
     try {
       final db = await DatabaseHelper.instance.database;
       final result = await db.query(
@@ -411,6 +411,9 @@ class DatabaseService {
       );
       return result.first['hrv'] as double? ?? 0;
     } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Today hrv error")));
       throw ("Today HRV error: $e");
     }
   }
