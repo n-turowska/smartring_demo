@@ -391,9 +391,18 @@ class DatabaseService {
   ///
   /// Returns: Double HRV value for today in milliseconds
   Future<double> getTodayHRV() async {
-    await Future.delayed(const Duration(milliseconds: 50));
-
-    return _mockWeeklyHRV.last;
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final result = await db.query(
+        'health_metrics',
+        columns: ['hrv'],
+        orderBy: 'date DESC',
+        limit: 1,
+      );
+      return result.first['hrv'] as double? ?? 0;
+    } catch (e) {
+      throw ("Today HRV error: $e");
+    }
   }
 
   /// Get calories burned today (calculated from steps)
