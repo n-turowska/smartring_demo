@@ -444,7 +444,7 @@ class DatabaseService {
   /// Get distance traveled today in kilometers (calculated from steps)
   ///
   /// Returns: Integer distance in km
-  Future<int> getTodayDistanceKm() async {
+  Future<int> getTodayDistanceKm(BuildContext context) async {
     try {
       final db = await DatabaseHelper.instance.database;
       final result = await db.query(
@@ -459,6 +459,9 @@ class DatabaseService {
           0.75; // Simple calculation: ~0.75m per step for average personreturn (meters / 1000).round();// ~4-5 km for 5607 steps
       return (meters / 1000).round();
     } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Today distance error")));
       throw ("Today distance error: $e");
     }
   }
