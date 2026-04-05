@@ -1,5 +1,6 @@
 // services/database_service.dart
 
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 
 import '../models/health_metrics.dart';
@@ -327,7 +328,7 @@ class DatabaseService {
   /// Get step counts for the last 7 days
   ///
   /// Returns: List of 7 integers (Monday to Sunday)
-  Future<List<int>> getWeeklySteps() async {
+  Future<List<int>> getWeeklySteps(BuildContext context) async {
     try {
       final db = await DatabaseHelper.instance.database;
       final result = await db.query(
@@ -342,7 +343,10 @@ class DatabaseService {
           .reversed
           .toList();
     } catch (e) {
-      throw ("Weekly steps error: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Weekly steps error")));
+      throw Exception("Weekly steps error: $e");
     }
   }
 
