@@ -429,11 +429,21 @@ class DatabaseService {
   ///
   /// Returns: Integer distance in km
   Future<int> getTodayDistanceKm() async {
-    await Future.delayed(const Duration(milliseconds: 50));
-
-    // Simple calculation: ~0.75m per step for average person
-    final steps = _mockWeeklySteps.last;
-    final meters = steps * 0.75;
-    return (meters / 1000).round(); // ~4-5 km for 5607 steps
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final result = await db.query(
+        'health_metrics',
+        columns: ['step_count'],
+        orderBy: 'date DESC',
+        limit: 1,
+      );
+      final steps = result.first['step_count'] as int? ?? 0;
+      final meters =
+          steps *
+          0.75; // Simple calculation: ~0.75m per step for average personreturn (meters / 1000).round();// ~4-5 km for 5607 steps
+      return (meters / 1000).round();
+    } catch (e) {
+      throw ("Today distance error: $e");
+    }
   }
 }
