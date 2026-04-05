@@ -353,7 +353,7 @@ class DatabaseService {
   /// Get today's step count
   ///
   /// Returns: Integer step count for today
-  Future<int> getTodaySteps() async {
+  Future<int> getTodaySteps(BuildContext context) async {
     try {
       final db = await DatabaseHelper.instance.database;
       final result = await db.query(
@@ -365,7 +365,10 @@ class DatabaseService {
 
       return result.first['step_count'] as int? ?? 0;
     } catch (e) {
-      throw ("Today step error: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Today steps error")));
+      throw Exception("Today steps error: $e");
     }
   }
 
