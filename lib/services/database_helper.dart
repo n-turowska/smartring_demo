@@ -98,9 +98,9 @@ class DatabaseHelper {
     $_sleepHoursColumnName REAL,
     $_sleepQualityColumnName INTEGER CHECK ($_sleepQualityColumnName BETWEEN 1 AND 5),
     $_readinessColumnName INTEGER CHECK ($_readinessColumnName BETWEEN 0 AND 100),
-    $_createdTableColumnName TEXT NOT NULL
+    $_createdTableColumnName TEXT NOT NULL,
 
-    FOREIGN KEY(user_id) REFERENCES $_userTableName(_idColumnName)
+    FOREIGN KEY(id) REFERENCES $_userTableName($_idColumnName)
     )
 ''');
 
@@ -123,9 +123,9 @@ class DatabaseHelper {
         $_predictionColumnName INTEGER,
         $_confidenceColumnName REAL CHECK ($_confidenceColumnName BETWEEN 0.0 AND 1.0),
         $_notesColumnName TEXT,
-        $_createdTableColumnName TEXT NOT NULL
-        title TEXT
-        FOREIGN KEY(user_id) REFERENCES $_userTableName(_idColumnName)
+        $_createdTableColumnName TEXT NOT NULL,
+        title TEXT,
+        FOREIGN KEY(id) REFERENCES $_userTableName(&_idColumnName)
       )
 ''');
     await db.execute('''
