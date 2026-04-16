@@ -59,9 +59,20 @@ class _CyklState extends State<Cykl> {
   }
 
   Future<void> _loadData() async {
-    ovulation = await getCurrentOvulation();
-    cycleLength = await getPredictedDlugoscCyklu();
-    setState(() {});
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    try {
+      ovulation = await getCurrentOvulation();
+      cycleLength = await getPredictedDlugoscCyklu();
+      setState(() {});
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Nie udało załadować się danych. Spróbuj ponownie';
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _loadEvents() async {
