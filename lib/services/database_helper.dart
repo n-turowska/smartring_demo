@@ -61,7 +61,7 @@ class DatabaseHelper {
     final database = await openDatabase(
       databasePath,
       password: key,
-      version: 1,
+      version: 2,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys=ON');
       },
@@ -103,8 +103,8 @@ class DatabaseHelper {
     $_sleepQualityColumnName INTEGER CHECK ($_sleepQualityColumnName BETWEEN 1 AND 5),
     $_readinessColumnName INTEGER CHECK ($_readinessColumnName BETWEEN 0 AND 100),
     $_createdTableColumnName TEXT NOT NULL,
-
-    FOREIGN KEY(id) REFERENCES $_userTableName($_idColumnName)
+    user_id INTEGER,
+    FOREIGN KEY(user_id) REFERENCES $_userTableName($_idColumnName)
     )
 ''');
     await db.execute(
@@ -132,7 +132,8 @@ class DatabaseHelper {
         $_notesColumnName TEXT,
         $_createdTableColumnName TEXT NOT NULL,
         title TEXT,
-        FOREIGN KEY(id) REFERENCES $_userTableName(&_idColumnName)
+        user_id INTEGER,
+        FOREIGN KEY(user_id) REFERENCES $_userTableName($_idColumnName)
       )
 ''');
     await db.execute(
@@ -177,6 +178,8 @@ class DatabaseHelper {
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {}
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE health_metrics ADD COLUMN test TEXT');
+    }
   }
 }
