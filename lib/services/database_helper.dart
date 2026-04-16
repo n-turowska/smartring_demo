@@ -68,8 +68,10 @@ class DatabaseHelper {
   }
 
   Future _createDB(Database db, int version) async {
+    await db.execute('PRAGMA foreign_keys = ON');
     await db.execute('''
     CREATE TABLE $_userTableName(
+    
     $_idColumnName INTEGER PRIMARY KEY CHECK(id=1),
     $_userAvrCycleLengthColumnName INTEGER DEFAULT 28,
     $_userLastPeriodColumnName TEXT,
@@ -86,6 +88,7 @@ class DatabaseHelper {
 
     await db.execute('''
     CREATE TABLE $_healthTableName(
+    
     $_idColumnName INTEGER PRIMARY KEY AUTOINCREMENT,
     $_dateColumnName TEXT NOT NULL UNIQUE,
     $_stepColumnName INTEGER,
@@ -96,11 +99,14 @@ class DatabaseHelper {
     $_sleepQualityColumnName INTEGER CHECK ($_sleepQualityColumnName BETWEEN 1 AND 5),
     $_readinessColumnName INTEGER CHECK ($_readinessColumnName BETWEEN 0 AND 100),
     $_createdTableColumnName TEXT NOT NULL
+
+    FOREIGN KEY(user_id) REFERENCES $_userTableName(_idColumnName)
     )
 ''');
 
     await db.execute('''
         CREATE TABLE $_cycleTableName(
+  
         $_idColumnName INTEGER PRIMARY KEY AUTOINCREMENT,
         $_dateColumnName TEXT NOT NULL,
         $_cycleEventTypeColumnName TEXT NOT NULL CHECK(
@@ -112,12 +118,14 @@ class DatabaseHelper {
             'fertile_window',
             'user_event'
           )
+          
         ),
         $_predictionColumnName INTEGER,
         $_confidenceColumnName REAL CHECK ($_confidenceColumnName BETWEEN 0.0 AND 1.0),
         $_notesColumnName TEXT,
         $_createdTableColumnName TEXT NOT NULL
         title TEXT
+        FOREIGN KEY(user_id) REFERENCES $_userTableName(_idColumnName)
       )
 ''');
     await db.execute('''
