@@ -103,6 +103,9 @@ class DatabaseHelper {
     FOREIGN KEY(id) REFERENCES $_userTableName($_idColumnName)
     )
 ''');
+    await db.execute(
+      'CREATE INDEX idx_health_table_date ON $_healthTableName($_dateColumnName)',
+    );
 
     await db.execute('''
         CREATE TABLE $_cycleTableName(
@@ -128,6 +131,9 @@ class DatabaseHelper {
         FOREIGN KEY(id) REFERENCES $_userTableName(&_idColumnName)
       )
 ''');
+    await db.execute(
+      'CREATE INDEX idx_cycle_table_date ON $_cycleTableName($_dateColumnName)',
+    );
     await db.execute('''
     CREATE TABLE symptoms (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
