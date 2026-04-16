@@ -118,9 +118,8 @@ class _CyklState extends State<Cykl> {
     }
   }
 
-  int? getPredictedDlugoscCyklu() {
-    final repo = DatabaseService.instance;
-    final dlCyklu = repo.dlCyklu.first;
+  Future<int?> getPredictedDlugoscCyklu() async {
+    final dlCyklu = await widget.databaseService.getCycleLength();
     dlugoscCyklu = dlCyklu;
     return dlugoscCyklu;
   }
