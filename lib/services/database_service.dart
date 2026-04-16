@@ -278,6 +278,12 @@ class DatabaseService {
     28,
   ];
   List<int> get dlCyklu => _mockPredictedDlugoscCyklu;
+  Future<int> getCycleLength() async {
+    final db = await DatabaseHelper.instance.database;
+    final result = await db.query('user_profile', limit: 1);
+    if (result.isEmpty) return 28;
+    return result.first['average_cycle_length'] as int;
+  }
 
   /// added by user events-for example period days
 
