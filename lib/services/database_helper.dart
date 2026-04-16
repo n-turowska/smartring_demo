@@ -183,6 +183,14 @@ class DatabaseHelper {
       
     )
   ''');
+    await db.execute('''
+    CREATE TABLE menstruation_days (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      date TEXT NOT NULL,
+      title TEXT NOT NULL
+      
+    )
+  ''');
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {

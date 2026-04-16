@@ -251,7 +251,16 @@ class DatabaseService {
   ];
   List<PredictedMenstruation> get menstruationDays => _mockMenstruationDay;
   Future<List<PredictedMenstruation>> getAllMenstruationDays() async {
-    return _mockMenstruationDay;
+    final db = await DatabaseHelper.instance.database;
+    final result = await db.query('menstruation_days');
+    return result
+        .map(
+          (e) => PredictedMenstruation(
+            title: e['title'] as String,
+            date: DateTime.parse(e['date'] as String),
+          ),
+        )
+        .toList();
   }
 
   final List<int> _mockPredictedDlugoscCyklu = [
