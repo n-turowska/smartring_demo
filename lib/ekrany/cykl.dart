@@ -103,13 +103,14 @@ class _CyklState extends State<Cykl> {
         []; //jesli _eventsByDay jest null to zwroci pusta liste;
   }
 
-  int? getCurrentOvulation() {
+  Future<int?> getCurrentOvulation() async {
     final repo = DatabaseService
         .instance; //musi byc instancja zeby sie moc odwolac do ovulationDays, czyli do gettera
     final today = _kliknietyDzien ?? DateTime.now();
 
     try {
-      final currentOvulation = repo.ovulationDays.firstWhere(
+      final ovulations = await repo.getAllOvulationDays();
+      final currentOvulation = ovulations.firstWhere(
         (i) => i.date.year == today.year && i.date.month == today.month,
       );
       return currentOvulation.date.day;
