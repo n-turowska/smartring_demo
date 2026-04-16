@@ -52,27 +52,30 @@ class _CyklState extends State<Cykl> {
     super.initState();
     dzisiaj = DateTime.now();
     _wybraneEventy = ValueNotifier([]);
-    _loadEvents();
-    _loadData();
+    _init();
 
     //_wybraneEventy = ValueNotifier(_wezEventyForDay(_kliknietyDzien!));
   }
 
+  Future<void> _init() async {
+    setState(() => _isLoading = true);
+
+    try {
+      await _loadEvents();
+      await _loadData();
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
   Future<void> _loadData() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
     try {
       ovulation = await getCurrentOvulation();
       cycleLength = await getPredictedDlugoscCyklu();
-      setState(() {});
     } catch (e) {
-      setState(() {
-        _errorMessage = 'Nie udało załadować się danych. Spróbuj ponownie';
-        _isLoading = false;
-      });
+      _errorMessage = "Błąd danych";
     }
+    setState(() {});
   }
 
   Future<void> _loadEvents() async {
@@ -106,7 +109,8 @@ class _CyklState extends State<Cykl> {
 
         setState(() {
           _eventsByDay = grouped;
-          _wybraneEventy.value = _wezEventyForDay(_kliknietyDzien!);
+          final selected = _kliknietyDzien ?? DateTime.now();
+          _wybraneEventy.value = _wezEventyForDay(selected);
           _isLoading = false;
         });
       });
@@ -127,10 +131,7 @@ class _CyklState extends State<Cykl> {
     final repo = DatabaseService
         .instance; //musi byc instancja zeby sie moc odwolac do ovulationDays, czyli do gettera
     final today = _kliknietyDzien ?? DateTime.now();
-    setState(() {
-      _errorMessage = null;
-      _isLoading = true;
-    });
+
     try {
       final ovulations = await repo.getAllOvulationDays();
       final currentOvulation = ovulations.firstWhere(
@@ -138,28 +139,16 @@ class _CyklState extends State<Cykl> {
       );
       return currentOvulation.date.day;
     } catch (e) {
-      setState(() {
-        _errorMessage = 'Nie udało się dodać wydarzenia.';
-        _isLoading = false;
-      });
       return null;
     }
   }
 
   Future<int?> getPredictedDlugoscCyklu() async {
-    setState(() {
-      _errorMessage = null;
-      _isLoading = true;
-    });
     try {
       final dlCyklu = await widget.databaseService.getCycleLength();
       dlugoscCyklu = dlCyklu;
       return dlugoscCyklu;
     } catch (e) {
-      setState(() {
-        _errorMessage = 'Nie udało się dodać wydarzenia.';
-        _isLoading = false;
-      });
       return null;
     }
   }
