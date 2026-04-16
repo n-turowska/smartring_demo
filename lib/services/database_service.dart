@@ -186,7 +186,17 @@ class DatabaseService {
   List<PredictedOvulation> get ovulationDays =>
       _mockOvulationDay; //zeby mozna bylo sie odwolac do danego dnia na zewnatrz pliku
   Future<List<PredictedOvulation>> getAllOvulationDays() async {
-    return _mockOvulationDay;
+    final db = await DatabaseHelper.instance.database;
+    final result = await db.query('ovulation_days');
+
+    return result
+        .map(
+          (e) => PredictedOvulation(
+            title: e['title'] as String,
+            date: DateTime.parse(e['date'] as String),
+          ),
+        )
+        .toList();
   }
 
   final List<PredictedMenstruation> _mockMenstruationDay = [
