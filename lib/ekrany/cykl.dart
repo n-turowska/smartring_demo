@@ -127,7 +127,10 @@ class _CyklState extends State<Cykl> {
     final repo = DatabaseService
         .instance; //musi byc instancja zeby sie moc odwolac do ovulationDays, czyli do gettera
     final today = _kliknietyDzien ?? DateTime.now();
-
+    setState(() {
+      _errorMessage = null;
+      _isLoading = true;
+    });
     try {
       final ovulations = await repo.getAllOvulationDays();
       final currentOvulation = ovulations.firstWhere(
@@ -135,14 +138,30 @@ class _CyklState extends State<Cykl> {
       );
       return currentOvulation.date.day;
     } catch (e) {
+      setState(() {
+        _errorMessage = 'Nie udało się dodać wydarzenia.';
+        _isLoading = false;
+      });
       return null;
     }
   }
 
   Future<int?> getPredictedDlugoscCyklu() async {
-    final dlCyklu = await widget.databaseService.getCycleLength();
-    dlugoscCyklu = dlCyklu;
-    return dlugoscCyklu;
+    setState(() {
+      _errorMessage = null;
+      _isLoading = true;
+    });
+    try {
+      final dlCyklu = await widget.databaseService.getCycleLength();
+      dlugoscCyklu = dlCyklu;
+      return dlugoscCyklu;
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Nie udało się dodać wydarzenia.';
+        _isLoading = false;
+      });
+      return null;
+    }
   }
 
   /*void zwiekszenie_dni() {
