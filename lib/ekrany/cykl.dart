@@ -181,46 +181,9 @@ class _CyklState extends State<Cykl> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) return const Center(child: CircularProgressIndicator());
-    if (_errorMessage != null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              _errorMessage!,
-              style: TextStyle(
-                color: Colors.purple,
-                decoration: TextDecoration.none,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                if (_lastFailedAction != null) {
-                  _runAction(_lastFailedAction!);
-                }
-              },
-              child: const Text('Odśwież'),
-            ),
-          ],
-        ),
-      );
-    }
     final ovulation = getCurrentOvulation();
     final cycleLength = getPredictedDlugoscCyklu();
-    if (ovulation == null || cycleLength == null) {
-      return const Center(
-        child: Text(
-          'Brak danych cyklu',
-          style: TextStyle(
-            color: Colors.purple,
-            decoration: TextDecoration.none,
-          ),
-        ),
-      );
-    }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -241,95 +204,140 @@ class _CyklState extends State<Cykl> {
         //zeby tlo nie przykrylo pozniejszych elementow dajemy stack-stos
         fit: StackFit.expand,
         children: [
+          if (_isLoading)
+            const Center(child: CircularProgressIndicator())
           /*Image.asset(
             //'assets/tlo.png',
             'assets/tlo_tel_cykl.png',
             fit: BoxFit.cover,
           ),*/
-          Column(
-            spacing: 10.0,
-            //scaffold ma jeden widget wiec column musi byc w stack
-            mainAxisAlignment: MainAxisAlignment.center, //zeby bylo na srodku
-            children: [
-              Container(
-                height: 100,
-                width: 270,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.shade500,
-                      offset: Offset(4.0, 4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: Offset(-4.0, -4.0),
-                      blurRadius: 15.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ],
+          else if (ovulation == null || cycleLength == null)
+            const Center(
+              child: Text(
+                'Brak danych cyklu',
+                style: TextStyle(
+                  color: Colors.purple,
+                  decoration: TextDecoration.none,
                 ),
-
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text.rich(
-                      TextSpan(
-                        text:
-                            ((dzienOwulacji + ovulation - dzisiaj.day) %
-                                        cycleLength !=
-                                    0 &&
-                                (dzienOwulacji + ovulation - dzisiaj.day) %
-                                        cycleLength !=
-                                    27 &&
-                                (dzienOwulacji + ovulation - dzisiaj.day) %
-                                        cycleLength !=
-                                    26)
-                            ? 'okres: za '
-                            : '',
-                        style: TextStyle(color: Colors.black, fontSize: 25),
-
-                        children: [
-                          TextSpan(
-                            text:
-                                ((dzienOwulacji + ovulation - dzisiaj.day) %
-                                            cycleLength !=
-                                        0 &&
-                                    (dzienOwulacji + ovulation - dzisiaj.day) %
-                                            cycleLength !=
-                                        27 &&
-                                    (dzienOwulacji + ovulation - dzisiaj.day) %
-                                            cycleLength !=
-                                        26)
-                                ? '${(dzienOwulacji + ovulation - dzisiaj.day) % cycleLength} dni\n'
-                                : '',
-                            style: TextStyle(
-                              color: Kolor_tekstu,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'cykl: ',
-                            style: TextStyle(color: Colors.black, fontSize: 25),
-                          ),
-                          TextSpan(
-                            text:
-                                '${(dzienOwulacji + _kliknietyDzien!.day - ovulation - 1) % cycleLength + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
-                            style: TextStyle(
-                              color: Kolor_tekstu,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25,
-                            ),
-                          ),
-                        ],
-                      ),
+              ),
+            )
+          else if (_errorMessage != null)
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    _errorMessage!,
+                    style: TextStyle(
+                      color: Colors.purple,
+                      decoration: TextDecoration.none,
+                      fontSize: 16,
                     ),
-                    /*Text(
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_lastFailedAction != null) {
+                        _runAction(_lastFailedAction!);
+                      }
+                    },
+                    child: const Text('Odśwież'),
+                  ),
+                ],
+              ),
+            )
+          else
+            Column(
+              spacing: 10.0,
+              //scaffold ma jeden widget wiec column musi byc w stack
+              mainAxisAlignment: MainAxisAlignment.center, //zeby bylo na srodku
+              children: [
+                Container(
+                  height: 100,
+                  width: 270,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade500,
+                        offset: Offset(4.0, 4.0),
+                        blurRadius: 15.0,
+                        spreadRadius: 1.0,
+                      ),
+                      BoxShadow(
+                        color: Colors.white,
+                        offset: Offset(-4.0, -4.0),
+                        blurRadius: 15.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ],
+                  ),
+
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text.rich(
+                        TextSpan(
+                          text:
+                              ((dzienOwulacji + ovulation - dzisiaj.day) %
+                                          cycleLength !=
+                                      0 &&
+                                  (dzienOwulacji + ovulation - dzisiaj.day) %
+                                          cycleLength !=
+                                      27 &&
+                                  (dzienOwulacji + ovulation - dzisiaj.day) %
+                                          cycleLength !=
+                                      26)
+                              ? 'okres: za '
+                              : '',
+                          style: TextStyle(color: Colors.black, fontSize: 25),
+
+                          children: [
+                            TextSpan(
+                              text:
+                                  ((dzienOwulacji + ovulation - dzisiaj.day) %
+                                              cycleLength !=
+                                          0 &&
+                                      (dzienOwulacji +
+                                                  ovulation -
+                                                  dzisiaj.day) %
+                                              cycleLength !=
+                                          27 &&
+                                      (dzienOwulacji +
+                                                  ovulation -
+                                                  dzisiaj.day) %
+                                              cycleLength !=
+                                          26)
+                                  ? '${(dzienOwulacji + ovulation - dzisiaj.day) % cycleLength} dni\n'
+                                  : '',
+                              style: TextStyle(
+                                color: Kolor_tekstu,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'cykl: ',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 25,
+                              ),
+                            ),
+                            TextSpan(
+                              text:
+                                  '${(dzienOwulacji + _kliknietyDzien!.day - ovulation - 1) % cycleLength + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
+                              style: TextStyle(
+                                color: Kolor_tekstu,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      /*Text(
                       ((dzienOwulacji + ovulation - dzisiaj.day) %
                                       cycleLength !=
                                   0 &&
@@ -353,11 +361,11 @@ class _CyklState extends State<Cykl> {
                             fontWeight: FontWeight.normal,
                           ),
                     ),*/
-                    /*const SizedBox(
+                      /*const SizedBox(
                           width: 10,
                         ), */
-                    //zeby byla przerwa miedzy tekstem a obrazkiem
-                    /*for (
+                      //zeby byla przerwa miedzy tekstem a obrazkiem
+                      /*for (
                           int i = 0;
                           i < 4 - ilosc_dni_do_miesiaczki;
                           i++
@@ -368,78 +376,81 @@ class _CyklState extends State<Cykl> {
                             color: Kolor,
                             colorBlendMode: BlendMode.multiply,
                           ),*/
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 0,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 0, right: 16),
-
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      FloatingActionButton(
-                        onPressed: () {
-                          showDialog(
-                            //otwieramy okno dialogowe
-                            context:
-                                context, //dzieki temu showDialog wie gdzie ma byc dodane okno dialogowe, czyli w miejscu tego przycisku-flutter znajduje navigator i pokazuje dialog nad ekranem
-                            builder: (context) {
-                              return AlertDialog(
-                                scrollable: true,
-                                title: Text(
-                                  '${_kliknietyDzien!.day}-${_kliknietyDzien!.month}-${_kliknietyDzien!.year} : ',
-                                ),
-                                content: Padding(
-                                  padding: EdgeInsets.all(
-                                    8,
-                                  ), //dookola pola tekstowego przerwa 8 pikseli
-                                  child: TextField(
-                                    controller: _eventController,
-                                  ),
-                                ),
-                                actions: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      final date = _kliknietyDzien!;
-                                      final puredate = DateTime(
-                                        date.year,
-                                        date.month,
-                                        date.day,
-                                      ); //zeby bylo bez godziny
-                                      widget.databaseService.addUserEvent(
-                                        Event(_eventController.text, puredate),
-                                      );
-                                      _eventsByDay[puredate] =
-                                          (_eventsByDay[puredate] ?? [])..add(
-                                            Event(
-                                              _eventController.text,
-                                              puredate,
-                                            ),
-                                          );
-                                      _wybraneEventy.value =
-                                          _eventsByDay[puredate]!;
-                                      Navigator.of(
-                                        context,
-                                      ).pop(); //dzieki temu jak klikniemy dodaj to sie zamyka okno dialogowe
-                                    },
-                                    child: Text('dodaj'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        backgroundColor: Kolor_przycisku,
-                        child: Icon(Icons.edit),
-                      ),
                     ],
                   ),
                 ),
-              ),
+                Positioned(
+                  top: 0,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 0, right: 16),
 
-              /*Image.asset(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        FloatingActionButton(
+                          onPressed: () {
+                            showDialog(
+                              //otwieramy okno dialogowe
+                              context:
+                                  context, //dzieki temu showDialog wie gdzie ma byc dodane okno dialogowe, czyli w miejscu tego przycisku-flutter znajduje navigator i pokazuje dialog nad ekranem
+                              builder: (context) {
+                                return AlertDialog(
+                                  scrollable: true,
+                                  title: Text(
+                                    '${_kliknietyDzien!.day}-${_kliknietyDzien!.month}-${_kliknietyDzien!.year} : ',
+                                  ),
+                                  content: Padding(
+                                    padding: EdgeInsets.all(
+                                      8,
+                                    ), //dookola pola tekstowego przerwa 8 pikseli
+                                    child: TextField(
+                                      controller: _eventController,
+                                    ),
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        final date = _kliknietyDzien!;
+                                        final puredate = DateTime(
+                                          date.year,
+                                          date.month,
+                                          date.day,
+                                        ); //zeby bylo bez godziny
+                                        widget.databaseService.addUserEvent(
+                                          Event(
+                                            _eventController.text,
+                                            puredate,
+                                          ),
+                                        );
+                                        _eventsByDay[puredate] =
+                                            (_eventsByDay[puredate] ?? [])..add(
+                                              Event(
+                                                _eventController.text,
+                                                puredate,
+                                              ),
+                                            );
+                                        _wybraneEventy.value =
+                                            _eventsByDay[puredate]!;
+                                        Navigator.of(
+                                          context,
+                                        ).pop(); //dzieki temu jak klikniemy dodaj to sie zamyka okno dialogowe
+                                      },
+                                      child: Text('dodaj'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          backgroundColor: Kolor_przycisku,
+                          child: Icon(Icons.edit),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                /*Image.asset(
                 'assets/kalendarz1.png',
                 width: 250,
                 height: 250,
@@ -447,203 +458,203 @@ class _CyklState extends State<Cykl> {
                 //colorBlendMode: BlendMode.multiply,
               ), //dodanie obrazka
               */
-              Container(
-                width: 400,
-                height: 300,
-                child: TableCalendar<dynamic>(
-                  locale: Localizations.localeOf(
-                    context,
-                  ).toString(), //toString zamienia na tekst "pl_PL", a to wczesniej pobiera atualny jezyk aplikacji
-                  rowHeight: 40, //odleglosc miedzy wierszami
-                  headerStyle: HeaderStyle(
-                    titleCentered: true,
-                    formatButtonVisible: false, //zeby zniknal napis '2weeks'
-                  ),
-                  availableGestures: AvailableGestures
-                      .all, //zeby mozna bylo przewijac, przeciagac-co sie chce
-                  firstDay: DateTime.utc(2010, 10, 16),
-                  lastDay: DateTime.utc(2035, 10, 16),
-                  focusedDay: dzisiaj,
-                  selectedDayPredicate: (dzien) {
-                    return isSameDay(
-                      _kliknietyDzien,
-                      dzien,
-                    ); //dzien jest aktualnie rysowany w siatce, jesli true znaczy ze dzien jest rzeczywiscie tym co kliknal uzytkownik i jest wtedy podkreslany
-                  },
-                  onDaySelected: (kliknietyDzien, terazniejszyDzien) {
-                    //
-                    setState(() {
-                      //zeby powiadomic ze zmienily sie wartosci trzeba przypisac
-                      _kliknietyDzien = kliknietyDzien;
-                      dzisiaj = terazniejszyDzien;
-                      final date = _kliknietyDzien!;
-                      final puredate = DateTime(
-                        date.year,
-                        date.month,
-                        date.day,
-                      );
-                      _wybraneEventy.value = _wezEventyForDay(
-                        puredate,
-                      ); //zeby pokazywal sie event w zaleznosci od kliknietego dnia, a nie ciagle ten sam
-                    });
-                  },
-                  eventLoader: (day) {
-                    final puredate = DateTime(day.year, day.month, day.day);
-                    return _eventsByDay[puredate] ?? [];
-                  },
-                  startingDayOfWeek: StartingDayOfWeek
-                      .monday, //zeby byl od pn-ndz a nie ndz-sb
-                  calendarBuilders: CalendarBuilders(
-                    markerBuilder: (context, day, events) {
-                      if (events.isEmpty) return null;
-                      final hasUserEvent = events.any((e) => e is Event);
-                      final hasOvulation = events.any(
-                        (e) => e is PredictedOvulation,
-                      );
-                      final hasMenstruation = events.any(
-                        (e) => e is PredictedMenstruation,
-                      );
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (hasOvulation)
-                            const Icon(
-                              Icons.circle_sharp,
-                              size: 10,
-                              color: Color.fromARGB(255, 118, 117, 109),
-                            ),
-                          if (hasMenstruation)
-                            for (int i = 0; i < 3; i++)
+                Container(
+                  width: 400,
+                  height: 300,
+                  child: TableCalendar<dynamic>(
+                    locale: Localizations.localeOf(
+                      context,
+                    ).toString(), //toString zamienia na tekst "pl_PL", a to wczesniej pobiera atualny jezyk aplikacji
+                    rowHeight: 40, //odleglosc miedzy wierszami
+                    headerStyle: HeaderStyle(
+                      titleCentered: true,
+                      formatButtonVisible: false, //zeby zniknal napis '2weeks'
+                    ),
+                    availableGestures: AvailableGestures
+                        .all, //zeby mozna bylo przewijac, przeciagac-co sie chce
+                    firstDay: DateTime.utc(2010, 10, 16),
+                    lastDay: DateTime.utc(2035, 10, 16),
+                    focusedDay: dzisiaj,
+                    selectedDayPredicate: (dzien) {
+                      return isSameDay(
+                        _kliknietyDzien,
+                        dzien,
+                      ); //dzien jest aktualnie rysowany w siatce, jesli true znaczy ze dzien jest rzeczywiscie tym co kliknal uzytkownik i jest wtedy podkreslany
+                    },
+                    onDaySelected: (kliknietyDzien, terazniejszyDzien) {
+                      //
+                      setState(() {
+                        //zeby powiadomic ze zmienily sie wartosci trzeba przypisac
+                        _kliknietyDzien = kliknietyDzien;
+                        dzisiaj = terazniejszyDzien;
+                        final date = _kliknietyDzien!;
+                        final puredate = DateTime(
+                          date.year,
+                          date.month,
+                          date.day,
+                        );
+                        _wybraneEventy.value = _wezEventyForDay(
+                          puredate,
+                        ); //zeby pokazywal sie event w zaleznosci od kliknietego dnia, a nie ciagle ten sam
+                      });
+                    },
+                    eventLoader: (day) {
+                      final puredate = DateTime(day.year, day.month, day.day);
+                      return _eventsByDay[puredate] ?? [];
+                    },
+                    startingDayOfWeek: StartingDayOfWeek
+                        .monday, //zeby byl od pn-ndz a nie ndz-sb
+                    calendarBuilders: CalendarBuilders(
+                      markerBuilder: (context, day, events) {
+                        if (events.isEmpty) return null;
+                        final hasUserEvent = events.any((e) => e is Event);
+                        final hasOvulation = events.any(
+                          (e) => e is PredictedOvulation,
+                        );
+                        final hasMenstruation = events.any(
+                          (e) => e is PredictedMenstruation,
+                        );
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (hasOvulation)
                               const Icon(
-                                Icons.opacity,
+                                Icons.circle_sharp,
                                 size: 10,
-                                color: Colors.pink,
+                                color: Color.fromARGB(255, 118, 117, 109),
                               ),
+                            if (hasMenstruation)
+                              for (int i = 0; i < 3; i++)
+                                const Icon(
+                                  Icons.opacity,
+                                  size: 10,
+                                  color: Colors.pink,
+                                ),
 
-                          if (hasUserEvent)
-                            const Icon(
-                              Icons.circle,
-                              size: 7,
-                              color: Color.fromARGB(255, 7, 52, 78),
-                            ),
-                        ],
-                      );
+                            if (hasUserEvent)
+                              const Icon(
+                                Icons.circle,
+                                size: 7,
+                                color: Color.fromARGB(255, 7, 52, 78),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                    onPageChanged: (terazniejszyDzien) {
+                      //informuje ktory miesiac jest aktualnie widoczny
+                      setState(() {
+                        dzisiaj =
+                            terazniejszyDzien; //zmieniamy z tego miesiaca co byl z 'dzisiaj' i zmieniamy na ten klikniety
+                      });
                     },
                   ),
-                  onPageChanged: (terazniejszyDzien) {
-                    //informuje ktory miesiac jest aktualnie widoczny
-                    setState(() {
-                      dzisiaj =
-                          terazniejszyDzien; //zmieniamy z tego miesiaca co byl z 'dzisiaj' i zmieniamy na ten klikniety
-                    });
-                  },
                 ),
-              ),
 
-              Container(
-                height: 90,
-                width: 290,
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: ValueListenableBuilder<List<dynamic>>(
-                    valueListenable: _wybraneEventy,
-                    builder: (context, value, _) {
-                      return ListView.builder(
-                        itemCount: value.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            height: 70,
-                            width: 300,
-                            margin: EdgeInsets.symmetric(
-                              horizontal: 80,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                15,
-                              ), //do zaokraglenia rogow
-                              color: Colors.white, //kolor tla
-                              boxShadow: [
-                                //cienie
-                                BoxShadow(
-                                  color: Colors.grey.shade500, //kolor cienia
-                                  offset: Offset(
-                                    4.0,
-                                    4.0,
-                                  ), //przesunicie wzgledem kontenera
-                                  blurRadius: 15.0, //rozmycie cienia
-                                  spreadRadius: 1.0, //rozszerzenie cienia
-                                ),
-                                BoxShadow(
-                                  color: Colors.white,
-                                  offset: Offset(-4.0, -4.0),
-                                  blurRadius: 15.0,
-                                  spreadRadius: 1.0,
-                                ),
-                              ],
-                            ),
-
-                            child: ListTile(
-                              onTap: () => print(""),
-
-                              title: Center(
-                                child: Text(
-                                  value[index].title,
-                                  style: TextStyle(fontSize: 15),
-                                ),
+                Container(
+                  height: 90,
+                  width: 290,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: ValueListenableBuilder<List<dynamic>>(
+                      valueListenable: _wybraneEventy,
+                      builder: (context, value, _) {
+                        return ListView.builder(
+                          itemCount: value.length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              height: 70,
+                              width: 300,
+                              margin: EdgeInsets.symmetric(
+                                horizontal: 80,
+                                vertical: 4,
                               ),
-                              trailing: value[index] is Event
-                                  ? IconButton(
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        size: 20,
-                                        color: Colors.black,
-                                      ),
-                                      onPressed: () async {
-                                        setState(() {
-                                          _errorMessage = null;
-                                          _isLoading = true;
-                                        });
-                                        try {
-                                          await _runAction(() async {
-                                            final date = DateTime(
-                                              _kliknietyDzien!.year,
-                                              _kliknietyDzien!.month,
-                                              _kliknietyDzien!.day,
-                                            );
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  15,
+                                ), //do zaokraglenia rogow
+                                color: Colors.white, //kolor tla
+                                boxShadow: [
+                                  //cienie
+                                  BoxShadow(
+                                    color: Colors.grey.shade500, //kolor cienia
+                                    offset: Offset(
+                                      4.0,
+                                      4.0,
+                                    ), //przesunicie wzgledem kontenera
+                                    blurRadius: 15.0, //rozmycie cienia
+                                    spreadRadius: 1.0, //rozszerzenie cienia
+                                  ),
+                                  BoxShadow(
+                                    color: Colors.white,
+                                    offset: Offset(-4.0, -4.0),
+                                    blurRadius: 15.0,
+                                    spreadRadius: 1.0,
+                                  ),
+                                ],
+                              ),
 
-                                            await widget.databaseService
-                                                .deleteEvent(value[index]);
-                                            _eventsByDay[date]?.removeWhere(
-                                              (e) => e.id == value[index].id,
-                                            );
-                                            _wybraneEventy.value = List.from(
-                                              _wezEventyForDay(date),
-                                            );
+                              child: ListTile(
+                                onTap: () => print(""),
+
+                                title: Center(
+                                  child: Text(
+                                    value[index].title,
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                                trailing: value[index] is Event
+                                    ? IconButton(
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          size: 20,
+                                          color: Colors.black,
+                                        ),
+                                        onPressed: () async {
+                                          setState(() {
+                                            _errorMessage = null;
+                                            _isLoading = true;
+                                          });
+                                          try {
+                                            await _runAction(() async {
+                                              final date = DateTime(
+                                                _kliknietyDzien!.year,
+                                                _kliknietyDzien!.month,
+                                                _kliknietyDzien!.day,
+                                              );
+
+                                              await widget.databaseService
+                                                  .deleteEvent(value[index]);
+                                              _eventsByDay[date]?.removeWhere(
+                                                (e) => e.id == value[index].id,
+                                              );
+                                              _wybraneEventy.value = List.from(
+                                                _wezEventyForDay(date),
+                                              );
+                                              setState(() {
+                                                _isLoading = false;
+                                              });
+                                            });
+                                          } catch (e) {
                                             setState(() {
+                                              _errorMessage =
+                                                  'Nie udało się usunąć wydarzenia.';
                                               _isLoading = false;
                                             });
-                                          });
-                                        } catch (e) {
-                                          setState(() {
-                                            _errorMessage =
-                                                'Nie udało się usunąć wydarzenia.';
-                                            _isLoading = false;
-                                          });
-                                        }
-                                      },
-                                    )
-                                  : null,
-                            ),
-                          );
-                        },
-                      );
-                    },
+                                          }
+                                        },
+                                      )
+                                    : null,
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
         ],
       ),
 
