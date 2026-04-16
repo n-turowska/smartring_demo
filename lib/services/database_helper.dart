@@ -175,6 +175,14 @@ class DatabaseHelper {
       error_message TEXT
     )
   ''');
+    await db.execute('''
+    CREATE TABLE ovulation_days (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      date TEXT NOT NULL,
+      title TEXT NOT NULL
+      
+    )
+  ''');
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {

@@ -416,7 +416,7 @@ class DatabaseService {
       );
       return result.first['hrv'] as double? ?? 0;
     } catch (e) {
-      throw ("Today HRV error: $e");
+      throw Exception("Today HRV error: $e");
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartring_demo/ekrany/cykl.dart';
+import 'package:smartring_demo/services/database_helper.dart';
 import 'package:smartring_demo/services/database_service.dart';
 
 class StartowyEkran extends StatefulWidget {
@@ -86,6 +87,19 @@ class _StartowyEkranState extends State<StartowyEkran> {
               spacing: 80.0,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                ElevatedButton(
+                  onPressed: () async {
+                    print("KLIK");
+                    final db = await DatabaseHelper.instance.database;
+                    print("KLIK2");
+                    final tables = await db.rawQuery(
+                      "SELECT name FROM sqlite_master WHERE type='table'",
+                    );
+
+                    print(tables);
+                  },
+                  child: Text("Sprawdź tabele"),
+                ),
                 Container(
                   height: 100,
                   width: 270,
