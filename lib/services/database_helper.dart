@@ -62,7 +62,11 @@ class DatabaseHelper {
       databasePath,
       password: key,
       version: 1,
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys=ON');
+      },
       onCreate: _createDB,
+      onUpgrade: _onUpgrade,
     );
     return database;
   }
@@ -170,5 +174,9 @@ class DatabaseHelper {
       error_message TEXT
     )
   ''');
+  }
+
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {}
   }
 }
