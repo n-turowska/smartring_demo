@@ -33,4 +33,16 @@ class Symptom {
     required this.intensity,
     this.notes,
   });
+
+  Map<String, dynamic> toMap() {
+    //zeby zamienialo na typy ktore "rozumie" SQLite, czyli int, String, double, null, bo nie rozumie tych "dartowych" obiektow jak np DateTime i enum
+    return {
+      'id': id,
+      'date': date.toIso8601String(),
+      'symptom_type': symptomType,
+      'category': category.name,
+      'intensity': intensity,
+      'notes': notes,
+    };
+  }
 }

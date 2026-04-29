@@ -250,8 +250,8 @@ Logowanie objawów pomaga użytkowniczkom:
 - Przewidywać trudne dni i planować odpowiednio
 
 ### Kryteria Akceptacji
-- [ ] Klasa modelu Symptom z wszystkimi wymaganymi polami
-- [ ] Predefiniowane typy objawów dostępne jako enum/stałe
+- [] Klasa modelu Symptom z wszystkimi wymaganymi polami
+- [] Predefiniowane typy objawów dostępne jako enum/stałe
 - [ ] Wsparcie dla niestandardowych objawów
 - [ ] Operacje CRUD w DatabaseService
 - [ ] Objawy powiązane z konkretnymi datami
