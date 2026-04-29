@@ -502,4 +502,20 @@ class DatabaseService {
       throw Exception("nie udało się dodać symptomu");
     }
   }
+
+  Future getSymptomsForDate(DateTime date) async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final result = await db.query(
+        "symptoms",
+        where: "date=?",
+        whereArgs: [date.toIso8601String()],
+      );
+      return result
+          .map((e) => Symptom.fromMap(e))
+          .toList(); //kazda mape e z result(lista map) zamien na obiekt Symptom i zmienia na liste List<Symptom>
+    } catch (e) {
+      throw Exception("nie udało się zwrócić symptomu dla tej daty");
+    }
+  }
 }
