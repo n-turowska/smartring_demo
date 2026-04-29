@@ -546,4 +546,13 @@ class DatabaseService {
       throw Exception("nie udało się zaaktualizować symptomu");
     }
   }
+
+  Future deleteSymptom(int id) async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      return await db.delete("symptoms", where: 'id=?', whereArgs: [id]);
+    } catch (e) {
+      throw Exception("nie udało się usunąć symptomu");
+    }
+  }
 }
