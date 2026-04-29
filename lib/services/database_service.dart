@@ -518,4 +518,18 @@ class DatabaseService {
       throw Exception("nie udało się zwrócić symptomu dla tej daty");
     }
   }
+
+  Future getSymptomsInRange(DateTime start, DateTime end) async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final result = await db.query(
+        "symptoms",
+        where: "date BETWEEN ? AND ?",
+        whereArgs: [start.toIso8601String(), end.toIso8601String()],
+      );
+      return result.map((e) => Symptom.fromMap(e)).toList();
+    } catch (e) {
+      throw Exception("nie udało się zwrócić zakresu dat dla symptomu");
+    }
+  }
 }
