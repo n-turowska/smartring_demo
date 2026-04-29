@@ -191,6 +191,17 @@ class DatabaseHelper {
       
     )
   ''');
+    await db.execute('''
+    CREATE TABLE symptoms (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      date TEXT NOT NULL,
+      symptom_type TEXT NOT NULL,
+      category TEXT NOT NULL,
+      intensity INTEGER NOT NULL,
+      notes TEXT
+      
+    )
+  ''');
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {

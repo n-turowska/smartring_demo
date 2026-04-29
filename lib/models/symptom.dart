@@ -47,6 +47,7 @@ class Symptom {
   }
 
   factory Symptom.fromMap(Map<String, dynamic> map) {
+    //tworzenie obiektu Symptom na podstawie danych pobranych z bazy(map)
     return Symptom(
       id: map['id'],
       date: DateTime.parse(map['date']),
