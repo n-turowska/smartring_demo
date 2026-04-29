@@ -241,7 +241,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: [
                       const SizedBox(width: 15),
                       Text(
-                        'Cykl',
+                        'Objawy',
                         style: TextStyle(
                           height: 2,
                           fontSize: 25,
@@ -253,7 +253,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         padding: EdgeInsets.only(right: 10),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.popAndPushNamed(context, '/cykl');
+                            Navigator.popAndPushNamed(context, '/symptoms');
                           },
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
@@ -277,6 +277,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ),
+
                 //MainShape(kolor: Colors.grey, nazwa: 'segment testowy'),
               ],
             ),
