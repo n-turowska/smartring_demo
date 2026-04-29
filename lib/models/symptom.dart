@@ -45,4 +45,17 @@ class Symptom {
       'notes': notes,
     };
   }
+
+  factory Symptom.fromMap(Map<String, dynamic> map) {
+    return Symptom(
+      id: map['id'],
+      date: DateTime.parse(map['date']),
+      symptomType: map['symptom_type'],
+      category: SymptomCategory.values.firstWhere(
+        (e) => e.name == map['category'],
+      ),
+      intensity: map['intensity'],
+      notes: map['notes'],
+    );
+  }
 }
