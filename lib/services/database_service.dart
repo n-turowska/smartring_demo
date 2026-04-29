@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import '../models/health_metrics.dart';
 import '../ekrany/kalendarz/event.dart';
 import '../models/temp_entry.dart';
+import '../models/symptom.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:smartring_demo/services/database_helper.dart';
 
@@ -484,6 +485,21 @@ class DatabaseService {
       return (meters / 1000).round();
     } catch (e) {
       throw ("Today distance error: $e");
+    }
+  }
+
+  Future addSymptom(Symptom symptom) async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      if (symptom.intensity < 1 || symptom.intensity > 5) {
+        throw Exception("Intensity must be 1-5");
+      }
+      return await db.insert(
+        'symptoms',
+        symptom.toMap(),
+      ); //zwraca id tego symptomu
+    } catch (e) {
+      throw Exception("nie udało się dodać symptomu");
     }
   }
 }
