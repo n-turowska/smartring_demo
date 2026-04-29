@@ -532,4 +532,18 @@ class DatabaseService {
       throw Exception("nie udało się zwrócić zakresu dat dla symptomu");
     }
   }
+
+  Future updateSymptom(Symptom symptom) async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      return await db.update(
+        "symptoms",
+        symptom.toMap(),
+        where: 'id=?',
+        whereArgs: [symptom.id],
+      );
+    } catch (e) {
+      throw Exception("nie udało się zaaktualizować symptomu");
+    }
+  }
 }
