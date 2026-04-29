@@ -87,7 +87,7 @@ class _StartowyEkranState extends State<StartowyEkran> {
               spacing: 80.0,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                ElevatedButton(
+                /*ElevatedButton(
                   onPressed: () async {
                     print("KLIK");
                     final db = await DatabaseHelper.instance.database;
@@ -99,7 +99,7 @@ class _StartowyEkranState extends State<StartowyEkran> {
                     print(tables);
                   },
                   child: Text("Sprawdź tabele"),
-                ),
+                ),*/
                 Container(
                   height: 100,
                   width: 270,
@@ -291,7 +291,7 @@ class _StartowyEkranState extends State<StartowyEkran> {
                           ),
                         ),
                         child: Text(
-                          'Cykl',
+                          'Kalendarz',
                           style: TextStyle(
                             height: 2,
                             fontSize: 25,
@@ -316,6 +316,79 @@ class _StartowyEkranState extends State<StartowyEkran> {
                             Text(
                               "okres za\n  ${(dzienOwulacji + getCurrentOvulation()! - DateTime.now().day) % getPredictedDlugoscCyklu()!} dni",
                             ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 100,
+                  width: 270,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      15,
+                    ), //do zaokraglenia rogow
+                    color: Color.fromARGB(255, 255, 255, 255), //kolor tla
+                    boxShadow: [
+                      //cienie
+                      BoxShadow(
+                        color: Colors.grey.shade500, //kolor cienia
+                        offset: Offset(
+                          4.0,
+                          4.0,
+                        ), //przesunicie wzgledem kontenera
+                        blurRadius: 15.0, //rozmycie cienia
+                        spreadRadius: 1.0, //rozszerzenie cienia
+                      ),
+                      BoxShadow(
+                        color: Colors.white,
+                        offset: Offset(-4.0, -4.0),
+                        blurRadius: 15.0,
+                        spreadRadius: 1.0,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.popAndPushNamed(context, '/symptoms');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(
+                            255,
+                            255,
+                            255,
+                            255,
+                          ),
+                        ),
+                        child: Text(
+                          'Objawy',
+                          style: TextStyle(
+                            height: 2,
+                            fontSize: 25,
+                            color: const Color.fromARGB(255, 230, 102, 200),
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: EdgeInsets.only(right: 10),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: 90,
+                              height: 90,
+                              child: CircularProgressIndicator(
+                                value: 1,
+                                color: const Color.fromARGB(255, 7, 230, 70),
+                              ),
+                            ),
+                            Text("   8h\nspania"),
                           ],
                         ),
                       ),

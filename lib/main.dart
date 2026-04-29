@@ -7,14 +7,15 @@ import 'ekrany/startowy.dart';
 import 'ekrany/wiecej.dart';
 import 'ekrany/cykl.dart';
 import 'ekrany/parowanie.dart';
+import 'ekrany/symptoms.dart';
 import 'services/database_service.dart';
 import 'services/ring_service.dart';
 import 'core/theme.dart';
 import 'models/symptom.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await _testDb();
+void main() {
+  /*WidgetsFlutterBinding.ensureInitialized();
+  await _testDb();*/
 
   runApp(const MyApp());
 }
@@ -56,6 +57,8 @@ class MyApp extends StatelessWidget {
         '/parowanie': (context) => DeviceDiscoveryScreen(),
         '/glowny': (context) =>
             const MyHomePage(title: 'Mira Ring Demo More Page'),
+        '/symptoms': (context) =>
+            Symptoms(databaseService: DatabaseService.instance),
       },
       localizationsDelegates: GlobalMaterialLocalizations
           .delegates, //zeby tlumaczylo na jezyk systemowy uzytkownika
