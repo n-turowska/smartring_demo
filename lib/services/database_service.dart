@@ -610,7 +610,7 @@ class DatabaseService {
         symptom.toMap(),
       ); //zwraca id tego symptomu
     } catch (e) {
-      throw Exception("nie udało się dodać symptomu");
+      throw Exception("nie udało się dodać symptomu, $e");
     }
   }
 

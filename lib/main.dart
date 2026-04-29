@@ -10,9 +10,31 @@ import 'ekrany/parowanie.dart';
 import 'services/database_service.dart';
 import 'services/ring_service.dart';
 import 'core/theme.dart';
+import 'models/symptom.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await _testDb();
+
   runApp(const MyApp());
+}
+
+Future<void> _testDb() async {
+  final db = DatabaseService.instance;
+  final id = await db.addSymptom(
+    Symptom(
+      id: 0,
+      date: DateTime.now(),
+      symptomType: 'headache',
+      category: SymptomCategory.physical,
+      intensity: 3,
+      notes: 'test z main',
+    ),
+  );
+  print("INSERT ID: $id");
+
+  final list = await db.getSymptomsForDate(DateTime.now());
+  print("SYMPTOMS TODAY: ${list.length}");
 }
 
 class MyApp extends StatelessWidget {
