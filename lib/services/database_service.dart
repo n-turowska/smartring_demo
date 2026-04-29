@@ -169,6 +169,117 @@ class DatabaseService {
     80.0, // Sunday
   ];
 
+  //Mock symptoms
+  final List<SymptomType> physicalSymptoms = [
+    SymptomType(
+      id: 'cramps',
+      name: 'Cramps',
+      namePolish: "Skurcze",
+      category: SymptomCategory.physical,
+      icon: "🩸",
+    ),
+    SymptomType(
+      id: 'headache',
+      name: "Headache",
+      namePolish: "Ból głowy",
+      category: SymptomCategory.physical,
+      icon: "🤕",
+    ),
+    SymptomType(
+      id: "bloating",
+      name: "Bloating",
+      namePolish: "Wzdęcia",
+      category: SymptomCategory.physical,
+      icon: "🎈",
+    ),
+    SymptomType(
+      id: "breast_tenderness",
+      name: "Breast tenderness",
+      namePolish: "Tkliwość piersi",
+      category: SymptomCategory.physical,
+      icon: "💗",
+    ),
+    SymptomType(
+      id: "fatigue",
+      name: "Fatigue",
+      namePolish: "Zmęczenie",
+      category: SymptomCategory.physical,
+      icon: "😴",
+    ),
+    SymptomType(
+      id: "backache",
+      name: "Backache",
+      namePolish: "Ból pleców",
+      category: SymptomCategory.physical,
+      icon: "🦴",
+    ),
+    SymptomType(
+      id: "nausea",
+      name: "Nausea",
+      namePolish: "Nudności",
+      category: SymptomCategory.physical,
+      icon: "🤢",
+    ),
+    SymptomType(
+      id: "acne",
+      name: "Acne",
+      namePolish: "Trądzik",
+      category: SymptomCategory.physical,
+      icon: "🧴",
+    ),
+  ];
+  final List<SymptomType> moodSymptoms = [
+    SymptomType(
+      id: "happy",
+      name: "Happy",
+      namePolish: "Szczęśliwa",
+      category: SymptomCategory.mood,
+      icon: "😊",
+    ),
+    SymptomType(
+      id: "anxious",
+      name: "Anxious",
+      namePolish: "Niespokojna",
+      category: SymptomCategory.mood,
+      icon: "😰",
+    ),
+    SymptomType(
+      id: "irritable",
+      name: "Irritable",
+      namePolish: "Rozdrażniona",
+      category: SymptomCategory.mood,
+      icon: "😠",
+    ),
+    SymptomType(
+      id: "sad",
+      name: "Sad",
+      namePolish: "Smutna",
+      category: SymptomCategory.mood,
+      icon: "😢",
+    ),
+    SymptomType(
+      id: "calm",
+      name: "Calm",
+      namePolish: "Spokojna",
+      category: SymptomCategory.mood,
+      icon: "😌",
+    ),
+    SymptomType(
+      id: "energetic",
+      name: "Energetic",
+      namePolish: "Energiczna",
+      category: SymptomCategory.mood,
+      icon: "⚡",
+    ),
+    SymptomType(
+      id: "sensitive",
+      name: "Sensitive",
+      namePolish: "Wrażliwa",
+      category: SymptomCategory.mood,
+      icon: "💔",
+    ),
+  ];
+
   /// Mock annually ovulation day
   final List<PredictedOvulation> _mockOvulationDay = [
     PredictedOvulation(title: 'owulacja', date: DateTime(2025, 11, 15)),
