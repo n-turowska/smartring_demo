@@ -626,7 +626,7 @@ class DatabaseService {
           .map((e) => Symptom.fromMap(e))
           .toList(); //kazda mape e z result(lista map) zamien na obiekt Symptom i zmienia na liste List<Symptom>
     } catch (e) {
-      throw Exception("nie udało się zwrócić symptomu dla tej daty");
+      throw Exception("nie udało się zwrócić symptomu dla tej daty, $e");
     }
   }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:path/path.dart';
 import 'package:smartring_demo/ekrany/pairing/device_discovery_screen.dart';
+import 'package:sqflite/sqflite.dart';
 import 'ekrany/aktywnosc.dart';
 import 'ekrany/zdrowie.dart';
 import 'ekrany/startowy.dart';
@@ -9,14 +11,15 @@ import 'ekrany/cykl.dart';
 import 'ekrany/parowanie.dart';
 import 'ekrany/symptoms.dart';
 import 'services/database_service.dart';
+import 'services/database_helper.dart';
 import 'services/ring_service.dart';
 import 'core/theme.dart';
 import 'models/symptom.dart';
 
-void main() {
-  /*WidgetsFlutterBinding.ensureInitialized();
-  await _testDb();*/
-
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //await _testDb();
+  await DatabaseHelper.instance.database;
   runApp(const MyApp());
 }
 
@@ -30,6 +33,7 @@ Future<void> _testDb() async {
       category: SymptomCategory.physical,
       intensity: 3,
       notes: 'test z main',
+      created_at: DateTime.now().toIso8601String(),
     ),
   );
   print("INSERT ID: $id");

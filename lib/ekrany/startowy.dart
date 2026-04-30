@@ -100,6 +100,7 @@ class _StartowyEkranState extends State<StartowyEkran> {
                   },
                   child: Text("Sprawdź tabele"),
                 ),*/
+                //do testowania czy tworza sie tabele
                 Container(
                   height: 100,
                   width: 270,

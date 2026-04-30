@@ -53,7 +53,13 @@ class _SymptomsState extends State<Symptoms> {
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: _symptoms.length,
-              itemBuilder: (contex, index) {},
+              itemBuilder: (contex, index) {
+                final s = _symptoms[index];
+                return ListTile(
+                  title: Text(s.symptomType),
+                  subtitle: Text("intensity: ${s.intensity}"),
+                );
+              },
             ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {

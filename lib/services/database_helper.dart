@@ -56,6 +56,7 @@ class DatabaseHelper {
     //asynchroniczna, nie zwraca od razu->od razu zwraca future, czyli cos co w przyszlosci bedzie
     final databaseDirPath = await getDatabasesPath();
     final databasePath = join(databaseDirPath, _dbName);
+    //await deleteDatabase(databasePath); //do testow
     final key = await _getPassword();
 
     final database = await openDatabase(
@@ -191,22 +192,20 @@ class DatabaseHelper {
       
     )
   ''');
-    await db.execute('''
-    CREATE TABLE symptoms (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      date TEXT NOT NULL,
-      symptom_type TEXT NOT NULL,
-      category TEXT NOT NULL,
-      intensity INTEGER NOT NULL,
-      notes TEXT
-      
-    )
-  ''');
   }
 
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    print("UPGRADE: $oldVersion -> $newVersion");
     if (oldVersion < 2) {
-      await db.execute('ALTER TABLE health_metrics ADD COLUMN test TEXT');
+      final columns = await db.rawQuery("PRAGMA table_info(health_metrics)");
+      print("COLUMNS BEFORE: $columns");
+      final exists = columns.any((c) => c['name'] == 'test');
+
+      if (!exists) {
+        await db.execute('ALTER TABLE health_metrics ADD COLUMN test TEXT');
+        print("COLUMN 'test' ADDED");
+      }
     }
+    if (oldVersion < 3) {}
   }
 }

@@ -144,7 +144,9 @@ class _AktywnoscState extends State<Aktywnosc> {
               SizedBox(
                 height: 200,
                 child: MyHistogram(
-                  tygodniowePodsumowanie: tygodniowePodsumowanie,
+                  tygodniowePodsumowanie: tygodniowePodsumowanie
+                      .map((e) => e.toDouble())
+                      .toList(),
                 ),
               ),
               MainShape(

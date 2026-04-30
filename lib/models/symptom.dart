@@ -24,6 +24,7 @@ class Symptom {
   final SymptomCategory category;
   final int intensity; //1-5
   final String? notes;
+  final String created_at;
 
   const Symptom({
     required this.id,
@@ -32,6 +33,7 @@ class Symptom {
     required this.category,
     required this.intensity,
     this.notes,
+    required this.created_at,
   });
 
   Map<String, dynamic> toMap() {
@@ -43,6 +45,7 @@ class Symptom {
       'category': category.name,
       'intensity': intensity,
       'notes': notes,
+      'created_at': created_at,
     };
   }
 
@@ -57,6 +60,7 @@ class Symptom {
       ),
       intensity: map['intensity'],
       notes: map['notes'],
+      created_at: map['created_at'],
     );
   }
 }
