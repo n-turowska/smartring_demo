@@ -12,7 +12,11 @@ class Symptoms extends StatefulWidget {
 }
 
 class _SymptomsState extends State<Symptoms> {
-  List<Symptom> _symptoms = [];
+  String? selectedSymptom;
+  SymptomCategory? selectedCategory;
+  int intensity = 3;
+  String notes = '';
+  List<Symptom> todaySymptoms = [];
   bool _isLoading = false;
   int myIndex = 2;
 
@@ -30,7 +34,7 @@ class _SymptomsState extends State<Symptoms> {
       DateTime.now(),
     );
     setState(() {
-      _symptoms = data;
+      todaySymptoms = data;
       _isLoading = false;
     });
   }
@@ -52,9 +56,9 @@ class _SymptomsState extends State<Symptoms> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
-              itemCount: _symptoms.length,
+              itemCount: todaySymptoms.length,
               itemBuilder: (contex, index) {
-                final s = _symptoms[index];
+                final s = todaySymptoms[index];
                 return ListTile(
                   title: Text(s.symptomType),
                   subtitle: Text("intensity: ${s.intensity}"),
