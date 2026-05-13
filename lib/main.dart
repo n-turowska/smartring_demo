@@ -9,37 +9,33 @@ import 'ekrany/startowy.dart';
 import 'ekrany/wiecej.dart';
 import 'ekrany/cykl.dart';
 import 'ekrany/parowanie.dart';
-import 'ekrany/symptoms.dart';
+import 'ekrany/symptoms/symptom_logging_screen.dart';
 import 'services/database_service.dart';
 import 'services/database_helper.dart';
 import 'services/ring_service.dart';
 import 'core/theme.dart';
 import 'models/symptom.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+void main() {
+  //WidgetsFlutterBinding.ensureInitialized();
   //await _testDb();
-  await DatabaseHelper.instance.database;
+  //await DatabaseHelper.instance.database;
   runApp(const MyApp());
 }
 
 Future<void> _testDb() async {
   final db = DatabaseService.instance;
-  final id = await db.addSymptom(
-    Symptom(
-      id: 0,
-      date: DateTime.now(),
-      symptomType: 'headache',
-      category: SymptomCategory.physical,
-      intensity: 3,
-      notes: 'test z main',
-      created_at: DateTime.now().toIso8601String(),
-    ),
+  final symptom = Symptom(
+    id: 4,
+    date: DateTime.now(),
+    symptomType: 'headache',
+    category: SymptomCategory.physical,
+    intensity: 3,
+    notes: 'test z main',
+    created_at: DateTime.now().toIso8601String(),
   );
-  print("INSERT ID: $id");
-
-  final list = await db.getSymptomsForDate(DateTime.now());
-  print("SYMPTOMS TODAY: ${list.length}");
+  final id = await db.addSymptom(symptom);
+  print("note: ${symptom.notes}");
 }
 
 class MyApp extends StatelessWidget {
