@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:smartring_demo/services/database_service.dart';
 import 'package:smartring_demo/models/symptom.dart';
+import 'widgets/symptom_button.dart';
 
 class Symptoms extends StatefulWidget {
   final DatabaseService databaseService;
