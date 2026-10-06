@@ -22,10 +22,14 @@ class _StartowyEkranState extends State<StartowyEkran> {
     final repo = DatabaseService
         .instance; //musi byc instancja zeby sie moc odwolac do ovulationDays, czyli do gettera
     final today = _kliknietyDzien;
-    final currentOvulation = repo.ovulationDays.firstWhere(
-      (i) => i.date.year == today.year && i.date.month == today.month,
-    );
-    return currentOvulation.date.day;
+    try {
+      final currentOvulation = repo.ovulationDays.firstWhere(
+        (i) => i.date.year == today.year && i.date.month == today.month,
+      );
+      return currentOvulation.date.day;
+    } catch (e) {
+      return 15;
+    }
   }
 
   int? getPredictedDlugoscCyklu() {
