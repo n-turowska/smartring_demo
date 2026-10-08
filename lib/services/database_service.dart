@@ -282,6 +282,8 @@ class DatabaseService {
 
   /// Mock annually ovulation day
   final List<PredictedOvulation> _mockOvulationDay = [
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 9, 24)),
+    PredictedOvulation(title: 'owulacja', date: DateTime(2026, 10, 18)),
     PredictedOvulation(title: 'owulacja', date: DateTime(2026, 11, 15)),
     PredictedOvulation(title: 'owulacja', date: DateTime(2026, 12, 13)),
     PredictedOvulation(title: 'owulacja', date: DateTime(2027, 1, 10)),
