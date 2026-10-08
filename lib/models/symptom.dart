@@ -40,7 +40,8 @@ class Symptom {
     //zeby zamienialo na typy ktore "rozumie" SQLite, czyli int, String, double, null, bo nie rozumie tych "dartowych" obiektow jak np DateTime i enum
     return {
       'id': id,
-      'date': date.toIso8601String(),
+      'date':
+          '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
       'symptom_type': symptomType,
       'category': category.name,
       'intensity': intensity,

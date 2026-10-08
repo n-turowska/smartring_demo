@@ -16,10 +16,10 @@ import 'services/ring_service.dart';
 import 'core/theme.dart';
 import 'models/symptom.dart';
 
-void main() {
-  //WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   //await _testDb();
-  //await DatabaseHelper.instance.database;
+  await DatabaseHelper.instance.database;
   runApp(const MyApp());
 }
 

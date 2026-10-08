@@ -77,7 +77,7 @@ class _SymptomsState extends State<Symptoms> {
       );
       final newSymptom = Symptom(
         id: null,
-        date: selectedDate,
+        date: DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
         symptomType: symptomType.id,
         category: symptomType.category,
         intensity: intensity,
@@ -230,6 +230,7 @@ class _SymptomsState extends State<Symptoms> {
                   ),
 
                   if (selectedSymptom != null) ...[
+                    const SizedBox(height: 20),
                     //suwak intensywności
                     IntensitySlider(
                       value: intensity,
@@ -282,6 +283,7 @@ class _SymptomsState extends State<Symptoms> {
                     ),
                   ],
                   if (todaySymptoms.isNotEmpty) ...[
+                    const SizedBox(height: 20),
                     const Text(
                       'Dzisiejsze objawy:',
                       style: TextStyle(
@@ -314,7 +316,7 @@ class _SymptomsState extends State<Symptoms> {
                             'Intensywność: ${symptom.intensity}/5${symptom.notes != null ? ' | ${symptom.notes}' : ''}',
                           ),
                           trailing: IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
+                            icon: const Icon(Icons.delete, color: Colors.black),
                             onPressed: symptom.id != null
                                 ? () => _deleteSymptom(symptom.id!)
                                 : null,

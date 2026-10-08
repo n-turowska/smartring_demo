@@ -620,7 +620,9 @@ class DatabaseService {
       final result = await db.query(
         "symptoms",
         where: "date=?",
-        whereArgs: [date.toIso8601String()],
+        whereArgs: [
+          '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
+        ],
       );
       return result
           .map((e) => Symptom.fromMap(e))
