@@ -284,7 +284,7 @@ class _CyklState extends State<Cykl> {
                 children: [
                   Container(
                     height: 100,
-                    width: 270,
+                    width: 255,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.white,
@@ -506,7 +506,7 @@ class _CyklState extends State<Cykl> {
                   //KALENDARZ
                   Container(
                     width: 400,
-                    height: 320,
+                    height: 360,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
@@ -525,6 +525,7 @@ class _CyklState extends State<Cykl> {
                         ),
                       ],
                     ),
+                    //margin: const EdgeInsets.symmetric(horizontal: 16),
                     child: TableCalendar<dynamic>(
                       locale: Localizations.localeOf(
                         context,
@@ -538,6 +539,17 @@ class _CyklState extends State<Cykl> {
                           color: Colors.black87,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
+                        ),
+                      ),
+                      daysOfWeekHeight: 40,
+                      daysOfWeekStyle: DaysOfWeekStyle(
+                        weekdayStyle: TextStyle(
+                          color: const Color.fromARGB(255, 123, 107, 152),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        weekendStyle: TextStyle(
+                          color: const Color.fromARGB(255, 142, 138, 151),
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       calendarStyle: CalendarStyle(

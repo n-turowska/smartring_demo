@@ -22,6 +22,7 @@ class _SymptomsState extends State<Symptoms> {
   bool _isLoading = false;
   int myIndex = 2;
   DateTime selectedDate = DateTime.now();
+  int? editingSymptomId;
 
   List<SymptomType> get physicalSymptoms =>
       DatabaseService.instance.physicalSymptoms;
@@ -76,16 +77,33 @@ class _SymptomsState extends State<Symptoms> {
         (s) => s.id == selectedSymptom,
       );
       final newSymptom = Symptom(
-        id: null,
+        id: editingSymptomId,
         date: DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
         symptomType: symptomType.id,
         category: symptomType.category,
         intensity: intensity,
         notes: notes.isEmpty ? null : notes,
-        created_at: DateTime.now().toIso8601String(),
+        created_at: editingSymptomId != null
+            ? todaySymptoms
+                  .firstWhere((s) => s.id == editingSymptomId)
+                  .created_at
+            : DateTime.now().toIso8601String(),
       );
-      await widget.databaseService.addSymptom(newSymptom);
+      if (editingSymptomId != null) {
+        await widget.databaseService.updateSymptom(newSymptom);
+      } else {
+        await widget.databaseService.addSymptom(newSymptom);
+      }
       await _loadSymptoms();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            editingSymptomId != null
+                ? 'Objaw zaaktualizowany'
+                : 'Objaw zapisany!',
+          ),
+        ),
+      );
 
       setState(() {
         selectedSymptom = null;
@@ -93,10 +111,8 @@ class _SymptomsState extends State<Symptoms> {
         intensity = 3;
         notes = '';
         _isLoading = false;
+        editingSymptomId = null;
       });
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Objaw zapisany!')));
     } catch (e) {
       setState(() {
         _isLoading = false;
@@ -119,6 +135,24 @@ class _SymptomsState extends State<Symptoms> {
         context,
       ).showSnackBar(SnackBar(content: Text('Błąd usuwania: ${e.toString()}')));
     }
+  }
+
+  void _editSymptom(Symptom symptom) {
+    final allSymptoms = [...physicalSymptoms, ...moodSymptoms];
+    final symptomType = allSymptoms.firstWhere(
+      (s) => s.id == symptom.symptomType,
+    );
+    setState(() {
+      editingSymptomId = symptom.id;
+      selectedSymptom = symptom.symptomType;
+      selectedCategory = symptom.category;
+      intensity = symptom.intensity;
+      notes = symptom.notes ?? '';
+    });
+    Scrollable.ensureVisible(
+      context,
+      duration: const Duration(milliseconds: 300),
+    );
   }
 
   @override
@@ -170,6 +204,7 @@ class _SymptomsState extends State<Symptoms> {
                               if (picked != null && picked != selectedDate) {
                                 setState(() {
                                   selectedDate = picked;
+                                  editingSymptomId = null;
                                 });
                                 await _loadSymptoms();
                               }
@@ -271,8 +306,10 @@ class _SymptomsState extends State<Symptoms> {
                           elevation: 4,
                         ),
                         onPressed: _saveSymptom,
-                        child: const Text(
-                          'Zapisz objaw',
+                        child: Text(
+                          editingSymptomId != null
+                              ? 'Zaaktualizuj objaw'
+                              : 'Zapisz objaw',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -315,11 +352,23 @@ class _SymptomsState extends State<Symptoms> {
                           subtitle: Text(
                             'Intensywność: ${symptom.intensity}/5${symptom.notes != null ? ' | ${symptom.notes}' : ''}',
                           ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.black),
-                            onPressed: symptom.id != null
-                                ? () => _deleteSymptom(symptom.id!)
-                                : null,
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                onPressed: () => _editSymptom(symptom),
+                                icon: const Icon(Icons.edit),
+                              ),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.black,
+                                ),
+                                onPressed: symptom.id != null
+                                    ? () => _deleteSymptom(symptom.id!)
+                                    : null,
+                              ),
+                            ],
                           ),
                         ),
                       );
