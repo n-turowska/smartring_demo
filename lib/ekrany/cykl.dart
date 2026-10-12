@@ -425,6 +425,25 @@ class _CyklState extends State<Cykl> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
+                              Navigator.pushNamed(
+                                context,
+                                '/symptoms',
+                                arguments: {'selectedDate': _kliknietyDzien},
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.deepPurple[400],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              padding: const EdgeInsets.all(12),
+                            ),
+                            child: const Icon(Icons.spa_outlined),
+                          ),
+                          const SizedBox(width: 8),
+                          ElevatedButton(
+                            onPressed: () {
                               showDialog(
                                 //otwieramy okno dialogowe
                                 context:
