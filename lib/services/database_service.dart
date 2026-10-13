@@ -670,4 +670,24 @@ class DatabaseService {
       throw Exception("nie udało się usunąć symptomu");
     }
   }
+
+  Future logPeriodStart(DateTime date) async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final dateToUse = date;
+      final dateStr =
+          '${dateToUse.year}-${dateToUse.month.toString().padLeft(2, '0')}-${dateToUse.day.toString().padLeft(2, '0')}';
+      return await db.insert(_cycleTableName, {
+        _cycleDateColumnName: dateStr,
+        _cycleEventTypeColumnName: 'period_start',
+        _cycleIdColumnName: 1,
+        'notes': null,
+        'is_prediction': 0,
+        'confidence': 1,
+        'created_at': DateTime.now().toIso8601String(),
+      });
+    } catch (e) {
+      throw Exception(Text('Błąd logowania początku miesiączki: ${e}'));
+    }
+  }
 }
