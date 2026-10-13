@@ -690,4 +690,24 @@ class DatabaseService {
       throw Exception(Text('Błąd logowania początku miesiączki: ${e}'));
     }
   }
+
+  Future logPeriodEnd(DateTime date) async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final dateToUse = date;
+      final dateStr =
+          '${dateToUse.year}-${dateToUse.month.toString().padLeft(2, '0')}-${dateToUse.day.toString().padLeft(2, '0')}';
+      return await db.insert(_cycleTableName, {
+        _cycleDateColumnName: dateStr,
+        _cycleEventTypeColumnName: 'period_end',
+        _cycleIdColumnName: 1,
+        'notes': null,
+        'is_prediction': 0,
+        'confidence': 1,
+        'created_at': DateTime.now().toIso8601String(),
+      });
+    } catch (e) {
+      throw Exception(Text('Błąd logowania końca miesiączki: ${e}'));
+    }
+  }
 }
