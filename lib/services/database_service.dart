@@ -710,4 +710,27 @@ class DatabaseService {
       throw Exception(Text('Błąd logowania końca miesiączki: ${e}'));
     }
   }
+
+  Future<List<DateTime>> getPeriodDays(DateTime start, DateTime end) async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final startStr = start.toIso8601String().split('T').first;
+      final endStr = end.toIso8601String().split('T').first;
+      final result = await db.query(
+        _cycleTableName,
+        columns: [_cycleDateColumnName],
+        where:
+            '$_cycleEventTypeColumnName IN (?,?) AND $_cycleDateColumnName BETWEEN ?, ?',
+        whereArgs: ['period_start', 'period_end', startStr, endStr],
+        orderBy: '$_cycleDateColumnName ASC',
+      );
+      return result
+          .map((e) => DateTime.parse(e[_cycleDateColumnName] as String))
+          .toList();
+    } catch (e) {
+      throw Exception(
+        Text('Nie udało się dostać przedziału czasowego miesiączki: ${e}'),
+      );
+    }
+  }
 }
