@@ -722,7 +722,8 @@ class DatabaseService {
         where:
             '$_cycleEventTypeColumnName IN (?,?) AND $_cycleDateColumnName BETWEEN ?, ?',
         whereArgs: ['period_start', 'period_end', startStr, endStr],
-        orderBy: '$_cycleDateColumnName ASC',
+        orderBy:
+            '$_cycleDateColumnName ASC', //ASC: ponumerowane od najstarszej do najnowszej
       );
       return result
           .map((e) => DateTime.parse(e[_cycleDateColumnName] as String))
@@ -730,6 +731,65 @@ class DatabaseService {
     } catch (e) {
       throw Exception(
         Text('Nie udało się dostać przedziału czasowego miesiączki: ${e}'),
+      );
+    }
+  }
+
+  Future<DateTime?> getLastPeriodStart() async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final result = await db.query(
+        _cycleTableName,
+        columns: [_cycleDateColumnName],
+        where: '$_cycleEventTypeColumnName = ?',
+        whereArgs: ['period_start'],
+        orderBy:
+            '$_cycleDateColumnName DESC', //DESC: ponumerowane od najnowszej do najstarszej
+        limit: 1,
+      );
+      return result.isEmpty
+          ? null
+          : DateTime.parse(result.first[_cycleDateColumnName] as String);
+    } catch (e) {
+      throw Exception(
+        Text('Nie udało się dostać ostatniego dnia miesiączki: ${e}'),
+      );
+    }
+  }
+
+  Future<double> calculateAverageCycleLength() async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final result = await db.query(
+        _cycleTableName,
+        columns: [_cycleDateColumnName],
+        where: '$_cycleEventTypeColumnName = ?',
+        whereArgs: ['period_start'],
+        orderBy: '$_cycleDateColumnName DESC',
+      );
+      if (result.isEmpty) return 28;
+      final dates = result
+          .map((e) => DateTime.parse(e['$_cycleDateColumnName'] as String))
+          .toList();
+      dates.sort();
+      if (dates.length < 2) return 28;
+      final List<int> cycleLengths = [];
+      for (int i = 1; i < dates.length; i++) {
+        final diff = dates[i].difference(dates[i - 1]).inDays;
+        if (diff > 0) cycleLengths.add(diff);
+      }
+      final lastCycle = cycleLengths.length > 6
+          ? cycleLengths.sublist(
+              cycleLengths.length - 6,
+            ) //bierze ostatnie 6 elementow listy
+          : cycleLengths; //jesli jest rown lub < 6 to bierze cala liste
+
+      return lastCycle.reduce((a, b) => a + b) / lastCycle.length;
+    } catch (e) {
+      throw Exception(
+        Text(
+          'Nie udało się obliczyć średniej długości trwania miesiączki: ${e}',
+        ),
       );
     }
   }
