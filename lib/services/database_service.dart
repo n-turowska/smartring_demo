@@ -793,4 +793,18 @@ class DatabaseService {
       );
     }
   }
+
+  Future<List<Event>> getPeriodEvents() async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final result = await db.query(
+        _cycleTableName,
+        where: '$_cycleEventTypeColumnName IN (?,?)',
+        whereArgs: ['period_start', 'period_end'],
+      );
+      return result.map((e) => Event.fromMap(e)).toList();
+    } catch (e) {
+      throw Exception("Nie udało się załadować period events: $e");
+    }
+  }
 }
