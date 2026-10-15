@@ -2,19 +2,25 @@ class Event {
   final String title;
   final int? id;
   final DateTime date;
+  final String eventType;
 
-  Event(this.title, this.date, {this.id});
+  Event(this.title, this.date, {this.id, this.eventType = 'user_event'});
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'date': date.toIso8601String().split('T').first,
-      'event_type': 'user_event',
+      'event_type': eventType,
     };
   }
 
   factory Event.fromMap(Map<String, dynamic> map) {
-    return Event(map['title'], DateTime.parse(map['date']), id: map['id']);
+    return Event(
+      map['title'],
+      DateTime.parse(map['date']),
+      id: map['id'],
+      eventType: map['event_type'] ?? 'user_event',
+    );
   }
 }
 
