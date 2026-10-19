@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:path/path.dart';
+import 'package:smartring_demo/ekrany/analiza_cyklu.dart';
 import 'package:smartring_demo/ekrany/pairing/device_discovery_screen.dart';
 import 'package:sqflite/sqflite.dart';
 import 'ekrany/aktywnosc.dart';
@@ -59,6 +60,8 @@ class MyApp extends StatelessWidget {
             const MyHomePage(title: 'Mira Ring Demo More Page'),
         '/symptoms': (context) =>
             Symptoms(databaseService: DatabaseService.instance),
+        '/analiza_cyklu': (context) =>
+            CycleAnalysisScreen(databaseService: DatabaseService.instance),
       },
       localizationsDelegates: GlobalMaterialLocalizations
           .delegates, //zeby tlumaczylo na jezyk systemowy uzytkownika

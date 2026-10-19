@@ -589,7 +589,7 @@ class _CyklState extends State<Cykl> {
                             onPressed: () {
                               Navigator.pushNamed(
                                 context,
-                                '/symptoms',
+                                '/analiza_cyklu',
                                 arguments: {'selectedDate': _kliknietyDzien},
                               );
                             },
@@ -601,7 +601,7 @@ class _CyklState extends State<Cykl> {
                               ),
                               padding: const EdgeInsets.all(12),
                             ),
-                            child: const Icon(Icons.spa_outlined),
+                            child: const Icon(Icons.analytics),
                           ),
                           const SizedBox(width: 8),
                           //przycisk dodania
