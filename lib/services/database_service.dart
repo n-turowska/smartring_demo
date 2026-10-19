@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-
+import 'package:smartring_demo/models/cycle_records.dart';
+import 'dart:math';
 import '../models/health_metrics.dart';
 import '../ekrany/kalendarz/event.dart';
 import '../models/temp_entry.dart';
@@ -808,5 +809,117 @@ class DatabaseService {
     } catch (e) {
       throw Exception("Nie udało się załadować period events: $e");
     }
+  }
+
+  Future<List<CycleRecord>> getCycleRecords() async {
+    try {
+      final allPeriodEvents = await getPeriodEvents();
+      final events = allPeriodEvents.map((e) {
+        return {'date': DateTime.parse(e.date as String), 'type': e.eventType};
+      }).toList();
+
+      final List<CycleRecord> cycles = [];
+      DateTime? currentStart;
+
+      for (final event in events) {
+        if (event['type'] == 'period_start') {
+          currentStart = event['date'] as DateTime;
+        } else if (event['type'] == 'period_end' && currentStart != null) {
+          final periodLength =
+              (event['date'] as DateTime).difference(currentStart).inDays + 1;
+          cycles.add(
+            CycleRecord(
+              startDate: currentStart,
+              cycleLength: 0,
+              periodLength: periodLength,
+              isIrregular: false,
+            ),
+          );
+          currentStart = null;
+        }
+      }
+      if (cycles.length < 2) return cycles;
+      for (int i = 1; i < cycles.length; i++) {
+        final daysBetween = cycles[i].startDate
+            .difference(cycles[i - 1].startDate)
+            .inDays;
+        cycles[i - 1] = CycleRecord(
+          startDate: cycles[i - 1].startDate,
+          cycleLength: daysBetween,
+          periodLength: cycles[i - 1].periodLength,
+          isIrregular: false,
+        );
+      }
+
+      if (cycles.isNotEmpty) {
+        cycles
+            .removeLast(); //bo ostatni cykl nie bedzie mial dlugosci cyklu no bo kolejny sie jeszcze nie zaczal wiec sie nie da obliczyc
+      }
+
+      return cycles;
+    } catch (e) {
+      throw Exception("Błąd pobierania cykli: $e");
+    }
+  }
+
+  Future<CycleAnalysis> getCycleAnalysis() async {
+    final cycles = await getCycleRecords();
+    if (cycles.isEmpty) {
+      return CycleAnalysis(
+        averageCycleLength: 28,
+        shortestCycle: 28,
+        longestCycle: 28,
+        standardDeviation: 0,
+        averagePeriodLength: 5,
+        recentCycles: [],
+        isRegular: true,
+      );
+    }
+    //average cycle length
+    final avrCycleLength = await calculateAverageCycleLength();
+
+    //shortest cycle
+    final cycleLengths = cycles.map((c) => c.cycleLength).toList();
+    final minCycle = cycleLengths.reduce((a, b) => a < b ? a : b);
+    //longest cycle
+    final maxCycle = cycleLengths.reduce((a, b) => a > b ? a : b);
+
+    //standard deviation
+
+    final variation =
+        cycleLengths
+            .map((l) => (l - avrCycleLength) * (l - avrCycleLength))
+            .reduce((a, b) => a + b) /
+        cycleLengths.length;
+    final stdDev = sqrt(variation);
+    //average period length
+    final periodLengths = cycles.map((c) => c.periodLength).toList();
+    final avrPeriodLength =
+        periodLengths.reduce((a, b) => a + b) / periodLengths.length;
+
+    //recent irregular cycles
+    final irregularCycles = cycles.map((c) {
+      return CycleRecord(
+        startDate: c.startDate,
+        cycleLength: c.cycleLength,
+        periodLength: c.periodLength,
+        isIrregular: (c.cycleLength - avrCycleLength).abs() > 7 ? true : false,
+      );
+    }).toList();
+    final recentCycles = irregularCycles.length > 6
+        ? irregularCycles.sublist(irregularCycles.length - 6)
+        : irregularCycles;
+
+    //is regular?
+
+    return CycleAnalysis(
+      averageCycleLength: avrCycleLength.toInt(),
+      shortestCycle: minCycle,
+      longestCycle: maxCycle,
+      standardDeviation: stdDev,
+      averagePeriodLength: avrPeriodLength.toInt(),
+      recentCycles: recentCycles,
+      isRegular: stdDev < 3,
+    );
   }
 }
