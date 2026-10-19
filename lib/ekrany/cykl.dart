@@ -63,6 +63,7 @@ class _CyklState extends State<Cykl> {
     try {
       await _loadEvents();
       await _loadData();
+      await _getNextPeriodStart();
     } finally {
       setState(() => _isLoading = false);
     }
@@ -78,6 +79,24 @@ class _CyklState extends State<Cykl> {
     setState(() {});
   }
 
+  Future<int> _getNextPeriodStart() async {
+    final lastPeriodStart = await widget.databaseService.getLastPeriodStart();
+    final avrCycleLength = await widget.databaseService
+        .calculateAverageCycleLength();
+    final nextPeriod = lastPeriodStart!.add(
+      Duration(days: avrCycleLength.toInt()),
+    );
+    if (nextPeriod != null) {
+      final daysUntilPeriod = nextPeriod.difference(dzisiaj).inDays;
+
+      return daysUntilPeriod;
+    }
+  }
+
+  Future<double> _getActualCycleLength() async {
+    return await widget.databaseService.calculateAverageCycleLength();
+  }
+
   Future<void> _loadEvents() async {
     //Future, async i await powoduja ze program moze isc dalej pomimo ze to sie jeszcze nie wykona, a jak sie wykona to sie wtedy wyswietli i dzieki temu nic nie stoi i nie czeka na wykonanie tych linijek
     setState(() {
@@ -87,6 +106,7 @@ class _CyklState extends State<Cykl> {
     try {
       await _runAction(() async {
         final userEvents = await widget.databaseService.getUserEvents();
+        final periodEvents = await widget.databaseService.getPeriodEvents();
         final predictedOvulation = await widget.databaseService
             .getAllOvulationDays();
         final predictedMenstruation = await widget.databaseService
@@ -94,14 +114,22 @@ class _CyklState extends State<Cykl> {
 
         //grupowanie po dniu
         final Map<DateTime, List<dynamic>> grouped = {};
+        //user events
         for (var e in userEvents) {
           final date = DateTime(e.date.year, e.date.month, e.date.day);
           grouped[date] = (grouped[date] ?? [])..add(e);
         }
+        //period events
+        for (var e in periodEvents) {
+          final date = DateTime(e.date.year, e.date.month, e.date.day);
+          grouped[date] = (grouped[date] ?? [])..add(e);
+        }
+        //predicted ovulation
         for (var i in predictedOvulation) {
           final date = DateTime(i.date.year, i.date.month, i.date.day);
           grouped[date] = (grouped[date] ?? [])..add(i);
         }
+        //predicted menstruation
         for (var i in predictedMenstruation) {
           final date = DateTime(i.date.year, i.date.month, i.date.day);
           grouped[date] = (grouped[date] ?? [])..add(i);
@@ -201,7 +229,7 @@ class _CyklState extends State<Cykl> {
       });
     } catch (e) {
       setState(() {
-        _errorMessage = "Wystąpił błąd. Spróbuj ponownie.";
+        _errorMessage = "Wystąpił błąd. Spróbuj ponownie. ${e}";
         _lastFailedAction = action;
         _isLoading = false;
       });
@@ -419,10 +447,144 @@ class _CyklState extends State<Cykl> {
                     top: 0,
                     child: Padding(
                       padding: EdgeInsets.only(top: 0, right: 16),
-                      //PRZYCISK DODANIA
+                      //PRZYCISKi
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+                          //przycisk poczatku okresu
+                          ElevatedButton(
+                            onPressed: () async {
+                              final date = _kliknietyDzien!;
+                              final dateToUse = DateTime(
+                                date.year,
+                                date.month,
+                                date.day,
+                              );
+                              final existing = await widget.databaseService
+                                  .getPeriodEvents();
+                              final hasPeriodStart = existing.any(
+                                (e) =>
+                                    e.date.year == dateToUse.year &&
+                                    e.date.month == dateToUse.month &&
+                                    e.date.day == dateToUse.day &&
+                                    e.eventType == 'period_start',
+                              );
+
+                              if (hasPeriodStart) {
+                                setState(
+                                  () => _errorMessage =
+                                      'Początek okresu już istnieje dla tej daty',
+                                );
+                                return;
+                              }
+
+                              try {
+                                await widget.databaseService.logPeriodStart(
+                                  dateToUse,
+                                );
+                                final newEvent = Event(
+                                  "Początek okresu",
+                                  dateToUse,
+                                  eventType: 'period_start',
+                                );
+                                _eventsByDay[dateToUse] =
+                                    (_eventsByDay[dateToUse] ?? [])
+                                      ..add(newEvent);
+                                _wybraneEventy.value = _wezEventyForDay(
+                                  dateToUse,
+                                );
+                              } catch (e) {
+                                setState(
+                                  () => _errorMessage = 'Błąd: ${e.toString()}',
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.deepPurple[400],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              padding: const EdgeInsets.all(12),
+                            ),
+                            child: const Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.flag),
+                                Text(
+                                  'Początek',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          //przycisk koniec okresu
+                          ElevatedButton(
+                            onPressed: () async {
+                              final date = _kliknietyDzien!;
+                              final dateToUse = DateTime(
+                                date.year,
+                                date.month,
+                                date.day,
+                              );
+
+                              final existingEnd = await widget.databaseService
+                                  .getPeriodEvents();
+                              final hasPeriodEnd = existingEnd.any(
+                                (e) =>
+                                    e.date.year == dateToUse.year &&
+                                    e.date.month == dateToUse.month &&
+                                    e.date.day == dateToUse.day &&
+                                    e.eventType == 'period_end',
+                              );
+
+                              if (hasPeriodEnd) {
+                                setState(
+                                  () => _errorMessage =
+                                      'Koniec okresu już istnieje dla tej daty',
+                                );
+                                return;
+                              }
+                              try {
+                                await widget.databaseService.logPeriodEnd(
+                                  dateToUse,
+                                );
+                                final newEvent = Event(
+                                  "Koniec okresu",
+                                  dateToUse,
+                                  eventType: 'period_end',
+                                );
+                                _eventsByDay[dateToUse] =
+                                    (_eventsByDay[dateToUse] ?? [])
+                                      ..add(newEvent);
+                                _wybraneEventy.value = _wezEventyForDay(
+                                  dateToUse,
+                                );
+                              } catch (e) {
+                                setState(
+                                  () => _errorMessage = 'Błąd: ${e.toString()}',
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.deepPurple[400],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              padding: const EdgeInsets.all(12),
+                            ),
+                            child: const Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.flag),
+                                Text('Koniec', style: TextStyle(fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          //przycisk symptomy
                           ElevatedButton(
                             onPressed: () {
                               Navigator.pushNamed(
@@ -442,6 +604,7 @@ class _CyklState extends State<Cykl> {
                             child: const Icon(Icons.spa_outlined),
                           ),
                           const SizedBox(width: 8),
+                          //przycisk dodania
                           ElevatedButton(
                             onPressed: () {
                               showDialog(
@@ -626,6 +789,12 @@ class _CyklState extends State<Cykl> {
                       calendarBuilders: CalendarBuilders(
                         markerBuilder: (context, day, events) {
                           if (events.isEmpty) return null;
+                          final hasPeriodStart = events.any(
+                            (e) => e is Event && e.eventType == 'period_start',
+                          );
+                          final hasPeriodEnd = events.any(
+                            (e) => e is Event && e.eventType == 'period_end',
+                          );
                           final hasUserEvent = events.any((e) => e is Event);
                           final hasOvulation = events.any(
                             (e) => e is PredictedOvulation,
@@ -636,6 +805,13 @@ class _CyklState extends State<Cykl> {
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              // Ikona dla okresu (początek/koniec)
+                              if (hasPeriodStart || hasPeriodEnd)
+                                const Icon(
+                                  Icons.opacity,
+                                  size: 10,
+                                  color: Colors.red,
+                                ),
                               if (hasOvulation)
                                 const Icon(
                                   Icons.circle_sharp,
@@ -650,7 +826,9 @@ class _CyklState extends State<Cykl> {
                                     color: Colors.pink,
                                   ),
 
-                              if (hasUserEvent)
+                              if (hasUserEvent &&
+                                  !hasPeriodStart &&
+                                  !hasPeriodEnd)
                                 const Icon(
                                   Icons.circle,
                                   size: 7,
@@ -672,7 +850,7 @@ class _CyklState extends State<Cykl> {
 
                   Container(
                     height: 90,
-                    width: 290,
+                    width: 600,
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: ValueListenableBuilder<List<dynamic>>(
@@ -683,7 +861,7 @@ class _CyklState extends State<Cykl> {
                             itemBuilder: (context, index) {
                               return Container(
                                 height: 70,
-                                width: 300,
+                                width: 400,
                                 margin: EdgeInsets.symmetric(
                                   horizontal: 80,
                                   vertical: 4,
@@ -717,12 +895,30 @@ class _CyklState extends State<Cykl> {
                                 child: ListTile(
                                   onTap: () => print(""),
 
-                                  title: Center(
-                                    child: Text(
-                                      value[index].title,
-                                      style: TextStyle(fontSize: 15),
+                                  title: Text(
+                                    value[index] is Event
+                                        ? (value[index] as Event).title ??
+                                              (value[index].eventType ==
+                                                      'period_start'
+                                                  ? 'Początek okresu'
+                                                  : 'Koniec okresu')
+                                        : value[index].title,
+                                    style: TextStyle(
+                                      fontSize: 15,
+
+                                      color: const Color.fromARGB(
+                                        255,
+                                        148,
+                                        32,
+                                        202,
+                                      ),
                                     ),
+                                    textAlign: TextAlign.left,
+                                    softWrap: true,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
+
                                   trailing: value[index] is Event
                                       ? IconButton(
                                           icon: const Icon(

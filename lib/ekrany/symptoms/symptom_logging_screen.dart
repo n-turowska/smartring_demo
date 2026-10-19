@@ -177,7 +177,9 @@ class _SymptomsState extends State<Symptoms> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Card(
+                    color: Colors.white,
                     elevation: 4,
+
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -187,7 +189,7 @@ class _SymptomsState extends State<Symptoms> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Data: ${selectedDate.day}-${selectedDate.month}-${selectedDate.year}',
+                            ' ${selectedDate.day}-${selectedDate.month}-${selectedDate.year}',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

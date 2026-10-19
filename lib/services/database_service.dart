@@ -680,7 +680,7 @@ class DatabaseService {
       return await db.insert(_cycleTableName, {
         _cycleDateColumnName: dateStr,
         _cycleEventTypeColumnName: 'period_start',
-        _cycleIdColumnName: 1,
+        //_cycleIdColumnName: 1,
         'notes': null,
         'is_prediction': 0,
         'confidence': 1,
@@ -700,7 +700,8 @@ class DatabaseService {
       return await db.insert(_cycleTableName, {
         _cycleDateColumnName: dateStr,
         _cycleEventTypeColumnName: 'period_end',
-        _cycleIdColumnName: 1,
+
+        //_cycleIdColumnName: 1,
         'notes': null,
         'is_prediction': 0,
         'confidence': 1,
@@ -802,6 +803,7 @@ class DatabaseService {
         where: '$_cycleEventTypeColumnName IN (?,?)',
         whereArgs: ['period_start', 'period_end'],
       );
+      print(result);
       return result.map((e) => Event.fromMap(e)).toList();
     } catch (e) {
       throw Exception("Nie udało się załadować period events: $e");

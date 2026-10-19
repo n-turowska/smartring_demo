@@ -1,5 +1,7 @@
+import 'package:intl/intl.dart';
+
 class Event {
-  final String title;
+  final String? title;
   final int? id;
   final DateTime date;
   final String eventType;
@@ -17,7 +19,7 @@ class Event {
   factory Event.fromMap(Map<String, dynamic> map) {
     return Event(
       map['title'],
-      DateTime.parse(map['date']),
+      DateFormat('yyyy-MM-dd').parse(map['date'] as String),
       id: map['id'],
       eventType: map['event_type'] ?? 'user_event',
     );
