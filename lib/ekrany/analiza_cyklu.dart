@@ -87,43 +87,102 @@ class _CycleAnalysisScreenState extends State<CycleAnalysisScreen> {
           ),
         ],
       ),
-      body: _isLoading
+      body: /*_isLoading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
           ? Center(child: Text(_error!))
           : _analysis == null
           ? const Center(child: Text("Brak danych o cyklach"))
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Text("Podsumowanie:"),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Column(
-                                children: [
-                                  Text(
-                                    "Średnia {${_analysis!.averageCycleLength} dni",
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
+          :*/ SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Text(
+                      "Podsumowanie:",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            _buildCard(
+                              "Średnia długość trwania cyklu to ",
+                              "${_analysis!.averageCycleLength} dni",
+                              Colors.blue,
+                            ),
+                            _buildCard(
+                              "Średnia długość trwania miesiączki ",
+                              "${_analysis!.averagePeriodLength} dni",
+                              const Color.fromARGB(255, 71, 27, 24),
+                            ),
+                            _buildCard(
+                              "Regularność ",
+                              "${_analysis!.isRegular ? "TAK" : "NIE"} ",
+                              _analysis!.isRegular ? Colors.green : Colors.red,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            _buildCard(
+                              "Najkrótszy cykl to ",
+                              "${_analysis!.shortestCycle} dni",
+                              Colors.green,
+                            ),
+                            _buildCard(
+                              "Najdłuższy cykl to ",
+                              "${_analysis!.longestCycle} dni",
+                              Colors.orange,
+                            ),
+                            _buildCard(
+                              "Odchylenie standardowe ",
+                              "${_analysis!.standardDeviation.toStringAsFixed(1)} dni",
+                              Colors.purple,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCard(String label, String value, Color color) {
+    return Column(
+      children: [
+        Text(label, style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
+        const SizedBox(height: 8),
+      ],
     );
   }
 }

@@ -839,14 +839,17 @@ class DatabaseService {
         }
       }
       if (cycles.length < 2) return cycles;
+      cycles.sort(
+        (a, b) => a.startDate.compareTo(b.startDate),
+      ); //zeby byly daty od najsatrszej do najnowszej
       for (int i = 1; i < cycles.length; i++) {
         final daysBetween = cycles[i].startDate
             .difference(cycles[i - 1].startDate)
             .inDays;
-        cycles[i - 1] = CycleRecord(
-          startDate: cycles[i - 1].startDate,
+        cycles[i] = CycleRecord(
+          startDate: cycles[i].startDate,
           cycleLength: daysBetween,
-          periodLength: cycles[i - 1].periodLength,
+          periodLength: cycles[i].periodLength,
           isIrregular: false,
         );
       }
@@ -879,7 +882,8 @@ class DatabaseService {
     final avrCycleLength = await calculateAverageCycleLength();
 
     //shortest cycle
-    final cycleLengths = cycles.map((c) => c.cycleLength).toList();
+    final cycleLengths = cycles.map((c) => c.cycleLength)
+      ..where((length) => length > 0).toList();
     final minCycle = cycleLengths.reduce((a, b) => a < b ? a : b);
     //longest cycle
     final maxCycle = cycleLengths.reduce((a, b) => a > b ? a : b);
