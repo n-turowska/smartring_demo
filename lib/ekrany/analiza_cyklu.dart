@@ -101,7 +101,24 @@ class _CycleAnalysisScreenState extends State<CycleAnalysisScreen> {
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
-                      child: Column(children: [Text("Podsumowanie:")]),
+                      child: Column(
+                        children: [
+                          Text("Podsumowanie:"),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    "Średnia {${_analysis!.averageCycleLength} dni",
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

@@ -815,7 +815,7 @@ class DatabaseService {
     try {
       final allPeriodEvents = await getPeriodEvents();
       final events = allPeriodEvents.map((e) {
-        return {'date': DateTime.parse(e.date as String), 'type': e.eventType};
+        return {'date': e.date, 'type': e.eventType};
       }).toList();
 
       final List<CycleRecord> cycles = [];
