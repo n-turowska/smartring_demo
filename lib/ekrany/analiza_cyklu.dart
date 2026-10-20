@@ -30,8 +30,10 @@ class _CycleAnalysisScreenState extends State<CycleAnalysisScreen> {
     });
     try {
       final analysis = await widget.databaseService.getCycleAnalysis();
-      _analysis = analysis;
-      _isLoading = false;
+      setState(() {
+        _analysis = analysis;
+        _isLoading = false;
+      });
     } catch (e) {
       setState(() {
         _error = "Błąd ładowania analizy cyklu: {$e}";
