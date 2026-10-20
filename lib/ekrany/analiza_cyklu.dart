@@ -212,7 +212,7 @@ class _CycleAnalysisScreenState extends State<CycleAnalysisScreen> {
                                   _buildCard(
                                     "Średnia długość miesiączki ",
                                     "${_analysis!.averagePeriodLength} dni",
-                                    Colors.red,
+                                    const Color.fromARGB(255, 222, 65, 195),
                                   ),
 
                                   _buildCard(
