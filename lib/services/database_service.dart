@@ -854,9 +854,15 @@ class DatabaseService {
         );
       }
 
-      if (cycles.isNotEmpty) {
-        cycles
-            .removeLast(); //bo ostatni cykl nie bedzie mial dlugosci cyklu no bo kolejny sie jeszcze nie zaczal wiec sie nie da obliczyc
+      if (cycles.isNotEmpty && cycles.length > 1) {
+        cycles[cycles.length - 1] = CycleRecord(
+          //dla ostatniego, bo nie da sie obliczyc dlugosci cyklu, bo ten element jest ostatni
+          periodLength: cycles[cycles.length - 1].periodLength,
+          cycleLength: 0,
+          startDate: cycles[cycles.length - 1].startDate,
+          endDate: cycles[cycles.length - 1].endDate,
+          isIrregular: false,
+        );
       }
 
       return cycles;
