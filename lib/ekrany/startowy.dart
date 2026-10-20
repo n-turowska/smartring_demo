@@ -285,7 +285,7 @@ class _StartowyEkranState extends State<StartowyEkran> {
                       const SizedBox(width: 10),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.popAndPushNamed(context, '/cykl');
+                          Navigator.popAndPushNamed(context, '/caly_cykl');
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromARGB(
