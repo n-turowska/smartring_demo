@@ -889,8 +889,10 @@ class DatabaseService {
     final avrCycleLength = await calculateAverageCycleLength();
 
     //shortest cycle
-    final cycleLengths = cycles.map((c) => c.cycleLength)
-      ..where((length) => length > 0).toList();
+    final cycleLengths = cycles
+        .map((c) => c.cycleLength)
+        .where((length) => length > 0)
+        .toList();
     final minCycle = cycleLengths.reduce((a, b) => a < b ? a : b);
     //longest cycle
     final maxCycle = cycleLengths.reduce((a, b) => a > b ? a : b);
