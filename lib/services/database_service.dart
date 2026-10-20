@@ -769,9 +769,12 @@ class DatabaseService {
         whereArgs: ['period_start'],
         orderBy: '$_cycleDateColumnName DESC',
       );
-      if (result.isEmpty) return 28;
+      if (result.isEmpty) {
+        throw Exception("Brak danych do obliczenia średniej długości cyklu");
+      }
+      ;
       final dates = result
-          .map((e) => DateTime.parse(e['$_cycleDateColumnName'] as String))
+          .map((e) => DateTime.parse(e[_cycleDateColumnName] as String))
           .toList();
       dates.sort();
       if (dates.length < 2) return 28;
@@ -789,9 +792,7 @@ class DatabaseService {
       return lastCycle.reduce((a, b) => a + b) / lastCycle.length;
     } catch (e) {
       throw Exception(
-        Text(
-          'Nie udało się obliczyć średniej długości trwania miesiączki: ${e}',
-        ),
+        Text('Nie udało się obliczyć średniej długości trwania miesiączki: $e'),
       );
     }
   }
@@ -929,7 +930,7 @@ class DatabaseService {
       standardDeviation: stdDev,
       averagePeriodLength: avrPeriodLength.toInt(),
       recentCycles: recentCycles,
-      isRegular: stdDev < 3,
+      isRegular: stdDev < 7,
     );
   }
 }
