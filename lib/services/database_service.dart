@@ -855,7 +855,7 @@ class DatabaseService {
         );
       }
 
-      if (cycles.isNotEmpty && cycles.length > 1) {
+      /*if (cycles.isNotEmpty && cycles.length > 1) {
         cycles[cycles.length - 1] = CycleRecord(
           //dla ostatniego, bo nie da sie obliczyc dlugosci cyklu, bo ten element jest ostatni
           periodLength: cycles[cycles.length - 1].periodLength,
@@ -864,7 +864,7 @@ class DatabaseService {
           endDate: cycles[cycles.length - 1].endDate,
           isIrregular: false,
         );
-      }
+      }*/
 
       return cycles;
     } catch (e) {
