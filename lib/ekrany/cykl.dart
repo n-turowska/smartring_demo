@@ -46,6 +46,11 @@ class _CyklState extends State<Cykl> {
   int myIndex = 2;
   int? ovulation;
   int? cycleLength;
+  DateTime? _lastPeriodStart;
+  int? _currentCycleDay;
+  int? _daysUntilNextPeriodStart;
+  double? _avrCycleLength;
+  DateTime? _predictedOvulationDay;
 
   @override
   void initState() {
@@ -70,11 +75,34 @@ class _CyklState extends State<Cykl> {
   }
 
   Future<void> _loadData() async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
+      _lastPeriodStart = await widget.databaseService.getLastPeriodStart();
+      _avrCycleLength = await widget.databaseService
+          .calculateAverageCycleLength();
+      final _predictedOvulationDay = await widget.databaseService
+          .predictOvulationDay();
+      if (_lastPeriodStart != null) {
+        _currentCycleDay =
+            DateTime.now().difference(_lastPeriodStart!).inDays + 1;
+      }
+      if (_avrCycleLength != null) {
+        final nextPeriodStart = _lastPeriodStart!.add(
+          Duration(days: _avrCycleLength!.toInt()),
+        );
+        final _daysUntilNextPeriodStart = nextPeriodStart
+            .difference(DateTime.now())
+            .inDays;
+      }
       ovulation = await getCurrentOvulation();
       cycleLength = await getPredictedDlugoscCyklu();
+      setState(() {
+        _isLoading = false;
+      });
     } catch (e) {
-      _errorMessage = "Błąd danych";
+      _errorMessage = "Błąd ładowania danych";
     }
     setState(() {});
   }
@@ -147,6 +175,9 @@ class _CyklState extends State<Cykl> {
               FertilityDay(
                 date: pureDate,
                 isPeak: date == predictedOvulationDate,
+                title: date == predictedOvulationDate
+                    ? "owulacja"
+                    : "okno płodności",
               ),
             );
         }
@@ -326,139 +357,6 @@ class _CyklState extends State<Cykl> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 100,
-                    width: 255,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade500,
-                          offset: Offset(4.0, 4.0),
-                          blurRadius: 15.0,
-                          spreadRadius: 1.0,
-                        ),
-                        BoxShadow(
-                          color: Colors.white,
-                          offset: Offset(-4.0, -4.0),
-                          blurRadius: 15.0,
-                          spreadRadius: 1.0,
-                        ),
-                      ],
-                    ),
-
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text.rich(
-                          TextSpan(
-                            text:
-                                ((dzienOwulacji + ovulation! - dzisiaj.day) %
-                                            cycleLength! !=
-                                        0 &&
-                                    (dzienOwulacji + ovulation! - dzisiaj.day) %
-                                            cycleLength! !=
-                                        27 &&
-                                    (dzienOwulacji + ovulation! - dzisiaj.day) %
-                                            cycleLength! !=
-                                        26)
-                                ? 'okres za '
-                                : '',
-                            style: const TextStyle(
-                              color: Colors.black87,
-                              fontSize: 18,
-                            ),
-
-                            children: [
-                              TextSpan(
-                                text:
-                                    ((dzienOwulacji +
-                                                    ovulation! -
-                                                    dzisiaj.day) %
-                                                cycleLength! !=
-                                            0 &&
-                                        (dzienOwulacji +
-                                                    ovulation! -
-                                                    dzisiaj.day) %
-                                                cycleLength! !=
-                                            27 &&
-                                        (dzienOwulacji +
-                                                    ovulation! -
-                                                    dzisiaj.day) %
-                                                cycleLength! !=
-                                            26)
-                                    ? '${(dzienOwulacji + ovulation! - dzisiaj.day) % cycleLength!} dni\n'
-                                    : '',
-                                style: TextStyle(
-                                  color: Kolor_tekstu,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25,
-                                ),
-                              ),
-
-                              TextSpan(
-                                text:
-                                    '${(dzienOwulacji + _kliknietyDzien!.day - ovulation! - 1) % cycleLength! + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
-                                style: TextStyle(
-                                  color: Kolor_tekstu,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25,
-                                ),
-                              ),
-                              TextSpan(
-                                text: ' cyklu ',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        /*Text(
-                      ((dzienOwulacji + ovulation - dzisiaj.day) %
-                                      cycleLength !=
-                                  0 &&
-                              (dzienOwulacji +
-                                          ovulation -
-                                          dzisiaj.day) %
-                                      cycleLength !=
-                                  27 &&
-                              (dzienOwulacji +
-                                          ovulation -
-                                          dzisiaj.day) %
-                                      cycleLength !=
-                                  26)
-                          ? 'okres: za ${(dzienOwulacji + ovulation - dzisiaj.day) % cycleLength} dni\ncykl: ${(dzienOwulacji + _kliknietyDzien!.day - ovulation - 1) % cycleLength + 1} dzień'
-                          : 'cykl: ${(dzienOwulacji + _kliknietyDzien!.day - ovulation - 1) % cycleLength + 1} dzień', //14dziencyklu(owulacja)+dzien owulacji-dzien dzisiejszy
-                      //:'cykl: ${(dzienOwulacji + _kliknietyDzien!.day - ovulation - 1) % cycleLength + 1} dzień',
-                      style: Theme.of(context).textTheme.headlineMedium!
-                          .copyWith(
-                            color: Kolor_tekstu,
-                            fontSize: rozmiar_czcionki,
-                            fontWeight: FontWeight.normal,
-                          ),
-                    ),*/
-                        /*const SizedBox(
-                          width: 10,
-                        ), */
-                        //zeby byla przerwa miedzy tekstem a obrazkiem
-                        /*for (
-                          int i = 0;
-                          i < 4 - ilosc_dni_do_miesiaczki;
-                          i++
-                        ) //wyswietlenie kropelek obok napisu
-                          Image.asset(
-                            'assets/kropelka.jpg',
-                            width: 25,
-                            color: Kolor,
-                            colorBlendMode: BlendMode.multiply,
-                          ),*/
-                      ],
-                    ),
-                  ),
                   Positioned(
                     top: 0,
                     child: Padding(
@@ -617,7 +515,12 @@ class _CyklState extends State<Cykl> {
                               ),
                               padding: const EdgeInsets.all(12),
                             ),
-                            child: const Icon(Icons.analytics),
+                            child: Column(
+                              children: [
+                                const Icon(Icons.analytics),
+                                Text("Analiza", style: TextStyle(fontSize: 12)),
+                              ],
+                            ),
                           ),
                           const SizedBox(width: 8),
                           //przycisk dodania
@@ -686,7 +589,12 @@ class _CyklState extends State<Cykl> {
                               padding: const EdgeInsets.all(12),
                             ),
 
-                            child: Icon(Icons.add),
+                            child: Column(
+                              children: [
+                                Icon(Icons.add),
+                                Text("Notatki", style: TextStyle(fontSize: 12)),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -811,6 +719,7 @@ class _CyklState extends State<Cykl> {
                           final hasPeriodEnd = events.any(
                             (e) => e is Event && e.eventType == 'period_end',
                           );
+
                           final hasUserEvent = events.any((e) => e is Event);
                           final hasOvulation = events.any(
                             (e) => e is PredictedOvulation,
@@ -818,40 +727,100 @@ class _CyklState extends State<Cykl> {
                           final hasMenstruation = events.any(
                             (e) => e is PredictedMenstruation,
                           );
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // Ikona dla okresu (początek/koniec)
-                              if (hasPeriodStart || hasPeriodEnd)
+                          final hasFertility = events.any(
+                            (e) => e is FertilityDay,
+                          );
+                          final isFertilityPeak = events.any(
+                            (e) => e is FertilityDay && e.isPeak,
+                          );
+
+                          if (hasFertility) {
+                            return Container(
+                              margin: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                color: isFertilityPeak
+                                    ? const Color.fromARGB(
+                                        255,
+                                        0,
+                                        150,
+                                        0,
+                                      ) //Ciemny zielony (szczyt)
+                                    : const Color.fromARGB(
+                                        255,
+                                        100,
+                                        255,
+                                        100,
+                                      ), //Jasnozielony (okno)
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '${day.day}',
+                                  style: TextStyle(
+                                    color: isFertilityPeak
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          if (hasPeriodStart || hasPeriodEnd) {
+                            return Container(
+                              margin: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 233, 82, 223),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '${day.day}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+
+                          // Ikona dla okresu (początek/koniec)
+                          if (hasPeriodStart || hasPeriodEnd) {
+                            if (hasMenstruation)
+                              for (int i = 0; i < 3; i++) {
                                 const Icon(
                                   Icons.opacity,
                                   size: 10,
-                                  color: Colors.red,
-                                ),
-                              if (hasOvulation)
-                                const Icon(
-                                  Icons.circle_sharp,
-                                  size: 10,
-                                  color: Color.fromARGB(255, 118, 117, 109),
-                                ),
-                              if (hasMenstruation)
-                                for (int i = 0; i < 3; i++)
-                                  const Icon(
-                                    Icons.opacity,
-                                    size: 10,
-                                    color: Colors.pink,
-                                  ),
+                                  color: Color.fromARGB(255, 12, 12, 12),
+                                );
+                              }
 
-                              if (hasUserEvent &&
-                                  !hasPeriodStart &&
-                                  !hasPeriodEnd)
-                                const Icon(
-                                  Icons.circle,
-                                  size: 7,
-                                  color: Color.fromARGB(255, 7, 52, 78),
-                                ),
-                            ],
-                          );
+                            return const Icon(
+                              Icons.opacity,
+                              size: 10,
+                              color: Colors.red,
+                            );
+                          }
+
+                          if (hasOvulation) {
+                            return const Icon(
+                              Icons.circle_sharp,
+                              size: 10,
+                              color: Color.fromARGB(255, 118, 117, 109),
+                            );
+                          }
+
+                          if (hasUserEvent &&
+                              !hasPeriodStart &&
+                              !hasPeriodEnd) {
+                            const Icon(
+                              Icons.circle,
+                              size: 7,
+                              color: Color.fromARGB(255, 7, 52, 78),
+                            );
+                          }
                         },
                       ),
                       onPageChanged: (terazniejszyDzien) {
@@ -863,7 +832,120 @@ class _CyklState extends State<Cykl> {
                       },
                     ),
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 216, 88, 186),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Text("Miesiączka", style: TextStyle(fontSize: 12)),
+                      const SizedBox(width: 16),
+                      Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 127, 244, 54),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Text(
+                        "Okno płodności",
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, left: 16, right: 16),
+                    child: Text(
+                      '⚠️ Okno płodności: Tylko do celów informacyjnych. Nie jest metodą antykoncepcji. Skonsultuj się z lekarzem.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                        fontStyle: FontStyle.italic,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Container(
+                    height: 100,
+                    width: 255,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade500,
+                          offset: Offset(4.0, 4.0),
+                          blurRadius: 15.0,
+                          spreadRadius: 1.0,
+                        ),
+                        BoxShadow(
+                          color: Colors.white,
+                          offset: Offset(-4.0, -4.0),
+                          blurRadius: 15.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ],
+                    ),
 
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (_lastPeriodStart == null || _avrCycleLength == null)
+                          const Text(
+                            'Brak danych o cyklu',
+                            style: TextStyle(
+                              color: Colors.purple,
+                              fontSize: 18,
+                            ),
+                          )
+                        else
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (_daysUntilNextPeriodStart != null &&
+                                  _daysUntilNextPeriodStart! > 0)
+                                Text(
+                                  'Okres za $_daysUntilNextPeriodStart dni',
+                                  style: const TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${_currentCycleDay ?? 0}',
+                                    style: TextStyle(
+                                      color: Kolor_tekstu,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                  Text(
+                                    ' dzień cyklu',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
                   Container(
                     height: 90,
                     width: 600,
@@ -875,112 +957,119 @@ class _CyklState extends State<Cykl> {
                           return ListView.builder(
                             itemCount: value.length,
                             itemBuilder: (context, index) {
-                              return Container(
-                                height: 70,
-                                width: 400,
-                                margin: EdgeInsets.symmetric(
-                                  horizontal: 80,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                    15,
-                                  ), //do zaokraglenia rogow
-                                  color: Colors.white, //kolor tla
-                                  boxShadow: [
-                                    //cienie
-                                    BoxShadow(
-                                      color:
-                                          Colors.grey.shade500, //kolor cienia
-                                      offset: Offset(
-                                        4.0,
-                                        4.0,
-                                      ), //przesunicie wzgledem kontenera
-                                      blurRadius: 15.0, //rozmycie cienia
-                                      spreadRadius: 1.0, //rozszerzenie cienia
-                                    ),
-                                    BoxShadow(
-                                      color: Colors.white,
-                                      offset: Offset(-4.0, -4.0),
-                                      blurRadius: 15.0,
-                                      spreadRadius: 1.0,
-                                    ),
-                                  ],
-                                ),
-
-                                child: ListTile(
-                                  onTap: () => print(""),
-
-                                  title: Text(
-                                    value[index] is Event
-                                        ? (value[index] as Event).title ??
-                                              (value[index].eventType ==
-                                                      'period_start'
-                                                  ? 'Początek okresu'
-                                                  : 'Koniec okresu')
-                                        : value[index].title,
-                                    style: TextStyle(
-                                      fontSize: 15,
-
-                                      color: const Color.fromARGB(
-                                        255,
-                                        148,
-                                        32,
-                                        202,
+                              if (value[index] is Event &&
+                                  (value[index] as Event).eventType ==
+                                      'user_event') {
+                                return Container(
+                                  height: 70,
+                                  width: 400,
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: 80,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                      15,
+                                    ), //do zaokraglenia rogow
+                                    color: Colors.white, //kolor tla
+                                    boxShadow: [
+                                      //cienie
+                                      BoxShadow(
+                                        color:
+                                            Colors.grey.shade500, //kolor cienia
+                                        offset: Offset(
+                                          4.0,
+                                          4.0,
+                                        ), //przesunicie wzgledem kontenera
+                                        blurRadius: 15.0, //rozmycie cienia
+                                        spreadRadius: 1.0, //rozszerzenie cienia
                                       ),
-                                    ),
-                                    textAlign: TextAlign.left,
-                                    softWrap: true,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                      BoxShadow(
+                                        color: Colors.white,
+                                        offset: Offset(-4.0, -4.0),
+                                        blurRadius: 15.0,
+                                        spreadRadius: 1.0,
+                                      ),
+                                    ],
                                   ),
 
-                                  trailing: value[index] is Event
-                                      ? IconButton(
-                                          icon: const Icon(
-                                            Icons.delete,
-                                            size: 20,
-                                            color: Colors.black,
-                                          ),
-                                          onPressed: () async {
-                                            setState(() {
-                                              _errorMessage = null;
-                                              _isLoading = true;
-                                            });
-                                            try {
-                                              await _runAction(() async {
-                                                final date = DateTime(
-                                                  _kliknietyDzien!.year,
-                                                  _kliknietyDzien!.month,
-                                                  _kliknietyDzien!.day,
-                                                );
+                                  child: ListTile(
+                                    onTap: () => print(""),
 
-                                                await widget.databaseService
-                                                    .deleteEvent(value[index]);
-                                                _eventsByDay[date]?.removeWhere(
-                                                  (e) =>
-                                                      e.id == value[index].id,
-                                                );
-                                                _wybraneEventy.value =
-                                                    List.from(
-                                                      _wezEventyForDay(date),
-                                                    );
+                                    title: Text(
+                                      value[index] is Event &&
+                                              (value[index] as Event)
+                                                      .eventType ==
+                                                  'user_event'
+                                          ? (value[index] as Event).title ?? ''
+                                          : '',
+                                      style: TextStyle(
+                                        fontSize: 15,
+
+                                        color: const Color.fromARGB(
+                                          255,
+                                          148,
+                                          32,
+                                          202,
+                                        ),
+                                      ),
+                                      textAlign: TextAlign.left,
+                                      softWrap: true,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+
+                                    trailing: value[index] is Event
+                                        ? IconButton(
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              size: 20,
+                                              color: Colors.black,
+                                            ),
+                                            onPressed: () async {
+                                              setState(() {
+                                                _errorMessage = null;
+                                                _isLoading = true;
+                                              });
+                                              try {
+                                                await _runAction(() async {
+                                                  final date = DateTime(
+                                                    _kliknietyDzien!.year,
+                                                    _kliknietyDzien!.month,
+                                                    _kliknietyDzien!.day,
+                                                  );
+
+                                                  await widget.databaseService
+                                                      .deleteEvent(
+                                                        value[index],
+                                                      );
+                                                  _eventsByDay[date]
+                                                      ?.removeWhere(
+                                                        (e) =>
+                                                            e.id ==
+                                                            value[index].id,
+                                                      );
+                                                  _wybraneEventy.value =
+                                                      List.from(
+                                                        _wezEventyForDay(date),
+                                                      );
+                                                  setState(() {
+                                                    _isLoading = false;
+                                                  });
+                                                });
+                                              } catch (e) {
                                                 setState(() {
+                                                  _errorMessage =
+                                                      'Nie udało się usunąć wydarzenia.';
                                                   _isLoading = false;
                                                 });
-                                              });
-                                            } catch (e) {
-                                              setState(() {
-                                                _errorMessage =
-                                                    'Nie udało się usunąć wydarzenia.';
-                                                _isLoading = false;
-                                              });
-                                            }
-                                          },
-                                        )
-                                      : null,
-                                ),
-                              );
+                                              }
+                                            },
+                                          )
+                                        : null,
+                                  ),
+                                );
+                              }
                             },
                           );
                         },

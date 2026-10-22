@@ -42,5 +42,6 @@ class PredictedMenstruation {
 class FertilityDay {
   final DateTime date;
   bool isPeak;
-  FertilityDay({required this.date, required this.isPeak});
+  final String title;
+  FertilityDay({required this.date, required this.isPeak, required this.title});
 }
