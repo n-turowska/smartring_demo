@@ -38,3 +38,9 @@ class PredictedMenstruation {
   final DateTime date;
   PredictedMenstruation({required this.title, required this.date});
 }
+
+class FertilityDay {
+  final DateTime date;
+  bool isPeak;
+  FertilityDay({required this.date, required this.isPeak});
+}
