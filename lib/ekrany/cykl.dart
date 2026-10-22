@@ -111,6 +111,10 @@ class _CyklState extends State<Cykl> {
             .getAllOvulationDays();
         final predictedMenstruation = await widget.databaseService
             .getAllMenstruationDays();
+        final fertilityWindow = await widget.databaseService
+            .getFertilityWindow();
+        final predictedOvulationDate = await widget.databaseService
+            .predictOvulationDay();
 
         //grupowanie po dniu
         final Map<DateTime, List<dynamic>> grouped = {};
@@ -133,6 +137,18 @@ class _CyklState extends State<Cykl> {
         for (var i in predictedMenstruation) {
           final date = DateTime(i.date.year, i.date.month, i.date.day);
           grouped[date] = (grouped[date] ?? [])..add(i);
+        }
+
+        //predicted fertility window
+        for (var date in fertilityWindow) {
+          final pureDate = DateTime(date.year, date.month, date.day);
+          grouped[pureDate] = (grouped[pureDate] ?? [])
+            ..add(
+              FertilityDay(
+                date: pureDate,
+                isPeak: date == predictedOvulationDate,
+              ),
+            );
         }
 
         setState(() {
