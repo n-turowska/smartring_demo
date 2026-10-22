@@ -935,4 +935,16 @@ class DatabaseService {
       isRegular: stdDev < 7,
     );
   }
+
+  Future<DateTime?> predictOvulationDays() async {
+    try {
+      final lastPeriodStart = await getLastPeriodStart();
+      if (lastPeriodStart == null) return null;
+      final avrCycleLength = await calculateAverageCycleLength();
+
+      return lastPeriodStart.add(Duration(days: avrCycleLength.toInt() - 14));
+    } catch (e) {
+      throw Exception("Nie udało się załadować przewidywanej owulacji: $e");
+    }
+  }
 }
