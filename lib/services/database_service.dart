@@ -936,7 +936,7 @@ class DatabaseService {
     );
   }
 
-  Future<DateTime?> predictOvulationDays() async {
+  Future<DateTime?> predictOvulationDay() async {
     try {
       final lastPeriodStart = await getLastPeriodStart();
       if (lastPeriodStart == null) return null;
@@ -945,6 +945,20 @@ class DatabaseService {
       return lastPeriodStart.add(Duration(days: avrCycleLength.toInt() - 14));
     } catch (e) {
       throw Exception("Nie udało się załadować przewidywanej owulacji: $e");
+    }
+  }
+
+  Future<List<DateTime>> getFertilityWindow() async {
+    try {
+      final predictedOvulation = await predictOvulationDay();
+      if (predictedOvulation == null) return [];
+
+      return List.generate(
+        6,
+        (index) => predictedOvulation.subtract(Duration(days: 5 - index)),
+      );
+    } catch (e) {
+      throw Exception("Nie udało się załadować okna płodności: $e");
     }
   }
 }
