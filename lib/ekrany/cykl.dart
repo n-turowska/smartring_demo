@@ -92,7 +92,7 @@ class _CyklState extends State<Cykl> {
         final nextPeriodStart = _lastPeriodStart!.add(
           Duration(days: _avrCycleLength!.toInt()),
         );
-        final _daysUntilNextPeriodStart = nextPeriodStart
+        _daysUntilNextPeriodStart = nextPeriodStart
             .difference(DateTime.now())
             .inDays;
       }
@@ -415,7 +415,6 @@ class _CyklState extends State<Cykl> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              foregroundColor: Colors.deepPurple[400],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
@@ -424,16 +423,35 @@ class _CyklState extends State<Cykl> {
                             child: const Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.flag),
+                                Icon(
+                                  Icons.flag,
+                                  color: Color.fromARGB(255, 240, 28, 209),
+                                ),
                                 Column(
                                   children: [
                                     Text(
                                       'Początek',
-                                      style: TextStyle(fontSize: 12),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color.fromARGB(
+                                          255,
+                                          105,
+                                          104,
+                                          104,
+                                        ),
+                                      ),
                                     ),
                                     Text(
                                       'okresu',
-                                      style: TextStyle(fontSize: 12),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color.fromARGB(
+                                          255,
+                                          105,
+                                          104,
+                                          104,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -491,7 +509,7 @@ class _CyklState extends State<Cykl> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              foregroundColor: Colors.deepPurple[400],
+
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
@@ -500,16 +518,35 @@ class _CyklState extends State<Cykl> {
                             child: const Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.flag),
+                                Icon(
+                                  Icons.flag,
+                                  color: Color.fromARGB(255, 240, 28, 209),
+                                ),
                                 Column(
                                   children: [
                                     Text(
                                       'Koniec',
-                                      style: TextStyle(fontSize: 12),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color.fromARGB(
+                                          255,
+                                          105,
+                                          104,
+                                          104,
+                                        ),
+                                      ),
                                     ),
                                     Text(
                                       'okresu',
-                                      style: TextStyle(fontSize: 12),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color.fromARGB(
+                                          255,
+                                          105,
+                                          104,
+                                          104,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -528,7 +565,7 @@ class _CyklState extends State<Cykl> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              foregroundColor: Colors.deepPurple[400],
+
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
@@ -536,8 +573,17 @@ class _CyklState extends State<Cykl> {
                             ),
                             child: Column(
                               children: [
-                                const Icon(Icons.analytics),
-                                Text("Analiza", style: TextStyle(fontSize: 12)),
+                                const Icon(
+                                  Icons.analytics,
+                                  color: Color.fromARGB(255, 13, 88, 16),
+                                ),
+                                Text(
+                                  "Analiza",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color.fromARGB(255, 105, 104, 104),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -601,7 +647,7 @@ class _CyklState extends State<Cykl> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
-                              foregroundColor: Colors.deepPurple[400],
+
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
@@ -610,8 +656,17 @@ class _CyklState extends State<Cykl> {
 
                             child: Column(
                               children: [
-                                Icon(Icons.add),
-                                Text("Notatki", style: TextStyle(fontSize: 12)),
+                                Icon(
+                                  Icons.add,
+                                  color: const Color.fromARGB(255, 22, 80, 180),
+                                ),
+                                Text(
+                                  "Notatki",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color.fromARGB(255, 105, 104, 104),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -685,12 +740,10 @@ class _CyklState extends State<Cykl> {
                           color: Colors.black87,
                         ),
                         todayTextStyle: TextStyle(
-                          color: const Color.fromARGB(255, 119, 107, 141),
-                          fontWeight: FontWeight.bold,
+                          color: const Color.fromARGB(255, 205, 202, 210),
                         ),
                         selectedTextStyle: TextStyle(
-                          color: const Color.fromARGB(255, 158, 137, 194),
-                          fontWeight: FontWeight.bold,
+                          color: const Color.fromARGB(255, 205, 202, 210),
                         ),
                         cellMargin: const EdgeInsets.all(4),
                       ),
@@ -735,17 +788,38 @@ class _CyklState extends State<Cykl> {
                           final hasPeriodStart = events.any(
                             (e) => e is Event && e.eventType == 'period_start',
                           );
+
                           final hasPeriodEnd = events.any(
                             (e) => e is Event && e.eventType == 'period_end',
                           );
 
-                          final hasUserEvent = events.any((e) => e is Event);
-                          final hasOvulation = events.any(
-                            (e) => e is PredictedOvulation,
+                          final hasUserEvent = events.any(
+                            (e) => e is Event && e.eventType == 'user_event',
                           );
-                          final hasMenstruation = events.any(
-                            (e) => e is PredictedMenstruation,
-                          );
+
+                          final periodStart = events
+                              .where(
+                                (e) =>
+                                    e is Event && e.eventType == 'period_start',
+                              )
+                              .map((e) => e.date)
+                              .firstOrNull;
+
+                          final periodEnd = events
+                              .where(
+                                (e) =>
+                                    e is Event && e.eventType == 'period_end',
+                              )
+                              .map((e) => e.date)
+                              .firstOrNull;
+
+                          final today = DateTime.now();
+
+                          final hasMenstruation =
+                              periodStart != null &&
+                              periodEnd != null &&
+                              !today.isBefore(periodStart) &&
+                              !today.isAfter(periodEnd);
                           final hasFertility = events.any(
                             (e) => e is FertilityDay,
                           );
@@ -754,6 +828,13 @@ class _CyklState extends State<Cykl> {
                           );
 
                           if (hasFertility) {
+                            if (hasUserEvent) {
+                              const Icon(
+                                Icons.circle,
+                                size: 7,
+                                color: Color.fromARGB(255, 7, 52, 78),
+                              );
+                            }
                             return Container(
                               margin: const EdgeInsets.all(2),
                               decoration: BoxDecoration(
@@ -777,15 +858,33 @@ class _CyklState extends State<Cykl> {
                                   '${day.day}',
                                   style: TextStyle(
                                     color: isFertilityPeak
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontWeight: FontWeight.bold,
+                                        ? const Color.fromARGB(
+                                            255,
+                                            75,
+                                            221,
+                                            104,
+                                          )
+                                        : const Color.fromARGB(
+                                            255,
+                                            25,
+                                            125,
+                                            50,
+                                          ),
                                   ),
                                 ),
                               ),
                             );
                           }
-                          if (hasPeriodStart || hasPeriodEnd) {
+                          if (hasPeriodStart ||
+                              hasPeriodEnd ||
+                              hasMenstruation) {
+                            if (hasUserEvent) {
+                              const Icon(
+                                Icons.circle,
+                                size: 7,
+                                color: Color.fromARGB(255, 7, 52, 78),
+                              );
+                            }
                             return Container(
                               margin: const EdgeInsets.all(2),
                               decoration: BoxDecoration(
@@ -795,49 +894,9 @@ class _CyklState extends State<Cykl> {
                               child: Center(
                                 child: Text(
                                   '${day.day}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                            );
-                          }
-
-                          // Ikona dla okresu (początek/koniec)
-                          if (hasPeriodStart || hasPeriodEnd) {
-                            if (hasMenstruation)
-                              for (int i = 0; i < 3; i++) {
-                                const Icon(
-                                  Icons.opacity,
-                                  size: 10,
-                                  color: Color.fromARGB(255, 12, 12, 12),
-                                );
-                              }
-
-                            return const Icon(
-                              Icons.opacity,
-                              size: 10,
-                              color: Colors.red,
-                            );
-                          }
-
-                          if (hasOvulation) {
-                            return const Icon(
-                              Icons.circle_sharp,
-                              size: 10,
-                              color: Color.fromARGB(255, 118, 117, 109),
-                            );
-                          }
-
-                          if (hasUserEvent &&
-                              !hasPeriodStart &&
-                              !hasPeriodEnd) {
-                            const Icon(
-                              Icons.circle,
-                              size: 7,
-                              color: Color.fromARGB(255, 7, 52, 78),
                             );
                           }
                         },
@@ -919,25 +978,434 @@ class _CyklState extends State<Cykl> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 10),
 
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 16, right: 16),
-                    child: Text(
-                      '⚠️ Okno płodności: Tylko do celów informacyjnych. Nie jest metodą antykoncepcji. Skonsultuj się z lekarzem.',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                        fontStyle: FontStyle.italic,
+                  Row(
+                    children: [
+                      Container(
+                        height: 120,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade500,
+                              offset: Offset(4.0, 4.0),
+                              blurRadius: 15.0,
+                              spreadRadius: 1.0,
+                            ),
+                            BoxShadow(
+                              color: Colors.white,
+                              offset: Offset(-4.0, -4.0),
+                              blurRadius: 15.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ],
+                        ),
+
+                        alignment: Alignment.bottomLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (_lastPeriodStart == null ||
+                                _avrCycleLength == null)
+                              const Text(
+                                'Brak danych o cyklu',
+                                style: TextStyle(
+                                  color: Colors.purple,
+                                  fontSize: 18,
+                                ),
+                              )
+                            else
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          const Icon(
+                                            Icons.favorite_border,
+                                            color: Colors.grey,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Dzisiaj',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                          Text(
+                                            '${_currentCycleDay ?? 0}. dzień',
+                                            style: TextStyle(
+                                              color: Kolor_tekstu,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 25,
+                                            ),
+                                          ),
+                                          Text(
+                                            'cyklu',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
                       ),
-                      textAlign: TextAlign.center,
+                      const SizedBox(width: 20),
+                      Container(
+                        height: 120,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: const Color.fromARGB(255, 243, 234, 251),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade500,
+                              offset: Offset(4.0, 4.0),
+                              blurRadius: 15.0,
+                              spreadRadius: 1.0,
+                            ),
+                            BoxShadow(
+                              color: Colors.white,
+                              offset: Offset(-4.0, -4.0),
+                              blurRadius: 15.0,
+                              spreadRadius: 1.0,
+                            ),
+                          ],
+                        ),
+
+                        alignment: Alignment.bottomLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (_lastPeriodStart == null ||
+                                _avrCycleLength == null)
+                              const Text(
+                                'Brak danych o cyklu',
+                                style: TextStyle(
+                                  color: Colors.purple,
+                                  fontSize: 18,
+                                ),
+                              )
+                            else
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (_daysUntilNextPeriodStart != null &&
+                                      _daysUntilNextPeriodStart! > 0)
+                                    const Icon(
+                                      Icons.calendar_month,
+                                      color: Colors.grey,
+                                    ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Następny okres',
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  Text(
+                                    'za ${_daysUntilNextPeriodStart} dni',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Termin przywidywany',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        15,
+                      ), //do zaokraglenia rogow
+                      color: Colors.white, //kolor tla
+                      boxShadow: [
+                        //cienie
+                        BoxShadow(
+                          color: Colors.grey.shade500, //kolor cienia
+                          offset: Offset(
+                            4.0,
+                            4.0,
+                          ), //przesunicie wzgledem kontenera
+                          blurRadius: 15.0, //rozmycie cienia
+                          spreadRadius: 1.0, //rozszerzenie cienia
+                        ),
+                        BoxShadow(
+                          color: Colors.white,
+                          offset: Offset(-4.0, -4.0),
+                          blurRadius: 15.0,
+                          spreadRadius: 1.0,
+                        ),
+                      ],
+                    ),
+                    height: 150,
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: ValueListenableBuilder<List<dynamic>>(
+                        valueListenable: _wybraneEventy,
+                        builder: (context, value, _) {
+                          if (value.isEmpty) {
+                            return const Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "Notatki",
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    'Brak wydarzeń w tym dniu',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return ListView.builder(
+                            itemCount: value.length,
+
+                            itemBuilder: (context, index) {
+                              if (value[index] is Event) {
+                                final event = value[index] as Event;
+                                final title = event.title ?? '';
+                                final eventType = event.eventType;
+                                IconData icon;
+                                String? displayTitle;
+                                String? subtitle;
+
+                                switch (eventType) {
+                                  case 'period_start':
+                                    displayTitle = 'Początek okresu';
+                                    icon = Icons.favorite;
+                                    subtitle =
+                                        '${event.date.day}.${event.date.month}.${event.date.year}';
+                                    break;
+                                  case 'period_end':
+                                    displayTitle = 'Koniec okresu';
+                                    icon = Icons.event_available;
+                                    subtitle =
+                                        '${event.date.day}.${event.date.month}.${event.date.year}';
+                                    break;
+                                  default:
+                                    displayTitle = title.isNotEmpty
+                                        ? title
+                                        : 'Notatka';
+                                    subtitle =
+                                        '${event.date.day}.${event.date.month}.${event.date.year}';
+                                    icon = Icons.description;
+                                }
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      "Notatki",
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Container(
+                                      height: 70,
+                                      width: 600,
+                                      margin: EdgeInsets.symmetric(
+                                        horizontal: 0,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          15,
+                                        ), //do zaokraglenia rogow
+                                        color: const Color.fromARGB(
+                                          255,
+                                          251,
+                                          239,
+                                          249,
+                                        ), //kolor tla
+                                        boxShadow: [
+                                          //cienie
+                                          BoxShadow(
+                                            color: Colors
+                                                .grey
+                                                .shade500, //kolor cienia
+                                            offset: Offset(
+                                              4.0,
+                                              4.0,
+                                            ), //przesunicie wzgledem kontenera
+                                            blurRadius: 15.0, //rozmycie cienia
+                                            spreadRadius:
+                                                1.0, //rozszerzenie cienia
+                                          ),
+                                          BoxShadow(
+                                            color: Colors.white,
+                                            offset: Offset(-4.0, -4.0),
+                                            blurRadius: 15.0,
+                                            spreadRadius: 1.0,
+                                          ),
+                                        ],
+                                      ),
+
+                                      child: ListTile(
+                                        //onTap: () => print(""),
+                                        leading: Container(
+                                          width: 36,
+                                          height: 36,
+                                          decoration: BoxDecoration(
+                                            color: const Color.fromARGB(
+                                              255,
+                                              240,
+                                              116,
+                                              203,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            icon,
+                                            color: Colors.white,
+                                            size: 24,
+                                          ),
+                                        ),
+                                        title: Text(
+                                          displayTitle,
+                                          maxLines: 2,
+
+                                          style: TextStyle(
+                                            fontSize: 14,
+
+                                            color: const Color.fromARGB(
+                                              255,
+                                              24,
+                                              3,
+                                              34,
+                                            ),
+                                          ),
+                                        ),
+                                        subtitle: Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 5,
+                                          ),
+                                          child: Text(
+                                            subtitle,
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Color(0xFF898291),
+                                            ),
+                                          ),
+                                        ),
+
+                                        trailing: value[index] is Event
+                                            ? IconButton(
+                                                icon: const Icon(
+                                                  Icons.delete,
+                                                  size: 20,
+                                                  color: Colors.black,
+                                                ),
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    _errorMessage = null;
+                                                    _isLoading = true;
+                                                  });
+                                                  try {
+                                                    await _runAction(() async {
+                                                      final date = DateTime(
+                                                        _kliknietyDzien!.year,
+                                                        _kliknietyDzien!.month,
+                                                        _kliknietyDzien!.day,
+                                                      );
+
+                                                      await widget
+                                                          .databaseService
+                                                          .deleteEvent(
+                                                            value[index],
+                                                          );
+                                                      _eventsByDay[date]
+                                                          ?.removeWhere(
+                                                            (e) =>
+                                                                e.id ==
+                                                                value[index].id,
+                                                          );
+                                                      _wybraneEventy
+                                                          .value = List.from(
+                                                        _wezEventyForDay(date),
+                                                      );
+                                                      setState(() {
+                                                        _isLoading = false;
+                                                      });
+                                                    });
+                                                  } catch (e) {
+                                                    setState(() {
+                                                      _errorMessage =
+                                                          'Nie udało się usunąć wydarzenia.';
+                                                      _isLoading = false;
+                                                    });
+                                                  }
+                                                },
+                                              )
+                                            : null,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
                   Container(
-                    height: 100,
-                    width: 255,
+                    height: 120,
+                    width: 340,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
-                      color: Colors.white,
+                      color: const Color.fromARGB(255, 198, 223, 243),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.shade500,
@@ -955,184 +1423,33 @@ class _CyklState extends State<Cykl> {
                     ),
 
                     alignment: Alignment.center,
-                    child: Row(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (_lastPeriodStart == null || _avrCycleLength == null)
-                          const Text(
-                            'Brak danych o cyklu',
-                            style: TextStyle(
-                              color: Colors.purple,
-                              fontSize: 18,
-                            ),
-                          )
-                        else
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (_daysUntilNextPeriodStart != null &&
-                                  _daysUntilNextPeriodStart! > 0)
-                                Text(
-                                  'Okres za $_daysUntilNextPeriodStart dni',
-                                  style: const TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '${_currentCycleDay ?? 0}',
-                                    style: TextStyle(
-                                      color: Kolor_tekstu,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25,
-                                    ),
-                                  ),
-                                  Text(
-                                    ' dzień cyklu',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.info_outline),
+                            const SizedBox(width: 5),
+                            Text(
+                              "Informacja o płodności",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 9, 58, 99),
                               ),
-                            ],
+                            ),
+                          ],
+                        ),
+                        Text(
+                          'Przewidywane okno płodności jest tylko do celów informacyjnych i nie jest metodą antykoncepcji.',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                            fontStyle: FontStyle.italic,
                           ),
+                          textAlign: TextAlign.center,
+                        ),
                       ],
-                    ),
-                  ),
-                  Container(
-                    height: 90,
-                    width: 600,
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: ValueListenableBuilder<List<dynamic>>(
-                        valueListenable: _wybraneEventy,
-                        builder: (context, value, _) {
-                          return ListView.builder(
-                            itemCount: value.length,
-                            itemBuilder: (context, index) {
-                              if (value[index] is Event &&
-                                  (value[index] as Event).eventType ==
-                                      'user_event') {
-                                return Container(
-                                  height: 70,
-                                  width: 400,
-                                  margin: EdgeInsets.symmetric(
-                                    horizontal: 80,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                      15,
-                                    ), //do zaokraglenia rogow
-                                    color: Colors.white, //kolor tla
-                                    boxShadow: [
-                                      //cienie
-                                      BoxShadow(
-                                        color:
-                                            Colors.grey.shade500, //kolor cienia
-                                        offset: Offset(
-                                          4.0,
-                                          4.0,
-                                        ), //przesunicie wzgledem kontenera
-                                        blurRadius: 15.0, //rozmycie cienia
-                                        spreadRadius: 1.0, //rozszerzenie cienia
-                                      ),
-                                      BoxShadow(
-                                        color: Colors.white,
-                                        offset: Offset(-4.0, -4.0),
-                                        blurRadius: 15.0,
-                                        spreadRadius: 1.0,
-                                      ),
-                                    ],
-                                  ),
-
-                                  child: ListTile(
-                                    onTap: () => print(""),
-
-                                    title: Text(
-                                      value[index] is Event &&
-                                              (value[index] as Event)
-                                                      .eventType ==
-                                                  'user_event'
-                                          ? (value[index] as Event).title ?? ''
-                                          : '',
-                                      style: TextStyle(
-                                        fontSize: 15,
-
-                                        color: const Color.fromARGB(
-                                          255,
-                                          148,
-                                          32,
-                                          202,
-                                        ),
-                                      ),
-                                      textAlign: TextAlign.left,
-                                      softWrap: true,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-
-                                    trailing: value[index] is Event
-                                        ? IconButton(
-                                            icon: const Icon(
-                                              Icons.delete,
-                                              size: 20,
-                                              color: Colors.black,
-                                            ),
-                                            onPressed: () async {
-                                              setState(() {
-                                                _errorMessage = null;
-                                                _isLoading = true;
-                                              });
-                                              try {
-                                                await _runAction(() async {
-                                                  final date = DateTime(
-                                                    _kliknietyDzien!.year,
-                                                    _kliknietyDzien!.month,
-                                                    _kliknietyDzien!.day,
-                                                  );
-
-                                                  await widget.databaseService
-                                                      .deleteEvent(
-                                                        value[index],
-                                                      );
-                                                  _eventsByDay[date]
-                                                      ?.removeWhere(
-                                                        (e) =>
-                                                            e.id ==
-                                                            value[index].id,
-                                                      );
-                                                  _wybraneEventy.value =
-                                                      List.from(
-                                                        _wezEventyForDay(date),
-                                                      );
-                                                  setState(() {
-                                                    _isLoading = false;
-                                                  });
-                                                });
-                                              } catch (e) {
-                                                setState(() {
-                                                  _errorMessage =
-                                                      'Nie udało się usunąć wydarzenia.';
-                                                  _isLoading = false;
-                                                });
-                                              }
-                                            },
-                                          )
-                                        : null,
-                                  ),
-                                );
-                              }
-                            },
-                          );
-                        },
-                      ),
                     ),
                   ),
                 ],
