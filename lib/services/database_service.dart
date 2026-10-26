@@ -682,6 +682,7 @@ class DatabaseService {
         _cycleDateColumnName: dateStr,
         _cycleEventTypeColumnName: 'period_start',
         //_cycleIdColumnName: 1,
+        'title': "Początek okresu",
         'notes': null,
         'is_prediction': 0,
         'confidence': 1,
@@ -703,6 +704,7 @@ class DatabaseService {
         _cycleEventTypeColumnName: 'period_end',
 
         //_cycleIdColumnName: 1,
+        'title': "Koniec okresu",
         'notes': null,
         'is_prediction': 0,
         'confidence': 1,
