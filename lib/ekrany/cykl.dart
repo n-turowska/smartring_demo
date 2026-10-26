@@ -1178,7 +1178,11 @@ class _CyklState extends State<Cykl> {
                       child: ValueListenableBuilder<List<dynamic>>(
                         valueListenable: _wybraneEventy,
                         builder: (context, value, _) {
-                          if (value.isEmpty) {
+                          final hasUserEvents = value.any(
+                            (item) => item is Event,
+                          );
+
+                          if (!hasUserEvents) {
                             return const Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -1189,7 +1193,7 @@ class _CyklState extends State<Cykl> {
                                     style: TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.grey,
+                                      color: Colors.black,
                                     ),
                                   ),
                                   const SizedBox(height: 10),
@@ -1204,6 +1208,7 @@ class _CyklState extends State<Cykl> {
                               ),
                             );
                           }
+
                           return ListView.builder(
                             itemCount: value.length,
 
