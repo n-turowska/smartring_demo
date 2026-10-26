@@ -17,6 +17,7 @@ class _StartowyEkranState extends State<StartowyEkran> {
   int dlugoscCyklu = 28;
   int get dzienOwulacji => dlugoscCyklu - 14;
   DateTime _kliknietyDzien = DateTime.now();
+  int? _daysUntilNextPeriodStart;
 
   int? getCurrentOvulation() {
     final repo = DatabaseService
@@ -37,6 +38,29 @@ class _StartowyEkranState extends State<StartowyEkran> {
     final dlCyklu = repo.dlCyklu.first;
     dlugoscCyklu = dlCyklu;
     return dlugoscCyklu;
+  }
+
+  Future<void> _loadDaysUntilNextPeriod() async {
+    final lastPeriodStart = await DatabaseService.instance.getLastPeriodStart();
+    final avrCycleLength = await DatabaseService.instance
+        .calculateAverageCycleLength();
+
+    if (lastPeriodStart != null && avrCycleLength != null) {
+      final nextPeriodStart = lastPeriodStart.add(
+        Duration(days: avrCycleLength.toInt()),
+      );
+      _daysUntilNextPeriodStart = nextPeriodStart
+          .difference(DateTime.now())
+          .inDays;
+    } else {
+      _daysUntilNextPeriodStart = null;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDaysUntilNextPeriod();
   }
 
   @override
@@ -319,7 +343,7 @@ class _StartowyEkranState extends State<StartowyEkran> {
                               ),
                             ),
                             Text(
-                              "okres za\n  ${(dzienOwulacji + getCurrentOvulation()! - DateTime.now().day) % getPredictedDlugoscCyklu()!} dni",
+                              "okres za\n  ${_daysUntilNextPeriodStart ?? '?'} dni",
                             ),
                           ],
                         ),
