@@ -425,9 +425,17 @@ class _CyklState extends State<Cykl> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(Icons.flag),
-                                Text(
-                                  'Początek',
-                                  style: TextStyle(fontSize: 12),
+                                Column(
+                                  children: [
+                                    Text(
+                                      'Początek',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                    Text(
+                                      'okresu',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -493,7 +501,18 @@ class _CyklState extends State<Cykl> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(Icons.flag),
-                                Text('Koniec', style: TextStyle(fontSize: 12)),
+                                Column(
+                                  children: [
+                                    Text(
+                                      'Koniec',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                    Text(
+                                      'okresu',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
