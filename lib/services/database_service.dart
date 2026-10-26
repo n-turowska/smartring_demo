@@ -804,6 +804,7 @@ class DatabaseService {
         _cycleTableName,
         where: '$_cycleEventTypeColumnName IN (?,?)',
         whereArgs: ['period_start', 'period_end'],
+        orderBy: '$_cycleDateColumnName ASC',
       );
       print(result);
       return result.map((e) => Event.fromMap(e)).toList();
