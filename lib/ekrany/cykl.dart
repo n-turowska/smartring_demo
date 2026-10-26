@@ -832,35 +832,75 @@ class _CyklState extends State<Cykl> {
                       },
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Column(
                     children: [
-                      Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 216, 88, 186),
-                          shape: BoxShape.circle,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 216, 88, 186),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          const Text(
+                            "Miesiączka",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          const SizedBox(width: 16),
+                          Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 127, 244, 54),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+
+                          const SizedBox(width: 4),
+                          const Text(
+                            "Okno płodności",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          const SizedBox(width: 16),
+                          Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 49, 111, 10),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+
+                          const SizedBox(width: 4),
+                          const Text(
+                            "Owulacja",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 4),
-                      const Text("Miesiączka", style: TextStyle(fontSize: 12)),
-                      const SizedBox(width: 16),
-                      Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 127, 244, 54),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Text(
-                        "Okno płodności",
-                        style: TextStyle(fontSize: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 26, 18, 98),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+
+                          const SizedBox(width: 4),
+                          const Text("Notatki", style: TextStyle(fontSize: 12)),
+                        ],
                       ),
                     ],
                   ),
+
                   Padding(
                     padding: const EdgeInsets.only(top: 8, left: 16, right: 16),
                     child: Text(
