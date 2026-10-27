@@ -49,11 +49,15 @@ class _StartowyEkranState extends State<StartowyEkran> {
       final nextPeriodStart = lastPeriodStart.add(
         Duration(days: avrCycleLength.toInt()),
       );
-      _daysUntilNextPeriodStart = nextPeriodStart
-          .difference(DateTime.now())
-          .inDays;
+      setState(() {
+        _daysUntilNextPeriodStart = nextPeriodStart
+            .difference(DateTime.now())
+            .inDays;
+      });
     } else {
-      _daysUntilNextPeriodStart = null;
+      setState(() {
+        _daysUntilNextPeriodStart = null;
+      });
     }
   }
 
