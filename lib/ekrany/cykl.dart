@@ -558,7 +558,7 @@ class _CyklState extends State<Cykl> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          //przycisk symptomy
+                          //przycisk analiza
                           ElevatedButton(
                             onPressed: () {
                               Navigator.pushNamed(
@@ -578,8 +578,8 @@ class _CyklState extends State<Cykl> {
                             child: Column(
                               children: [
                                 const Icon(
-                                  Icons.analytics,
-                                  color: Color.fromARGB(255, 13, 88, 16),
+                                  Icons.insights,
+                                  color: const Color.fromARGB(255, 26, 18, 98),
                                 ),
                                 Text(
                                   "Analiza",
@@ -662,7 +662,7 @@ class _CyklState extends State<Cykl> {
                               children: [
                                 Icon(
                                   Icons.add,
-                                  color: const Color.fromARGB(255, 22, 80, 180),
+                                  color: const Color.fromARGB(255, 26, 18, 98),
                                 ),
                                 Text(
                                   "Notatki",
@@ -728,12 +728,12 @@ class _CyklState extends State<Cykl> {
                       daysOfWeekHeight: 40,
                       daysOfWeekStyle: DaysOfWeekStyle(
                         weekdayStyle: TextStyle(
-                          color: const Color.fromARGB(255, 123, 107, 152),
-                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                          //fontWeight: FontWeight.bold,
                         ),
                         weekendStyle: TextStyle(
-                          color: const Color.fromARGB(255, 142, 138, 151),
-                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                          //fontWeight: FontWeight.bold,
                         ),
                       ),
                       calendarStyle: CalendarStyle(
@@ -806,7 +806,13 @@ class _CyklState extends State<Cykl> {
                                 (e) =>
                                     e is Event && e.eventType == 'period_start',
                               )
-                              .map((e) => e.date)
+                              .map(
+                                (e) => DateTime(
+                                  e.date.year,
+                                  e.date.month,
+                                  e.date.day,
+                                ),
+                              )
                               .firstOrNull;
 
                           final periodEnd = events
@@ -814,22 +820,46 @@ class _CyklState extends State<Cykl> {
                                 (e) =>
                                     e is Event && e.eventType == 'period_end',
                               )
-                              .map((e) => e.date)
+                              .map(
+                                (e) => DateTime(
+                                  e.date.year,
+                                  e.date.month,
+                                  e.date.day,
+                                ),
+                              )
                               .firstOrNull;
-
-                          final today = DateTime.now();
 
                           final hasMenstruation =
                               periodStart != null &&
                               periodEnd != null &&
-                              !today.isBefore(periodStart) &&
-                              !today.isAfter(periodEnd);
+                              !day.isBefore(periodStart) &&
+                              !day.isAfter(periodEnd);
                           final hasFertility = events.any(
                             (e) => e is FertilityDay,
                           );
                           final isFertilityPeak = events.any(
                             (e) => e is FertilityDay && e.isPeak,
                           );
+                          final ovulationDay = events
+                              .whereType<FertilityDay>()
+                              .where((e) => e.isPeak)
+                              .firstOrNull;
+                          final DateTime? nextPeriodStart = ovulationDay == null
+                              ? null
+                              : DateTime(
+                                  ovulationDay.date.year,
+                                  ovulationDay.date.month,
+                                  ovulationDay.date.day,
+                                ).add(const Duration(days: 14));
+
+                          final nextPeriodDays =
+                              nextPeriodStart != null &&
+                              !day.isBefore(nextPeriodStart) &&
+                              day.isBefore(
+                                nextPeriodStart.add(
+                                  Duration(days: _avrCycleLength!.toInt()),
+                                ),
+                              );
 
                           if (hasFertility) {
                             if (hasUserEvent) {
@@ -862,18 +892,8 @@ class _CyklState extends State<Cykl> {
                                   '${day.day}',
                                   style: TextStyle(
                                     color: isFertilityPeak
-                                        ? const Color.fromARGB(
-                                            255,
-                                            75,
-                                            221,
-                                            104,
-                                          )
-                                        : const Color.fromARGB(
-                                            255,
-                                            25,
-                                            125,
-                                            50,
-                                          ),
+                                        ? Colors.white
+                                        : Colors.black,
                                   ),
                                 ),
                               ),
@@ -893,6 +913,28 @@ class _CyklState extends State<Cykl> {
                               margin: const EdgeInsets.all(2),
                               decoration: BoxDecoration(
                                 color: const Color.fromARGB(255, 233, 82, 223),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '${day.day}',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            );
+                          }
+                          if (nextPeriodDays) {
+                            if (hasUserEvent) {
+                              const Icon(
+                                Icons.circle,
+                                size: 7,
+                                color: Color.fromARGB(255, 7, 52, 78),
+                              );
+                            }
+                            return Container(
+                              margin: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 213, 99, 206),
                                 shape: BoxShape.circle,
                               ),
                               child: Center(
@@ -1034,7 +1076,12 @@ class _CyklState extends State<Cykl> {
                                         children: [
                                           const Icon(
                                             Icons.favorite_border,
-                                            color: Colors.grey,
+                                            color: Color.fromARGB(
+                                              255,
+                                              235,
+                                              53,
+                                              183,
+                                            ),
                                           ),
                                           const SizedBox(height: 4),
                                           Text(
@@ -1042,7 +1089,7 @@ class _CyklState extends State<Cykl> {
                                             style: TextStyle(
                                               color: Colors.grey,
 
-                                              fontSize: 13,
+                                              fontSize: 14,
                                             ),
                                           ),
                                           Text(
@@ -1058,7 +1105,7 @@ class _CyklState extends State<Cykl> {
                                             style: TextStyle(
                                               color: Colors.grey,
 
-                                              fontSize: 13,
+                                              fontSize: 12,
                                             ),
                                           ),
                                         ],
@@ -1076,7 +1123,7 @@ class _CyklState extends State<Cykl> {
                         width: 150,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: const Color.fromARGB(255, 243, 234, 251),
+                          color: const Color.fromARGB(255, 198, 223, 243),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey.shade500,
@@ -1114,20 +1161,25 @@ class _CyklState extends State<Cykl> {
                                       _daysUntilNextPeriodStart! > 0)
                                     const Icon(
                                       Icons.calendar_month,
-                                      color: Colors.grey,
+                                      color: Color.fromARGB(255, 26, 18, 98),
                                     ),
                                   const SizedBox(height: 4),
                                   Text(
                                     'Następny okres',
                                     style: const TextStyle(
                                       color: Colors.grey,
-                                      fontSize: 13,
+                                      fontSize: 14,
                                     ),
                                   ),
                                   Text(
                                     'za ${_daysUntilNextPeriodStart} dni',
                                     style: TextStyle(
-                                      color: Colors.black,
+                                      color: const Color.fromARGB(
+                                        255,
+                                        26,
+                                        18,
+                                        98,
+                                      ),
                                       fontWeight: FontWeight.bold,
                                       fontSize: 25,
                                     ),
@@ -1137,7 +1189,7 @@ class _CyklState extends State<Cykl> {
                                     style: TextStyle(
                                       color: Colors.grey,
 
-                                      fontSize: 13,
+                                      fontSize: 12,
                                     ),
                                   ),
                                   const SizedBox(height: 4),

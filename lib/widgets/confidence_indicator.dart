@@ -7,7 +7,7 @@ class ConfidenceIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 150,
+      width: 170,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -15,7 +15,7 @@ class ConfidenceIndicator extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             'Pewność przewidywania:',
-            style: TextStyle(fontSize: 12, color: Colors.grey),
+            style: TextStyle(fontSize: 14, color: Colors.grey),
             textAlign: TextAlign.left,
           ),
 
@@ -29,7 +29,7 @@ class ConfidenceIndicator extends StatelessWidget {
             minHeight: 5,
             value: confidence / 100,
             backgroundColor: const Color.fromARGB(255, 226, 224, 224),
-            color: Colors.green,
+            color: const Color.fromARGB(255, 117, 237, 121),
           ),
           const SizedBox(height: 4),
         ],
