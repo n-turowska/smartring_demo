@@ -964,4 +964,21 @@ class DatabaseService {
       throw Exception("Nie udało się załadować okna płodności: $e");
     }
   }
+
+  Future<double> calculatePredictionConfidence() async {
+    double confidence = 50.0;
+    final cycleRecords = await getCycleRecords();
+    final cycleAnalysis = await getCycleAnalysis();
+
+    final completedCycles = cycleRecords.where((e) => e.cycleLength > 0).length;
+    confidence +=
+        completedCycles * 10; //za każdy kolejny cykl jest +10% pewności
+    confidence.clamp(50.0, 80.0);
+    if (cycleAnalysis.standardDeviation < 3) {
+      confidence += 20;
+    } else if (cycleAnalysis.standardDeviation < 5) {
+      confidence += 10;
+    }
+    return confidence.clamp(50.0, 95.0);
+  }
 }
